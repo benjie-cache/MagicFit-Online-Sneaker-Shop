@@ -33,8 +33,5 @@ onMounted(()=>{
                 prevArrow: '<button class="slide-arrow prev-arrow"><i class="fa fa-long-arrow-left"></i></button>',
                 nextArrow: '<button class="slide-arrow next-arrow"><i class="fa fa-long-arrow-right"></i></button>'
             });
-})
+});
 </script>
-<style lang="">
-    
-</style>

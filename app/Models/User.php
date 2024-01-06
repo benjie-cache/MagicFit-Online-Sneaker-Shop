@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
 use App\Models\shopping_process\OrderDetail;
+use App\Models\shopping_process\Order;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -22,7 +23,10 @@ class User extends Authenticatable
    public function shopping_session():HasOne{
     return $this->hasOne(ShoppingSession::class);
    }
-   //ordertails session of the user
+   public function orders():HasMany{
+    return $this->hasMany(Order::class);
+   }
+   //order
    public function order_detail():HasOne{
      return $this->hasOne(OrderDetail::class);
    }

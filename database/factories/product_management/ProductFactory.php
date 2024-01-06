@@ -1,6 +1,4 @@
 <?php
-
-
 namespace Database\Factories\product_management;
 
 use App\Models\product_management\Product;
@@ -8,66 +6,188 @@ use App\Models\product_management\ProductImage;
 use App\Models\product_management\ProductDiscount;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Exception;
 
 class ProductFactory extends Factory
 {
     protected $model = Product::class;
 
+    protected $generatedExtension;
+
     public function definition()
     {
-        $productName = $this->faker->unique()->word;
-        $productSlug = Str::slug($productName);
-
-        return [
-            'name' => $productName,
-            'slug' => $productSlug,
-            'description' => $this->faker->paragraph,
-            'price' => $this->faker->randomFloat(2, 10, 1000),
-            'is_hot_deal_of_the_day' => $this->faker->boolean(10), // 10% chance of being a hot deal
-        ];
-    }
-
-    public function configure()
-    {
-        return $this->afterCreating(function (Product $product) {
-            // Attach product images
-            $this->attachProductImages($product);
-
-            // Conditionally attach product discount
-            if ($product->is_hot_deal_of_the_day) {
-                $this->attachProductDiscount($product);
+        // Get the path to the images folder
+        $imagesPath = storage_path('app/public/images');
+    
+        // Get all subdirectories (each subdirectory represents a product)
+        $subdirectories = array_filter(glob($imagesPath . '/*'), 'is_dir');
+    
+        foreach ($subdirectories as $subdirectory) {
+            // Get the product name from the subdirectory name
+            $productName = basename($subdirectory);
+            // Print the current subdirectory
+            echo "Processing directory: $productName\n";
+            // Get all files in the subdirectory
+            $files = glob($subdirectory . '/*');
+    
+            $sideFile = null;
+    
+            foreach ($files as $file) {
+                $fileName = pathinfo($file, PATHINFO_FILENAME);
+    
+                if ($fileName === 'side') {
+                    $sideFile = $file;
+                    break;
+                }
             }
-        });
-    }
-
-    private function attachProductImages(Product $product)
-    {
-        $views = ['front', 'side', 'top']; // Add more views if needed
-
-        foreach ($views as $view) {
-            $color = $this->faker->colorName;
-            $imageUrl = "public/assets/images/{$product->slug}/{$view}.jpg";
-
-            ProductImage::factory()->create([
-                'product_id' => $product->id,
-                'url' => $imageUrl,
-                'color' => $color,
-                'view' => $view,
-            ]);
+    
+            if ($sideFile) {
+                // If 'side' file is found, determine the extension
+                $generatedExtension = pathinfo($sideFile, PATHINFO_EXTENSION);
+    
+                // Generate the product name and slug
+                $productNameSlug = Str::slug($productName);
+    
+                // Create a new product instance for each iteration
+                $product = Product::create([
+                    'name' => $productNameSlug,
+                    'slug' => $productNameSlug,
+                    'description' => $this->faker->paragraph,
+                    'price' => $this->faker->randomFloat(2, 4000, 10000),
+                    'is_hot_deal_of_the_day' => $this->faker->boolean(10),
+                ]);
+    
+                // Attach product images
+                $views = ['front', 'side', 'top']; // Add more views if needed
+                foreach ($views as $view) {
+                    $color = $this->faker->colorName;
+                    $imageUrl = "/images/{$productNameSlug}/{$view}.{$generatedExtension}";
+    
+                    ProductImage::factory()->create([
+                        'product_id' => $product->id,
+                        'url' => $imageUrl,
+                        'color' => $color,
+                        'view' => $view,
+                    ]);
+                }
+    
+                // Conditionally attach product discount
+                if ($product->is_hot_deal_of_the_day) {
+                    $discountPercentage = $this->faker->numberBetween(5, 50);
+                    $startDate = now()->toDateString();
+                    $endDate = now()->addDays($this->faker->numberBetween(1, 30))->toDateString();
+    
+                    ProductDiscount::factory()->create([
+                        'product_id' => $product->id,
+                        'discount_percentage' => $discountPercentage,
+                        'start_date' => $startDate,
+                        'end_date' => $endDate,
+                    ]);
+                }
+    
+                // Break the loop after processing the first subdirectory
+               // break;
+            }
         }
+      
     }
+    
 
-    private function attachProductDiscount(Product $product)
-    {
-        $discountPercentage = $this->faker->numberBetween(5, 50);
-        $startDate = now()->toDateString();
-        $endDate = now()->addDays($this->faker->numberBetween(1, 30))->toDateString();
+    // public function configure()
+    // {
+    //     return $this->afterCreating(function (Product $product) {
+    //         // Attach product images
+    //         $this->attachProductImages($product);
 
-        ProductDiscount::factory()->create([
-            'product_id' => $product->id,
-            'discount_percentage' => $discountPercentage,
-            'start_date' => $startDate,
-            'end_date' => $endDate,
-        ]);
-    }
+    //         // Conditionally attach product discount
+    //         if ($product->is_hot_deal_of_the_day) {
+    //             $this->attachProductDiscount($product);
+    //         }
+    //     });
+    // }
+
+    // private function attachProductImages(Product $product)
+    // {
+    //     // Get the path to the images folder
+    //     $imagesPath = storage_path('app/public/images');
+
+    //     // Get all subdirectories (each subdirectory represents a product)
+    //     $subdirectories = array_filter(glob($imagesPath . '/*'), 'is_dir');
+
+    //     foreach ($subdirectories as $subdirectory) {
+    //         // Get the product name from the subdirectory name
+    //         $productName = basename($subdirectory);
+    //         // Print the current subdirectory
+    //         echo "Processing directory: $productName\n";
+    //         // Get all files in the subdirectory
+    //         $files = glob($subdirectory . '/*');
+    //        // echo "Processing files: $files\n";
+    //         $sideFile = null;
+
+    //         foreach ($files as $file) {
+    //             $fileName = pathinfo($file, PATHINFO_FILENAME);
+
+    //             if ($fileName === 'side') {
+    //                 $sideFile = $file;
+    //                 break;
+    //             }
+    //         }
+
+    //         if ($sideFile) {
+    //             // If 'side' file is found, determine the extension
+    //             $this->generatedExtension = pathinfo($sideFile, PATHINFO_EXTENSION);
+
+    //             // Generate the product name and slug
+    //             $productName = Str::slug($productName);
+    //             $productSlug = $productName;
+
+    //             // Update the product attributes
+    //             $product->update([
+    //                 'name' => $productName,
+    //                 'slug' => $productSlug,
+    //             ]);
+
+    //             // Attach product images
+    //             $this->attachProductImage($product, 'front');
+    //             $this->attachProductImage($product, 'side');
+    //             $this->attachProductImage($product, 'top');
+
+    //             // Conditionally attach product discount
+    //             if ($product->is_hot_deal_of_the_day) {
+    //                 $this->attachProductDiscount($product);
+    //             }
+
+    //             // Break the loop after processing the first subdirectory
+    //             //break;
+    //         }
+    //     }
+    // }
+
+    // private function attachProductImage(Product $product, $view)
+    // {
+    //     $color = $this->faker->colorName;
+    //     $imageUrl = "/images/{$product->slug}/{$view}.{$this->generatedExtension}";
+
+    //     ProductImage::factory()->create([
+    //         'product_id' => $product->id,
+    //         'url' => $imageUrl,
+    //         'color' => $color,
+    //         'view' => $view,
+    //     ]);
+    // }
+
+    // private function attachProductDiscount(Product $product)
+    // {
+    //     $discountPercentage = $this->faker->numberBetween(5, 50);
+    //     $startDate = now()->toDateString();
+    //     $endDate = now()->addDays($this->faker->numberBetween(1, 30))->toDateString();
+
+    //     ProductDiscount::factory()->create([
+    //         'product_id' => $product->id,
+    //         'discount_percentage' => $discountPercentage,
+    //         'start_date' => $startDate,
+    //         'end_date' => $endDate,
+    //     ]);
+    // }
 }

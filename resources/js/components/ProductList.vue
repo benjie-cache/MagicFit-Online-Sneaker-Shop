@@ -1,3 +1,34 @@
+<script setup>
+import axios from 'axios';
+import { onMounted ,ref} from 'vue';
+import {defineAsyncComponent} from 'vue';
+const Product=defineAsyncComponent(()=>import('./Product.vue'));
+
+const FETCH_PRODUCTS_URL = 'api/products';
+let products =ref([]) ;
+const headers = {
+    "Content-Type": "application/json"
+};
+
+const fetchProducts = async () => {
+    try {
+        const res = await axios.get(FETCH_PRODUCTS_URL, headers);
+
+        //console.log(res.data);
+        products.value=res.data.data
+        console.log(products.value)
+    } catch (error) {
+        console.error("An error occurred while fetching products:", error);
+        throw (error);
+    }
+};
+
+onMounted(() => {
+    fetchProducts();
+   
+});
+</script>
+
 <template lang="">
     <div class="col-lg-9" >
         <div class="row">
@@ -33,37 +64,9 @@
         </div>
         <div class="text-center pt--20">
             <a href="#" class="axil-btn btn-bg-lighter btn-load-more"
-                >Load more</a
+                >Pagination goes here</a
             >
         </div>
     </div>
 </template>
 
-<script setup>
-import axios from 'axios';
-import { onMounted ,ref} from 'vue';
-import Product from "./Product.vue";
-
-const FETCH_PRODUCTS_URL = 'api/products';
-let products =ref([]) ;
-const headers = {
-    "Content-Type": "application/json"
-};
-
-const fetchProducts = async () => {
-    try {
-        const res = await axios.get(FETCH_PRODUCTS_URL, headers);
-
-        //console.log(res.data);
-        products.value=res.data.data
-        console.log(products.value)
-    } catch (error) {
-        console.error("An error occurred while fetching products:", error);
-        throw (error);
-    }
-};
-
-onMounted(() => {
-    fetchProducts();
-});
-</script>

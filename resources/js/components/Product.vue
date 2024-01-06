@@ -1,31 +1,31 @@
 <script setup>
 import { defineAsyncComponent } from 'vue';
-import prodImgUrl from "../../images/others/luka 2 caves.webp";
+
 
 const ProductQuickView =defineAsyncComponent(()=>import('./ProductQuickView.vue'));
-import { ElAlert, ElButton } from "element-plus";
 
-import useCartStore from "../store/cartStore";
 
-import { ref } from "vue";
+import useCartStore from "@/store/cartStore.js";
 
+import { ref} from "vue";
+const isQuickViewOpen=ref(false)
 
 const props = defineProps({
     product: Object,
 });
+//Define a ref to keep track of the selected product for the modal
+const selectedProduct = ref(null);
 
 const visibleLiveDemo = ref(false);
 // Replace openQuickView with openQuickViewModal
 const openQuickViewModal = (product) => {
     // Set the product to be shown in the modal
     selectedProduct.value = product;
-
+    console.log(selectedProduct.value)
     // Open the modal
     isQuickViewOpen.value = true;
 };
 
-// Define a ref to keep track of the selected product for the modal
-const selectedProduct = ref(null);
 
 const closeQuickView = () => {
     isQuickViewOpen.value = false;
@@ -33,55 +33,15 @@ const closeQuickView = () => {
 
 //handle cart management
 const cartStore = useCartStore();
-const cartItems = ref(cartStore.items);
 
-const showAlert=ref(false)
-const showAddCartSuccess=ref(false)
 
-// Modify your addToCart function to show/hide the alert
-const addToCart = (item) => {
-  let targetItem = cartItems.value.find(
-    (currItem) => currItem.id === item.id
-  );
 
-  if (targetItem) {
-    // Show the alert if the item is already in the cart
-    showAlert.value = true;
-    setTimeout(() => {
-      showAlert.value = false;
-    }, 3000);
-  } else {
-    useCartStore().addItem(item);
-    showAddCartSuccess.value= true;
-    setTimeout(() => {
-      showAddCartSuccess.value= false;
-    }, 3000);
-  }
-};
+
 </script>
 <template lang="">
-  <el-alert
-  v-if="showAlert"
-  title="Item Already In the Cart"
-  type="warning"
-  :closable="true"
-  show-icon
-  @close="showAlert = false"
-></el-alert>
+    
 
-
-
-<el-alert
-  v-if="showAddCartSuccess"
-  title="Item Added In the Cart"
-  type="success"
-  :closable="true"
-  show-icon
-  @close="showAddCartSuccess= false"
-></el-alert>
-
-
-  <div class="axil-product product-style-one mb--30">
+    <div class="axil-product product-style-one mb--30">
         <div class="thumbnail">
             <a href="single-product.html">
                 <!-- <img :src="prodImgUrl" alt="Image"> -->
@@ -107,25 +67,24 @@ const addToCart = (item) => {
                         <a href="wishlist.html"><i class="far fa-heart"></i></a>
                     </li>
                     <li class="select-option">
-                        <a @click="addToCart(product)">Add to Cart</a>
+                        <a  @click="useCartStore().addItem(product)">Add to Cart</a>
                     </li>
                     <li class="quickview">
                         <a
                             href="#"
                             data-bs-toggle="modal"
                             data-bs-target="#quick-view-modal"
-                            @click="openQuickViewModal(product)" 
+                            @click="openQuickViewModal(product)"
                             ><i class="far fa-eye"></i
                         ></a>
                     </li>
-                 
                 </ul>
             </div>
         </div>
         <div class="product-content">
             <div class="inner">
                 <h5 class="title">
-                   {{ product.name }}
+                    {{ product.name }}
                 </h5>
 
                 <div class="product-price-variant" v-if="product.discount">
@@ -163,9 +122,13 @@ const addToCart = (item) => {
                     </button>
                 </div>
                 <div class="modal-body">
-                    <ProductQuickView :selectedProduct />
+                    <ProductQuickView :product="selectedProduct" />
                 </div>
             </div>
         </div>
     </div>
 </template>
+<style scoped>
+@import "slick-carousel/slick/slick.css";
+@import "slick-carousel/slick/slick-theme.css";
+</style>
