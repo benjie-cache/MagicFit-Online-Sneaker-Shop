@@ -1,67 +1,133 @@
 <script setup>
-
-
+import {onMounted} from 'vue';
+import 'slick-carousel';
+import $ from 'jquery/dist/jquery.min.js';
 const props = defineProps({
-    product: Object,
+    selected_product: Object,
 });
-   
+onMounted(() => {
+  try {
+    console.log('Trying to initialize Slick Carousel...');
+    
+    const smallThumb = $(`.product-small-thumb-${selected_product.id}`);
+    const largeThumb = $(`.product-large-thumbnail-${selected_product.id}`);
+
+
+    if (smallThumb.length && largeThumb.length) {
+      console.log('Both smallThumb and largeThumb elements found.');
+
+      if (!smallThumb.hasClass('slick-initialized')) {
+        console.log('Initializing Slick Carousel for smallThumb...');
+        smallThumb.slick({
+          infinite: false,
+          slidesToShow: 6,
+          slidesToScroll: 1,
+          arrows: false,
+          dots: false,
+          focusOnSelect: true,
+          vertical: true,
+          speed: 800,
+          asNavFor: '.product-large-thumbnail-{{ selected_product.id }}',
+          responsive: [
+            {
+              breakpoint: 992,
+              settings: {
+                vertical: false,
+              },
+            },
+            {
+              breakpoint: 768,
+              settings: {
+                vertical: false,
+                slidesToShow: 4,
+              },
+            },
+          ],
+        });
+      } else {
+        console.log('smallThumb is already initialized with Slick Carousel.');
+      }
+
+      if (!largeThumb.hasClass('slick-initialized')) {
+        console.log('Initializing Slick Carousel for largeThumb...');
+        largeThumb.slick({
+          infinite: false,
+          slidesToShow: 1,
+          slidesToScroll: 1,
+          arrows: false,
+          dots: false,
+          speed: 800,
+          draggable: false,
+          asNavFor: '.product-small-thumb-${selected_product.id}',
+        });
+      } else {
+        console.log('largeThumb is already initialized with Slick Carousel.');
+      }
+    } else {
+      console.error('Either smallThumb or largeThumb element not found.');
+    }
+  } catch (error) {
+    console.error('Error during Slick Carousel initialization:', error.message);
+  }
+});
+
 
 
 
 </script>
 
 <template lang="" >
-    <div class="single-product-thumb">
+ <div class="single-product-thumb">
                         <div class="row">
                             <div class="col-lg-7 mb--40">
                                 <div class="row">
                                     <div class="col-lg-10 order-lg-2">
-                                        <div class="single-product-thumbnail product-large-thumbnail axil-product thumbnail-badge zoom-gallery">
+                                        <div class="single-product-thumbnail product-large-thumbnail-{{ selected_product.id }} axil-product thumbnail-badge zoom-gallery">
                                             <div class="thumbnail">
-                                                <img src="assets/images/product/product-big-01.png" alt="Product Images">
+                                                <img :src="'/storage' + selected_product.images[0].url" alt="Product Images">
                                                 <div class="label-block label-right">
                                                     <div class="product-badget">20% OFF</div>
                                                 </div>
                                                 <div class="product-quick-view position-view">
-                                                    <a href="assets/images/product/product-big-01.png" class="popup-zoom">
+                                                    <a :href="'/storage' + selected_product.images[0].url" class="popup-zoom">
+                                                        <i class="fa fa-search-plus"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            <div class="thumbnail">
+                                                <img :src="'/storage' + selected_product.images[1].url" alt="Product Images">
+                                                <div class="label-block label-right">
+                                                    <div class="product-badget">20% OFF</div>
+                                                </div>
+                                                <div class="product-quick-view position-view">
+                                                    <a :href="'/storage' + selected_product.images[1].url" class="popup-zoom">
                                                         <i class="far fa-search-plus"></i>
                                                     </a>
                                                 </div>
                                             </div>
                                             <div class="thumbnail">
-                                                <img src="assets/images/product/product-big-02.png" alt="Product Images">
+                                                <img :src="'/storage' + selected_product.images[2].url" alt="Product Images">
                                                 <div class="label-block label-right">
                                                     <div class="product-badget">20% OFF</div>
                                                 </div>
                                                 <div class="product-quick-view position-view">
-                                                    <a href="assets/images/product/product-big-02.png" class="popup-zoom">
-                                                        <i class="far fa-search-plus"></i>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <div class="thumbnail">
-                                                <img src="assets/images/product/product-big-03.png" alt="Product Images">
-                                                <div class="label-block label-right">
-                                                    <div class="product-badget">20% OFF</div>
-                                                </div>
-                                                <div class="product-quick-view position-view">
-                                                    <a href="assets/images/product/product-big-03.png" class="popup-zoom">
-                                                        <i class="far fa-search-plus"></i>
+                                                    <a :href="'/storage' + selected_product.images[2].url" class="popup-zoom">
+                                                        <i class="fa fa-search-plus"></i>
                                                     </a>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-lg-2 order-lg-1">
-                                        <div class="product-small-thumb small-thumb-wrapper">
+                                        <div class="product-small-thumb-${selected_product.id} small-thumb-wrapper">
                                             <div class="small-thumb-img">
-                                                <img src="assets/images/product/product-thumb/thumb-08.png" alt="thumb image">
+                                                <img :src="'/storage' + selected_product.images[0].url" alt="thumb image">
                                             </div>
                                             <div class="small-thumb-img">
-                                                <img src="assets/images/product/product-thumb/thumb-07.png" alt="thumb image">
+                                                <img :src="'/storage' + selected_product.images[1].url" alt="thumb image">
                                             </div>
                                             <div class="small-thumb-img">
-                                                <img src="assets/images/product/product-thumb/thumb-09.png" alt="thumb image">
+                                                <img :src="'/storage' + selected_product.images[2].url" alt="thumb image">
                                             </div>
                                         </div>
                                     </div>
@@ -78,14 +144,14 @@ const props = defineProps({
                                                 <a href="#">(<span>1</span> customer reviews)</a>
                                             </div>
                                         </div>
-                                        <h3 class="product-title">Serif Coffee Table</h3>
-                                        <span class="price-amount">$155.00 - $255.00</span>
+                                        <h3 class="product-title">{{selected_product.name}}</h3>
+                                        <span class="price-amount">ksh {{selected_product.price}}</span>
                                         <ul class="product-meta">
-                                            <li><i class="fal fa-check"></i>In stock</li>
-                                            <li><i class="fal fa-check"></i>Free delivery available</li>
-                                            <li><i class="fal fa-check"></i>Sales 30% Off Use Code: MOTIVE30</li>
+                                            <li><i class="fa fa-check"></i>In stock</li>
+                                            <li><i class="fa fa-check"></i>Free delivery available</li>
+                                      
                                         </ul>
-                                        <p class="description">In ornare lorem ut est dapibus, ut tincidunt nisi pretium. Integer ante est, elementum eget magna. Pellentesque sagittis dictum libero, eu dignissim tellus.</p>
+                                        <p class="description">{{selected_product.description}}</p>
 
                                         <div class="product-variations-wrapper">
 
@@ -139,8 +205,10 @@ const props = defineProps({
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> 
+   
 </template>
 <style scoped>
-
+@import "slick-carousel/slick/slick.css";
+@import "slick-carousel/slick/slick-theme.css";
 </style>

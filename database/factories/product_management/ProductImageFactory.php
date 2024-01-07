@@ -23,7 +23,7 @@ class ProductImageFactory extends Factory
             },
             'url' => $this->faker->imageUrl,
             'color' => $this->faker->colorName,
-            'view' => $this->faker->randomElement(['front', 'side', 'top']),
+            'view' => $this->faker->randomElement(['rear', 'side', 'top']),
         ];
     }
 }

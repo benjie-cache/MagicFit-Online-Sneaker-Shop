@@ -19,13 +19,13 @@ return new class extends Migration
             $table->unsignedBigInteger('color_id')->index();
             $table->unsignedBigInteger('size_id')->index();
             $table->integer('quantity');
-            
             $table->timestamps();
-
-            // Foreign keys
+             // Foreign keys
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
             $table->foreign('color_id')->references('id')->on('colors')->onDelete('cascade');
             $table->foreign('size_id')->references('id')->on('sizes')->onDelete('cascade');
+             //Unique constraint for product_id, color_id, and size_id
+            $table->unique(['product_id', 'color_id', 'size_id']);
         });
     }
 

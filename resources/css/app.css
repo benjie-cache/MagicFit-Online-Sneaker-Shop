@@ -5193,7 +5193,7 @@ button.axil-btn.btn-size-md i {
 }
 
 .main-slider-large-thumb .single-slide .product-price span.price-amount {
-    font-size: 18px;
+    font-size: 14px;
     font-weight: 700;
     color: var(--color-primary)
 }
@@ -9990,7 +9990,7 @@ body.open .closeMask {
     margin: 4px;
     color: var(--color-heading);
     font-weight: 700;
-    font-size: 20px;
+    font-size: 15px;
     font-family: var(--font-secondary)
 }
 

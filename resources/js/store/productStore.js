@@ -1,36 +1,31 @@
-import { ref } from "vue";
-import { defineStore } from "pinia";
+// productStore.js
+import { defineStore } from 'pinia';
 
-export default defineStore('products', () => {
-
-    const products = ref({
-        items: [],
-        currentPageNum: 0,
-        limitPerPage: 30,
-        hasMore: true
-    });
-
-    const productsReceived = (items) => {
-
-        if(items.length === 0) return products.value.hasMore = false;
-
-        products.value.items = [...products.value.items, ...items];
-        products.value.currentPageNum += 1;
-
-    };
-
-    const resetProducts = () => {
-        products.value = {
-            items: [],
-            currentPageNum: 0,
-            limitPerPage: 30,
-            hasMore: true
-        }
-    }
-
-    return {
-        products,
-        productsReceived,
-        resetProducts
-    }
+export const useProductStore = defineStore({
+  id: 'product',
+  state: () => ({
+    products: [],
+    sortedProducts: [],
+  }),
+  getters: {
+    getProductById: (state) => (productId) => {
+      return state.products.find((product) => product.id === productId);
+    },
+  },
+  actions: {
+    setProducts(products) {
+      this.products = products;
+      this.sortedProducts = [...products]; // Initialize sortedProducts with the original products
+    },
+    sortProductsBy(property) {
+      this.sortedProducts.sort((a, b) => {
+        const aValue = a[property];
+        const bValue = b[property];
+        return aValue.localeCompare ? aValue.localeCompare(bValue) : aValue - bValue;
+      });
+    },
+    resetSort() {
+      this.sortedProducts = [...this.products];
+    },
+  },
 });

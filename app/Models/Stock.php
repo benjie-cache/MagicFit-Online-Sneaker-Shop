@@ -11,16 +11,16 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Stock extends Model
 {
     use HasFactory;
-    protected $dispatchesEvents = [
-        'saving' => 'checkStock',
-    ];
-    public function checkStock()
-    {
-        // Ensure that the stock quantity doesn't go below zero
-        if ($this->quantity < 0) {
-            throw new \Exception('Stock quantity cannot go below zero.');
-        }
-    }
+    // protected $dispatchesEvents = [
+    //     'saving' => 'checkStock',
+    // ];
+    // public function checkStock()
+    // {
+    //     // Ensure that the stock quantity doesn't go below zero
+    //     if ($this->quantity < 0) {
+    //         throw new \Exception('Stock quantity cannot go below zero.');
+    //     }
+    // }
     public function product():BelongsTo
     {
         return $this->belongsTo(Product::class);

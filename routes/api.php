@@ -35,15 +35,18 @@ Route::prefix('products')->group(function () {
     Route::put('/{product}', [ProductController::class, 'update']);//edit or update product details
     Route::delete('/{product}', [ProductController::class, 'destroy']);//delete a single product 
 });
+use App\Http\Controllers\EntityController;
+
+Route::get('/entities', [EntityController::class, 'getEntities']);
 
 //Routes for shopping session crud
-Route::prefix('shopping_sessions')->group(function(){
-      Route::get('/', [ShoppingSessionController::class,'index']);
-      Route::get('/{shopping_session}', [ShoppingSessionController::class,'show']);
-      Route::post('/', [ShoppingSessionController::class,'store']);
-      Route::put('/{shopping_session}', [ShoppingSessionController::class,'update']);
-      Route::delete('/{shopping_session}', [ShoppingSessionController::class,'destroy']);
-});
+// Route::prefix('shopping_sessions')->group(function(){
+//       Route::get('/', [ShoppingSessionController::class,'index']);
+//       Route::get('/{shopping_session}', [ShoppingSessionController::class,'show']);
+//       Route::post('/', [ShoppingSessionController::class,'store']);
+//       Route::put('/{shopping_session}', [ShoppingSessionController::class,'update']);
+//       Route::delete('/{shopping_session}', [ShoppingSessionController::class,'destroy']);
+// });
  //Routes for shopping cart items crud
 // Route::prefix('cart_items')->group(function(){
 //     Route::get('/', [CartItemController::class,'index']);

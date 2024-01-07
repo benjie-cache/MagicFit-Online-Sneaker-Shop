@@ -9,18 +9,19 @@ use App\Http\Resources\ProductResource;
 class ProductController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * 
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        $products = Product::with(['images', 'discount'])->get();
+        //eager load the related table data wheew
+        $products = Product::with(['images', 'discount','stocks'])->get();
         return ProductResource::collection($products);
     }
 
     /**
-     * Store a newly created resource in storage.
+     * 
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response

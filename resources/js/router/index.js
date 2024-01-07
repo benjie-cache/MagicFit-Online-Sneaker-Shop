@@ -10,7 +10,7 @@ const Shop=()=>import('@/pages/Shop.vue');
 const Checkout=()=>import('@/pages/Checkout.vue')
 const Login=()=>import('@/pages/auth/Login.vue');
 const Register=()=>import('@/pages/auth/Register.vue');
-const Cart=()=>import('@/components/cart-components/Cart.vue');
+const Cart=()=>import('@/pages/Cart.vue');
 const NotFound=()=>import('@/pages/404.vue');
 const Account=()=>import('@/pages/Account.vue');
 const router = createRouter({
@@ -24,6 +24,7 @@ const router = createRouter({
         { path: '/shop', component: Shop, name: 'shop',  meta: { title: 'MagicFit || Shop' }},
         { path: '/checkout', component: Checkout, name:'checkout', meta: { title: 'MagicFit || Checkout' }},
         { path: '/account', component: Account, name:'account' ,meta: { title: 'MagicFit || Customer Account' }},
+        { path: '/cart', component: Cart, name:'cart' ,meta: { title: 'MagicFit || Cart' }},
       ],
     },
     { path: '/login', component: Login, name: 'login',meta: { title: 'MagicFit || Customer Login' } },

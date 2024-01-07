@@ -55,7 +55,7 @@ class ProductFactory extends Factory
                     'slug' => $productNameSlug,
                     'description' => $this->faker->paragraph,
                     'price' => $this->faker->randomFloat(2, 4000, 10000),
-                    'is_hot_deal_of_the_day' => $this->faker->boolean(10),
+                    'is_hot_deal_of_the_day' => $this->faker->boolean(30),
                 ]);
     
                 // Attach product images
@@ -94,100 +94,5 @@ class ProductFactory extends Factory
     }
     
 
-    // public function configure()
-    // {
-    //     return $this->afterCreating(function (Product $product) {
-    //         // Attach product images
-    //         $this->attachProductImages($product);
-
-    //         // Conditionally attach product discount
-    //         if ($product->is_hot_deal_of_the_day) {
-    //             $this->attachProductDiscount($product);
-    //         }
-    //     });
-    // }
-
-    // private function attachProductImages(Product $product)
-    // {
-    //     // Get the path to the images folder
-    //     $imagesPath = storage_path('app/public/images');
-
-    //     // Get all subdirectories (each subdirectory represents a product)
-    //     $subdirectories = array_filter(glob($imagesPath . '/*'), 'is_dir');
-
-    //     foreach ($subdirectories as $subdirectory) {
-    //         // Get the product name from the subdirectory name
-    //         $productName = basename($subdirectory);
-    //         // Print the current subdirectory
-    //         echo "Processing directory: $productName\n";
-    //         // Get all files in the subdirectory
-    //         $files = glob($subdirectory . '/*');
-    //        // echo "Processing files: $files\n";
-    //         $sideFile = null;
-
-    //         foreach ($files as $file) {
-    //             $fileName = pathinfo($file, PATHINFO_FILENAME);
-
-    //             if ($fileName === 'side') {
-    //                 $sideFile = $file;
-    //                 break;
-    //             }
-    //         }
-
-    //         if ($sideFile) {
-    //             // If 'side' file is found, determine the extension
-    //             $this->generatedExtension = pathinfo($sideFile, PATHINFO_EXTENSION);
-
-    //             // Generate the product name and slug
-    //             $productName = Str::slug($productName);
-    //             $productSlug = $productName;
-
-    //             // Update the product attributes
-    //             $product->update([
-    //                 'name' => $productName,
-    //                 'slug' => $productSlug,
-    //             ]);
-
-    //             // Attach product images
-    //             $this->attachProductImage($product, 'front');
-    //             $this->attachProductImage($product, 'side');
-    //             $this->attachProductImage($product, 'top');
-
-    //             // Conditionally attach product discount
-    //             if ($product->is_hot_deal_of_the_day) {
-    //                 $this->attachProductDiscount($product);
-    //             }
-
-    //             // Break the loop after processing the first subdirectory
-    //             //break;
-    //         }
-    //     }
-    // }
-
-    // private function attachProductImage(Product $product, $view)
-    // {
-    //     $color = $this->faker->colorName;
-    //     $imageUrl = "/images/{$product->slug}/{$view}.{$this->generatedExtension}";
-
-    //     ProductImage::factory()->create([
-    //         'product_id' => $product->id,
-    //         'url' => $imageUrl,
-    //         'color' => $color,
-    //         'view' => $view,
-    //     ]);
-    // }
-
-    // private function attachProductDiscount(Product $product)
-    // {
-    //     $discountPercentage = $this->faker->numberBetween(5, 50);
-    //     $startDate = now()->toDateString();
-    //     $endDate = now()->addDays($this->faker->numberBetween(1, 30))->toDateString();
-
-    //     ProductDiscount::factory()->create([
-    //         'product_id' => $product->id,
-    //         'discount_percentage' => $discountPercentage,
-    //         'start_date' => $startDate,
-    //         'end_date' => $endDate,
-    //     ]);
-    // }
+   
 }

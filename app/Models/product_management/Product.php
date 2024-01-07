@@ -44,19 +44,23 @@ class Product extends Model
     public function orderitems():HasOne{
         return $this->hasOne(OrderItem::class);
     }
-    // public function colors():HasMany{
-    //     return $this->hasMany(Color::class);
-    // }
-    // public function sizes():BelongsToMany
-    // {
-    //     return $this->belongsToMany(Size::class)->withPivot('id');
-    // }
     public function brand():BelongsTo
     {
         return $this->belongsTo(Brand::class);
     }
-    public function stocks():HasMany{
+    public function stocks()
+    {
         return $this->hasMany(Stock::class);
+    }
+
+    public function colors()
+    {
+        return $this->belongsToMany(Color::class, 'stocks')->distinct();
+    }
+
+    public function sizes()
+    {
+        return $this->belongsToMany(Size::class, 'stocks')->distinct();
     }
 
 }

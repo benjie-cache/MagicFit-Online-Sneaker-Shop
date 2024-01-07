@@ -3,11 +3,10 @@ import logo from '../../../images/logo/logo1.png';
 import prodImgUrl from '../../../images/others/luka 2 caves.webp';
 import favicon from '../../../images/others/Nike G.T black.png';
 import { ref, watch } from 'vue'
-import { sideOffcanvasToggle } from '../../utils';
-import useCartStore from '../../store/cartStore';
-import Cart from '../cart-components/Cart.vue';
-import useDropdownStore from '../../store/dropdownStore';
-import {useAuthStore} from '../../store/authStore';
+import useCartStore from '@/store/cartStore.js';
+import Cart from '@/components/cart-components/Cart.vue';
+import useDropdownStore from '@/store/dropdownStore.js';
+import {useAuthStore} from '@/store/authStore.js';
 const cartStore = useCartStore();
 const cartItemCount = ref(cartStore.totalItems);
 const cartTotal = ref(parseFloat(cartStore.totalCost).toFixed(2));
@@ -231,7 +230,7 @@ const handleLogOut=async()=>{
                         :key="index"
                     >
                         <div class="item-img">
-                            <a href="single-product.html"
+                            <a href=""
                                 > <img v-if="item.images && item.images.length > 1 && item.images[1]" :src="'/storage' + item.images[1].url" alt="Image"></a>
                             <button
                                 class="close-btn"
@@ -266,11 +265,11 @@ const handleLogOut=async()=>{
                     <span class="subtotal-amount">{{ cartTotal }}</span>
                 </h3>
                 <div class="group-btn" >
-                    <!-- <router-link to="/cart">
+                     <router-link to="/cart">
                         <a class="axil-btn btn-bg-primary viewcart-btn"
                             >View Cart</a
                         ></router-link
-                    > -->
+                    > 
          <router-link to="/checkout"> <a  @click="handleCartButtonClick"
                        
                        class="axil-btn btn-bg-secondary checkout-btn"
