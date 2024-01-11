@@ -16,6 +16,8 @@ class ProductResource extends JsonResource
     {
         $data = [
             'id' => $this->id,
+            'brand_id'=>$this->brand_id,
+            'category_id'=>$this->products_category_id,
             'name' => $this->name,
             'slug' => $this->slug,
             'description' => $this->description,
@@ -23,24 +25,36 @@ class ProductResource extends JsonResource
             'is_hot_deal_of_the_day' => $this->is_hot_deal_of_the_day,
             'created_at' => $this->created_at->toDateTimeString(),
             'updated_at' => $this->updated_at->toDateTimeString(),
+             //Include colors and sizes
+             'colors' => $this->whenLoaded('colors', function () {
+                return ColorResource::collection($this->colors);
+            }),
+
+            'sizes' => $this->whenLoaded('sizes', function () {
+                return SizeResource::collection($this->sizes);
+            }),
         ];
+ // Include brand information if available
+//  if ($this->relationLoaded('brand') && $this->brand) {
+//     $data['brand'] = BrandResource::collection($this->brand);
+// }
 
         // Include images if available
         if ($this->relationLoaded('images') && $this->images->isNotEmpty()) {
             $data['images'] = ImageResource::collection($this->images);
         }
      // Include stock information if available
-     if ($this->relationLoaded('stocks') && $this->stocks->isNotEmpty()) {
-        $stocks = StockResource::collection($this->stocks);
-           // Calculate total quantity for each product
-           $totalQuantities = $stocks->groupBy('product_id')
-           ->map(function ($groupedStocks) {
-               return $groupedStocks->sum('quantity');
-           });
+    //  if ($this->relationLoaded('stocks') && $this->stocks->isNotEmpty()) {
+    //     $stocks = StockResource::collection($this->stocks);
+    //        // Calculate total quantity for each product
+    //        $totalQuantities = $stocks->groupBy('product_id')
+    //        ->map(function ($groupedStocks) {
+    //            return $groupedStocks->sum('quantity');
+    //        });
 
-       $data['stocks'] = $stocks;
-       $data['total_quantities'] = $totalQuantities;
-    }
+    //    $data['stocks'] = $stocks;
+    //    $data['total_quantities'] = $totalQuantities;
+    // }
 
       //  Include discount information if available
         if ($this->relationLoaded('discount') && $this->discount){

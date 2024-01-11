@@ -38,7 +38,7 @@ export default defineStore('useCartStore', () => {
         const targetItem = items.value.find(currItem => currItem.id === item.id);
         if (targetItem) {
             targetItem.subtotal = calculateSubtotal(targetItem);
-            showNotification("Info", "Item sub-total updated", "info");
+           
         }
     };
     const increaseItem = (item, number = 1) => {
@@ -47,7 +47,7 @@ export default defineStore('useCartStore', () => {
         if(targetItem) {
             targetItem.count += number;
             updateItemSubtotal(targetItem);
-            showNotification("Info", "Item quantity increased", "info");
+            showNotification("Info", "Item sub-total updated", "info");
         }
     };
 
@@ -61,7 +61,7 @@ export default defineStore('useCartStore', () => {
             } else {
                 targetItem.count -= number;
                 updateItemSubtotal(targetItem);
-                showNotification("Info", "Item quantity decreased", "info");
+                showNotification("Info", "Item sub-total updated", "info");
             }
         }
     };
@@ -83,6 +83,7 @@ export default defineStore('useCartStore', () => {
         items.value = [];
         totalItems.value = 0;
         totalCost.value = 0;
+        showNotification("Success", "All items in the cart are cleared", "success");
     };
 
     return {

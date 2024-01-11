@@ -4,7 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
-use App\Models\shopping_process\OrderDetail;
+
 use App\Models\shopping_process\Order;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -26,10 +26,7 @@ class User extends Authenticatable
    public function orders():HasMany{
     return $this->hasMany(Order::class);
    }
-   //order
-   public function order_detail():HasOne{
-     return $this->hasOne(OrderDetail::class);
-   }
+   
     /**
      * The attributes that are mass assignable.
      *

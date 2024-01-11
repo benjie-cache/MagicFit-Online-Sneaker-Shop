@@ -52,18 +52,16 @@
     </div>
 </template>
 <script setup>
-import { ref } from 'vue';
+import {useRouter} from 'vue-router';
+import { ref,reactive } from 'vue';
 import logo from '../../../images/logo/logo1.png';
 import { useAuthStore } from '@/store/authStore.js';
 import { ElForm, ElFormItem, ElInput, ElButton, ElLink } from 'element-plus';
-import { useRouter } from 'vue-router';
-// const form = ref({
-//     email: '',
-//     password: '',
-// });
+const router =useRouter()
+
 const email=ref('');
 const password=ref('');
- const form = ref({
+ const form = reactive({
      email: email.value,
      password: password.value,
  });
@@ -82,9 +80,17 @@ const login = async () => {
    
         await useAuthStore().signIn(email.value,password.value);
         // Redirect to a new route after successful login
-
-        const router = useRouter();
+      // Access router directly in script setup
+      try{
+        
         router.push({ name: 'home' });
+      }catch(error){
+          console.error('redirect failed',error.message)
+      }
+         
+    
+      
+       
     } catch (error) {
         console.error('Login failed:', error.message);
         // Handle login failure (e.g., show an error message to the user)

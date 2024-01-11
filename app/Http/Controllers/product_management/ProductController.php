@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\product_management;
-
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\product_management\Product;
@@ -13,12 +13,45 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //eager load the related table data wheew
-        $products = Product::with(['images', 'discount','stocks'])->get();
+        $perPage = $request->input('per_page', 10);
+
+        $query = Product::with(['images', 'discount']);
+
+       // Log::info('the query', $query);
+    
+       
+    // Check if the 'filters' key exists in the request
+    $filters = json_decode($request->input('filters'), true);
+
+    if ($filters) {
+        // Check and apply the 'brands' filter
+        // Check and apply the 'brands' filter
+if (isset($filters['brands']) && is_array($filters['brands']) && count($filters['brands']) > 0) {
+    $query->whereIn('brand_id', $filters['brands']);
+    // Log::info('Brands filter applied:', $filters['brands']);
+}
+if (isset($filters['categories']) && is_array($filters['categories']) && count($filters['categories']) > 0) {
+    $query->whereIn('products_category_id', $filters['categories']);
+    // Log::info('Brands filter applied:', $filters['brands']);
+}
+
+
+     
+    }
+
+        
+       
+    
+
+
+        // Paginate the results
+        $products = $query->paginate($perPage);
+
         return ProductResource::collection($products);
     }
+
 
     /**
      * 
@@ -43,7 +76,7 @@ class ProductController extends Controller
     {
         //
         $product = Product::findOrFail($product);
-        return response()->json($product,200);
+        return ProductResource::collection($product);
     }
 
     /**

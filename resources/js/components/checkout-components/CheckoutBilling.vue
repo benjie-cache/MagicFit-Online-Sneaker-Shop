@@ -1,7 +1,11 @@
+<script setup>
+
+</script>
 <template lang="">
     <div class="axil-checkout-billing">
                                 <h4 class="title mb--40">Billing details</h4>
                                 <div class="row">
+                                    
                                     <div class="col-lg-6">
                                         <div class="form-group">
                                             <label>First Name <span>*</span></label>
@@ -47,11 +51,7 @@
                                 </div>
                             </div>
 </template>
-<script>
-export default {
-    
-}
-</script>
+
 <style lang="">
     
 </style>

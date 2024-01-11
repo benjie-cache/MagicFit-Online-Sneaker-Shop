@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\product_management\ProductController;
 use App\Http\Controllers\shopping_process\ShoppingSessionController;
 use App\Http\Controllers\UserAuthenticationController;
+use App\Http\Controllers\EntityController;
+use App\Http\Controllers\OrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,9 +37,11 @@ Route::prefix('products')->group(function () {
     Route::put('/{product}', [ProductController::class, 'update']);//edit or update product details
     Route::delete('/{product}', [ProductController::class, 'destroy']);//delete a single product 
 });
-use App\Http\Controllers\EntityController;
 
 Route::get('/entities', [EntityController::class, 'getEntities']);
+
+
+Route::post('/orders', [OrderController::class, 'createOrder']);
 
 //Routes for shopping session crud
 // Route::prefix('shopping_sessions')->group(function(){

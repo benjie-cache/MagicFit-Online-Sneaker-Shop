@@ -1,6 +1,6 @@
 <script setup>
 import axios from "axios";
-import { onMounted, ref } from "vue";
+import { onMounted, ref,watch } from "vue";
 import { useProductStore } from "@/store/productStore.js";
 import { defineAsyncComponent } from "vue";
 const Product = defineAsyncComponent(() => import("./Product.vue"));
@@ -11,6 +11,7 @@ const headers = {
     "Content-Type": "application/json",
 };
 const selectedSort = ref("latest");
+
 
 const sortProducts = () => {
     switch (selectedSort.value) {
@@ -35,15 +36,21 @@ const fetchProducts = async () => {
     try {
         const res = await axios.get(FETCH_PRODUCTS_URL, headers);
         productStore.setProducts(res.data.data);
+        console.log(res.data)
     } catch (error) {
         console.error("An error occurred while fetching products:", error);
         throw error;
     }
 };
+// Watch for changes in sortedProducts and apply the changes to the displayed products
 
+watch(() => productStore.sortedProducts, (newlySorted) => {
+    productStore.sortedProducts=newlySorted
+});
 onMounted(() => {
     fetchProducts();
 });
+
 </script>
 
 <template lang="">
@@ -70,11 +77,7 @@ onMounted(() => {
                         </select>
                         <!-- End Single Select  -->
                     </div>
-                    <div class="d-lg-none">
-                        <button class="product-filter-mobile filter-toggle">
-                            <i class="fas fa-filter"></i> FILTER
-                        </button>
-                    </div>
+                  
                 </div>
             </div>
         </div>
@@ -82,17 +85,13 @@ onMounted(() => {
         <div class="row row--15" id="prod-list">
             <div
                 class="col-xl-4 col-sm-6"
-                v-for="(product, index) in productStore.sortedProducts"
+                v-for="(product,index) in productStore.sortedProducts"
                 :key="index"
             >
                 <Product :product="product" />
             </div>
             <!-- End Single Product  -->
         </div>
-        <div class="text-center pt--20">
-            <a href="#" class="axil-btn btn-bg-lighter btn-load-more"
-                >Pagination goes here</a
-            >
-        </div>
+       
     </div>
 </template>

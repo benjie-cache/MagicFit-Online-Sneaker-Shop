@@ -8,16 +8,20 @@ export const useAuthStore = defineStore({
   state: () => ({
     user: JSON.parse(localStorage.getItem('user')) || null,
     token: localStorage.getItem('token') || null,
+    router : useRouter()
   }),
   actions: {
-    async signUp(name, email, password) {
+
+    async signUp(first_name, email, password) {
       try {
+        const headers = this.getHeadersWithoutToken()
         const response = await axios.post('api/auth/register', {
-          name,
+          first_name,
           email,
           password,
         },
-          this.getHeadersWithoutToken());
+        {headers}
+        );
 
         const { user, token } = response.data.data;
         this.setUserToken(user, token);
@@ -41,7 +45,7 @@ export const useAuthStore = defineStore({
 
         const { user, token } = response.data.data;
         this.setUserToken(user, token);
-
+    
         return user;
       } catch (error) {
         console.error('There was an error signing in:', error.message);
@@ -55,8 +59,8 @@ export const useAuthStore = defineStore({
         await axios.post('api/auth/logout', null, { headers });
 
         this.clearUserToken();
-        const router = useRouter();
-        router.push({ name: 'login' });
+       
+        this.router.push({ name: 'login' });
       } catch (error) {
         console.error('There was an error logging out ', error);
         throw error;

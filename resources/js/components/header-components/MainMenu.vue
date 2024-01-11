@@ -4,13 +4,18 @@ import prodImgUrl from '../../../images/others/luka 2 caves.webp';
 import favicon from '../../../images/others/Nike G.T black.png';
 import { ref, watch } from 'vue'
 import useCartStore from '@/store/cartStore.js';
+
 import Cart from '@/components/cart-components/Cart.vue';
 import useDropdownStore from '@/store/dropdownStore.js';
 import {useAuthStore} from '@/store/authStore.js';
+
+
 const cartStore = useCartStore();
+
 const cartItemCount = ref(cartStore.totalItems);
 const cartTotal = ref(parseFloat(cartStore.totalCost).toFixed(2));
 const cartItems = ref(cartStore.items);
+
 //initialize authstore
 const authStore=useAuthStore();
 //handle cart drop down
@@ -54,6 +59,7 @@ watch(()=>dropDownStore.isAccountDropdownopen,(newisAccountDropdownopen)=>{
 watch(() => cartStore.totalItems, (newTotalItems) => {
     cartItemCount.value = newTotalItems;
 });
+
 
 watch(() => cartStore.totalCost, (newTotalCost) => {
     cartTotal.value = parseFloat(newTotalCost).toFixed(2);
@@ -128,10 +134,15 @@ const handleLogOut=async()=>{
                                     <i class="flaticon-magnifying-glass"></i>
                                 </a>
                             </li>
-                            <li class="wishlist">
-                                <a href="wishlist.html">
+                           
+                            <li class="shopping-cart">
+                                 <router-link to="/wishlist" class="cart-dropdown-btn">
+                                    
+                                 
                                     <i class="flaticon-heart"></i>
-                                </a>
+
+                                   
+                                </router-link>
                             </li>
                             <li class="shopping-cart">
                                 <a  class="cart-dropdown-btn"  @click="handleCartButtonClick"  >
@@ -266,7 +277,7 @@ const handleLogOut=async()=>{
                 </h3>
                 <div class="group-btn" >
                      <router-link to="/cart">
-                        <a class="axil-btn btn-bg-primary viewcart-btn"
+                        <a @click="handleCartButtonClick" class="axil-btn btn-bg-primary viewcart-btn"
                             >View Cart</a
                         ></router-link
                     > 

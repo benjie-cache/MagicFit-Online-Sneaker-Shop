@@ -1,0 +1,175 @@
+   <div class="axil-checkout-area axil-section-gap p-0">
+            <div class="card">
+                <div class="col-lg-9">
+                    <div class="axil-checkout-billing">
+                      <div class="text-center">
+                          <h6 class="mt-2 text-primary ">Billing Info</h6>
+                      </div>
+                       
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label>First Name <span>*</span></label>
+                                    <input 
+                                    class="form-control"
+                                        type="text"
+                                        id="first-name"
+                                        v-model="
+                                            orderStore.billingDetails.firstName
+                                        "
+                                        placeholder="Enter Your first name"
+                                    />
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label>First Name <span>*</span></label>
+                                    <input
+                                    class="form-control"
+                                        type="text"
+                                        id="first-name"
+                                        v-model="
+                                            orderStore.billingDetails.firstName
+                                        "
+                                        placeholder="Enter Your first name"
+                                    />
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label> Estate <span>*</span></label>
+                                    <input
+                                    class="form-control"
+                                        type="text"
+                                        id="estate"
+                                        v-model="
+                                            orderStore.billingDetails.estate
+                                        "
+                                    />
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label>Home Address <span>*</span></label>
+                                    <input
+                                        type="text"
+                                        id="home-address"
+                                        class="mb--15"
+                                        v-model="
+                                            orderStore.billingDetails
+                                                .homeAddress
+                                        "
+                                        placeholder="Your Home Address"
+                                    />
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label>Phone <span>*</span></label>
+                                    <input
+                                        type="tel"
+                                        id="phone"
+                                        v-model="
+                                            orderStore.billingDetails.phone
+                                        "
+                                    />
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label>Email Address <span>*</span></label>
+                                    <input
+                                        type="email"
+                                        id="email"
+                                        v-model="
+                                            orderStore.billingDetails.email
+                                        "
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+                      
+                      
+                        <div class="col-lg-3">
+                           <div
+                                class="axil-order-summery order-checkout-summery"
+                            >
+                                <h5 class="title mb--20">Your Order</h5>
+                                <div class="summery-table-wrap">
+                                    <table class="table summery-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Product</th>
+                                                <th>Subtotal</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr
+                                                class="order-product"
+                                                v-for="(
+                                                    item, index
+                                                ) in cartItems"
+                                                :key="index"
+                                            >
+                                                <td>
+                                                    {{ item.name
+                                                    }}<span class="quantity">
+                                                        x {{ item.count }}</span
+                                                    >
+                                                </td>
+                                                <td>KSH {{ item.subtotal }}</td>
+                                            </tr>
+
+                                            <tr class="order-total">
+                                                <td>Order Total</td>
+                                                <td class="order-total-amount">
+                                                    KSH {{ cartTotal }}
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="order-payment-method" v-show="isFormValid">
+                                    <div class="single-payment">
+                                        <div style="margin-top: 20px">
+                                            <el-radio-group
+                                                v-model="paymentMethod"
+                                            >
+                                                <el-radio label="mpesa" border
+                                                    >Mpesa</el-radio
+                                                >
+                                                <el-radio label="card" border
+                                                    >Pay with card</el-radio
+                                                >
+                                            </el-radio-group>
+                                        </div>
+                                    </div>
+                                    <el-form-item label="Mpesa Number" v-if="paymentMethod=='mpesa'">
+                                        <el-input v-model="orderStore.paymentMethod" />
+                                    </el-form-item>
+                                    <el-button type="primary" v-if="paymentMethod=='mpesa'">Send Payment Notification</el-button>
+                                </div>
+                                <el-alert v-show="!isFormValid" title="Fill your billing info to proceed" type="info" />
+                            
+                                       
+                                      
+                                              
+                                               
+                                
+                            
+                                <button
+                                 @click="processCheckout"
+                                    type="submit"
+                                    class="axil-btn btn-bg-primary checkout-btn"
+                                >
+                                    Process Order
+                                </button>
+
+                          
+                        </div>
+                    
+                        </div>

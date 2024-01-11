@@ -2,6 +2,7 @@
 
 </script>
 <template lang="">
+   <main class="main-wrapper">
      <div class="axil-dashboard-area axil-section-gap">
             <div class="container">
                 <div class="axil-dashboard-warp">
@@ -166,5 +167,6 @@
                 </div>
             </div>
         </div>
+    </main>
 </template>
 

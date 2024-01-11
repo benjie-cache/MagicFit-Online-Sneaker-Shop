@@ -62,5 +62,19 @@ class Product extends Model
     {
         return $this->belongsToMany(Size::class, 'stocks')->distinct();
     }
+     /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'products_category_id',
+        'brand_id',
+        'name',
+        'slug',
+        'description',
+        'price',
+        'is_hot_deal_of_the_day',
+    ];
 
 }

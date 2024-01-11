@@ -1,6 +1,8 @@
 <script setup>
 import { defineAsyncComponent ,onMounted} from "vue";
+import {useWishlistStore} from '@/store/wishlistStore.js';
 
+const wishlistStore=useWishlistStore()
 const ProductQuickView = defineAsyncComponent(() =>
     import("@/components/ProductQuickView.vue")
 );
@@ -20,45 +22,7 @@ const closeQuickView = () => {
 const props = defineProps({
     product: Object,
 });
-// onMounted(()=>{
-//     $('.slick-slider').slick('setPosition');
-//      $('.product-large-thumbnail').slick({
-//                 infinite: false,
-//                 slidesToShow: 1,
-//                 slidesToScroll: 1,
-//                 arrows: false,
-//                 dots: false,
-//                 speed: 800,
-//                 draggable: false,
-//                 asNavFor: '.product-small-thumb'
-//             });
-//     $('.product-small-thumb').slick({
-//                 infinite: false,
-//                 slidesToShow: 6,
-//                 slidesToScroll: 1,
-//                 arrows: false,
-//                 dots: false,
-//                 focusOnSelect: true,
-//                 vertical: true,
-//                 speed: 800,
-//                 asNavFor: '.product-large-thumbnail',
-//                 responsive: [{
-//                         breakpoint: 992,
-//                         settings: {
-//                             vertical: false,
-//                         }
-//                     },
-//                     {
-//                         breakpoint: 768,
-//                         settings: {
-//                             vertical: false,
-//                             slidesToShow: 4,
-//                         }
-//                     }
-//                 ]
 
-//             });
-// })
 // Define a function to generate a unique modal ID based on product ID
 const getModalId = (productId) => `${modalIdPrefix}-${productId}`;
 
@@ -90,7 +54,7 @@ const cartStore = useCartStore();
             <div class="product-hover-action">
                 <ul class="cart-action">
                     <li class="wishlist">
-                        <a href="wishlist.html"><i class="far fa-heart"></i></a>
+                        <a @click.prevent="wishlistStore.addToWishlist(product)"><i class="far fa-heart"></i></a>
                     </li>
                     <li class="select-option">
                         <a @click="useCartStore().addItem(product)"
@@ -145,7 +109,7 @@ const cartStore = useCartStore();
         </div>
     </div>
     <div
-        class="modal fade quick-view-product"
+        class="modal modal-sm fade quick-view-product"
         :id="getModalId(product.id)"
         tabindex="-1"
         aria-hidden="true"
