@@ -17,10 +17,14 @@ return new class extends Migration
             $table->id();
             $table->string('first_name',20);
             $table->string('last_name',20);
-            $table->string('phone',20);
-            $table->string('status',20);
-         
+            $table->integer('phone')->nullable(); 
+            $table->enum('type',['guest','authenticated'])->default('authenticated');
+            
             $table->timestamps();
+            //foreign keys
+              //foreign keys
+              $table->foreignId('user_id')->nullable()->index()->constrained()->onDelete('cascade');
+              
         });
     }
 

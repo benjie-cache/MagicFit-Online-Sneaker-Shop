@@ -17,7 +17,7 @@ class ProductCategoryFactory extends Factory
      */
     public function definition()
     {
-        $categories=array('Men','Women','Children');
+        $categories=array('Men','Women','Children','Unisex');
         return [
             'name'=>$this->faker->unique()->randomElement($categories),
             'description'=>$this->faker->sentence

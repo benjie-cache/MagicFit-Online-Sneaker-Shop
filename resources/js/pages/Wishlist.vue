@@ -12,7 +12,7 @@ const wishlistStore=useWishlistStore();
                     <h4 class="title">My Wish List on MagicFit</h4>
                 </div>
                 <div class="table-responsive">
-                    <table class="table axil-product-table axil-wishlist-table">
+                    <table class="table axil-product-table axil-wishlist-table" v-if="wishlistStore.wishlistItems.length">
                         <thead>
                             <tr>
                                 <th scope="col" class="product-remove"></th>

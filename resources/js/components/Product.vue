@@ -108,13 +108,13 @@ const cartStore = useCartStore();
             </div>
         </div>
     </div>
-    <div
+    <div v-if="isQuickViewOpen"
         class="modal modal-sm fade quick-view-product"
         :id="getModalId(product.id)"
         tabindex="-1"
         aria-hidden="true"
     >
-        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-dialog modal-dialog-centered"  >
             <div class="modal-content">
                 <div class="modal-header">
                     <button
@@ -133,7 +133,4 @@ const cartStore = useCartStore();
         </div>
     </div>
 </template>
-<style scoped>
-@import "slick-carousel/slick/slick.css";
-@import "slick-carousel/slick/slick-theme.css";
-</style>
+

@@ -11,7 +11,7 @@ import useCartStore from "@/store/cartStore.js";
 const authStore = useAuthStore();
 const cartStore = useCartStore();
 const orderStore = useOrderStore();
-const paymentMethod = ref(orderStore.paymentMethod);
+const paymentMethod =orderStore.paymentMethod;
 
 const cartTotal = ref(parseFloat(cartStore.totalCost).toFixed(2));
 const cartItems = ref(cartStore.items);
@@ -22,6 +22,9 @@ const showNotification = (title, message, type) => {
         type,
     });
 };
+const getBillingInfo=()=>{
+    console.log(orderStore.billingInfo)
+}
 watch(
     () => cartStore.items,
     (newItems) => {
@@ -98,9 +101,12 @@ watch(
                             </div>
                             <div class="axil-checkout-billing">
                                 <h4 class="title mb--40">Billing details</h4>
+                                <form @submit.prevent="orderStore.handleBillingInfo">
                                 <div class="row">
-                                    <div class="col-lg-6">
-                                        <div class="form-group">
+                                  
+
+                                         
+                                        <div class="form-group col-lg-6">
                                             <label
                                                 >First Name
                                                 <span>*</span></label
@@ -108,57 +114,83 @@ watch(
                                             <input
                                                 type="text"
                                                 id="first-name"
-                                                placeholder="Adam"
+                                                placeholder="Your First Name"
+                                                v-model="orderStore.billingInfo.first_name"
                                             />
                                         </div>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <div class="form-group">
-                                            <label
-                                                >Last Name <span>*</span></label
-                                            >
-                                            <input
-                                                type="text"
-                                                id="last-name"
-                                                placeholder="John"
-                                            />
+                                        <div class=" form-group col-lg-6">
+                                        
+                                                <label
+                                                    >Last Name <span>*</span></label
+                                                >
+                                                <input
+                                                    type="text"
+                                                    id="last-name"
+                                                    placeholder="Enter Your Last Name"
+                                                    v-model="orderStore.billingInfo.last_name"
+                                                />
+                                    
                                         </div>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <div class="form-group">
+                                        <div class="form-group col-lg-6">
+                                            <label>Phone <span>*</span></label>
+                                            <input type="text" id="phone"   
+                                              placeholder="Phone Number"
+                                                v-model="orderStore.billingInfo.phone" />
+                                        </div>
+                                        <div class="form-group col-lg-6">
                                             <label>Estate <span>*</span></label>
                                             <input
                                                 type="text"
                                                 id="estate"
                                                 placeholder="Where do you live?"
+                                                v-model="orderStore.billingInfo.estate"
                                             />
                                         </div>
-                                    </div>
-                                    <div>
-                                        <div class="form-group">
-                                            <label
-                                                >Street Address
+                                        <div class="form-group col-lg-6">
+                                        <label
+                                                >Street Name
                                                 <span>*</span></label
                                             >
                                             <input
                                                 type="text"
                                                 id="address1"
                                                 class="mb--15"
-                                                placeholder="House number and street name"
+                                                placeholder="Street Name"
+                                                v-model="orderStore.billingInfo.street_address"
                                             />
+
+                                        </div>
+                                    
+                                        <div class="form-group col-lg-6">
+                                            <label
+                                                >Apartment Name
+                                                <span>*</span></label
+                                            >
                                             <input
                                                 type="text"
                                                 id="address2"
-                                                placeholder="Apartment, suite, unit, etc. (optonal)"
+                                                placeholder="Apartment Name"
+                                                v-model="orderStore.billingInfo.apartment_name"
                                             />
                                         </div>
-                                    </div>
+                                        <div class="form-group col-lg-6">
+                                            <label
+                                                >House Number
+                                                <span>*</span></label
+                                            >
+                                            <input
+                                                type="text"
+                                                id="address2"
+                                                placeholder="Apartment Name"
+                                                v-model="orderStore.billingInfo.house_number"
+                                            />
+                                        </div>
+                                       
+                                        <button type="submit" class="btn btn-primary">Update Billing Info</button>
+                                
                                 </div>
-
-                                <div class="form-group">
-                                    <label>Phone <span>*</span></label>
-                                    <input type="tel" id="phone" />
-                                </div>
+                            </form>
+                              
 
                                 <div class="form-group input-group"   v-if="!authStore.user">
                                     <input
@@ -170,7 +202,7 @@ watch(
                                         >Create an account</label
                                     >
                                 </div>
-                                <div class="form-group different-shippng">
+                                <!-- <div class="form-group different-shippng">
                                     <div class="toggle-bar">
                                         <a
                                             href="javascript:void(0)"
@@ -255,7 +287,7 @@ watch(
                                         rows="2"
                                         placeholder="Notes about your order, e.g. speacial notes for delivery."
                                     ></textarea>
-                                </div>
+                                </div> -->
                             </div>
                         </div>
                         <div class="col-md-4 order-md-2 mb-4">

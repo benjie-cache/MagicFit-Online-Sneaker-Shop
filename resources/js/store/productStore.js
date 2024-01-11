@@ -37,7 +37,7 @@ export const useProductStore = defineStore({
        const headers={   "Content-Type": "application/json"}
         const apiUrl = 'api/products';
       // Send filters to the backend as query parameters
-          console.log( JSON.stringify(this.filters))
+          
           const response = await axios.get(apiUrl, {
             params:  { filters: JSON.stringify(this.filters) },
             headers: { "Content-Type": "application/json" },

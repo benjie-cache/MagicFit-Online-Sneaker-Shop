@@ -4,9 +4,11 @@ namespace App\Models;
 
 use App\Models\shopping_process\OrderItem;
 use App\Models\User;
+use App\Models\Customer;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Order extends Model
 {
@@ -19,8 +21,11 @@ class Order extends Model
 
    
 
-    public function user()
+    public function user():BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+    public function customer():BelongsTo{
+        return $this->belongsTo(Customer::class);
     }
 }

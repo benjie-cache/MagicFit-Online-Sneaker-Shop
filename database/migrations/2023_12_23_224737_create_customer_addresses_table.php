@@ -15,16 +15,17 @@ return new class extends Migration
     {
         Schema::create('customer_addresses', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('customer_id')->nullable()->index()->constrained()->onDelete('cascade');
             $table->string('type',20);
             $table->string('first_name',20);
             $table->string('last_name',20);
             $table->string('phone',20);
-            $table->string('address1',20);
-            $table->string('address2',20);
-            $table->string('city',20);
-            $table->string('zip_code',20);
-            $table->string('region',20);
-            $table->string('country_code',20);
+            $table->string('estate',20);
+            $table->string('address2', 20)->nullable();
+            
+            $table->string('street_address',20);
+            $table->string('apartment_name',20);
+            $table->string('house_number',20);
             $table->timestamps();
         });
     }

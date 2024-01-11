@@ -4,6 +4,7 @@ import {useWishlistStore} from '@/store/wishlistStore.js';
 import useCartStore from '@/store/cartStore.js';
 
 const cartStore=useCartStore();
+import rateIcon from '../../images/icons/rate.png';
 
 const wishlistStore=useWishlistStore()
 const props = defineProps({
@@ -44,7 +45,7 @@ const handleThumbnailChange=(index)=> {
                                     <div class="inner">
                                         <div class="product-rating">
                                             <div class="star-rating">
-                                                <img src="assets/images/icons/rate.png" alt="Rate Images">
+                                                <img :src="rateIcon" alt="Rate Images">
                                             </div>
                                             <div class="review-link">
                                                 <a href="#">(<span>1</span> customer reviews)</a>
@@ -102,10 +103,7 @@ const handleThumbnailChange=(index)=> {
 
                                         <!-- Start Product Action Wrapper  -->
                                         <div class="product-action-wrapper d-flex-center">
-                                            <!-- Start Quentity Action  -->
-                                            <!-- <div class="pro-qty"><input type="text" value="1"></div> -->
-                                            <!-- End Quentity Action  -->
-
+                                           
                                             <!-- Start Product Action  -->
                                             <ul class="product-action d-flex-center mb--0">
                                                 <li class="add-to-cart"><a  @click="cartStore.addItem(selected_product)" class="axil-btn btn-bg-primary">Add to Cart</a></li>

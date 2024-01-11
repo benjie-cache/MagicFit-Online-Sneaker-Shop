@@ -42,7 +42,7 @@ export const useWishlistStore = defineStore('useWishlistStore', ()=> {
 
     // Add item to cart
     useCart.addItem(item);
-    showNotification('Success', 'Item added to the cart from the wishlist', 'success');
+  //  showNotification('Success', 'Item added to the cart from the wishlist', 'success');
   };
 
   return {

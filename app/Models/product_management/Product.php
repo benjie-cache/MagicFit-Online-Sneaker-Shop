@@ -77,4 +77,13 @@ class Product extends Model
         'is_hot_deal_of_the_day',
     ];
 
+    public function sluggable(): array
+    {
+        return [
+            'slug' => [
+                'source' => 'name',
+            ],
+        ];
+    }
+
 }

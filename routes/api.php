@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CheckoutController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\product_management\ProductController;
@@ -30,7 +31,7 @@ Route::prefix('auth')->middleware('auth:sanctum')->group(function (){
     Route::post('logout', [UserAuthenticationController::class, 'logout']);
 });
 //Routes for product crud ...
-Route::prefix('products')->group(function () {
+Route::prefix('products')->group(function (){
     Route::get('/', [ProductController::class, 'index']);     //get a list of all products
     Route::get('/{product}', [ProductController::class, 'show']);///show a single product
     Route::post('/', [ProductController::class, 'store']);//store a newly created product
@@ -40,22 +41,5 @@ Route::prefix('products')->group(function () {
 
 Route::get('/entities', [EntityController::class, 'getEntities']);
 
-
-Route::post('/orders', [OrderController::class, 'createOrder']);
-
-//Routes for shopping session crud
-// Route::prefix('shopping_sessions')->group(function(){
-//       Route::get('/', [ShoppingSessionController::class,'index']);
-//       Route::get('/{shopping_session}', [ShoppingSessionController::class,'show']);
-//       Route::post('/', [ShoppingSessionController::class,'store']);
-//       Route::put('/{shopping_session}', [ShoppingSessionController::class,'update']);
-//       Route::delete('/{shopping_session}', [ShoppingSessionController::class,'destroy']);
-// });
- //Routes for shopping cart items crud
-// Route::prefix('cart_items')->group(function(){
-//     Route::get('/', [CartItemController::class,'index']);
-//     Route::get('/{cart_item}', [CartItemController::class,'show']);
-//     Route::post('/',[CartItemController::class,'store']);
-//     Route::put('/{cart_item}',[CartItemController::class,'update']);
-//     Route::delete('/{cart_item}',[CartItemController::class,'destroy']);
-// });
+//Checkout api
+Route::post('checkout/save_checkout_information',[CheckoutController::class,'save_checkout_information']);

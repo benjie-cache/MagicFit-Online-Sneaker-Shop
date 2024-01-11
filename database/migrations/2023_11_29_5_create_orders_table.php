@@ -16,9 +16,11 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->decimal('total_price',10,2);
-            $table->string('status');
-            $table->unsignedBigInteger('user_id')->index();
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->enum('status',['unpaid','paid'])->default('unpaid');
+            //foreign keys
+            $table->foreignId('user_id')->nullable()->index()->constrained()->onDelete('cascade');
+            $table->foreignId('customer_id')->nullable()->index()->constrained()->onDelete('cascade');
+
             $table->timestamps();
         });
     }

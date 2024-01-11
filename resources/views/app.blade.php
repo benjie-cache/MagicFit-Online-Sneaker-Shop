@@ -24,7 +24,8 @@
 
     
     
-    @vite('resources/css/app.css') 
+   @vite(['resources/css/app.css', 'resources/js/app.js'])
+</head>
 </head>
 
 <body class="sticky-header">
@@ -36,7 +37,7 @@
 
         <!-- Vue Router View -->
     </div>
-    @vite('resources/js/app.js')
+ 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" ></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js" ></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" ></script>

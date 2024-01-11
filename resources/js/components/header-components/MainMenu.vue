@@ -5,7 +5,7 @@ import favicon from '../../../images/others/Nike G.T black.png';
 import { ref, watch } from 'vue'
 import useCartStore from '@/store/cartStore.js';
 
-import Cart from '@/components/cart-components/Cart.vue';
+
 import useDropdownStore from '@/store/dropdownStore.js';
 import {useAuthStore} from '@/store/authStore.js';
 

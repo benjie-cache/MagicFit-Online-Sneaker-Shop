@@ -15,15 +15,14 @@ return new class extends Migration
     {
         Schema::create('order_details', function (Blueprint $table) {
             $table->id();
-            $table->string('first_name',20);
-            $table->string('last_name',20);
-            $table->string('phone',20);
-            $table->string('address1',20);
-            $table->string('address2',20);
-            $table->string('city',20);
-            $table->string('zip_code',20);
-            $table->string('region',20);
-            $table->string('country_code',20);
+            $table->foreignId('customer_id')->nullable()->index()->constrained()->onDelete('cascade');
+
+            $table->foreignId('order_id')->nullable()->index()->constrained()->onDelete('cascade');
+            $table->unsignedBigInteger('billing_address_id')->nullable()->index();
+            $table->foreign('billing_address_id')->references('id')->on('customer_addresses')->onDelete('set null');
+            
+            $table->unsignedBigInteger('shipping_address_id')->nullable()->index();
+            $table->foreign('shipping_address_id')->references('id')->on('customer_addresses')->onDelete('set null');
             $table->timestamps();
         });
     }

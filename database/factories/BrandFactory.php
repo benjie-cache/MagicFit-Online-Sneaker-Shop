@@ -17,7 +17,7 @@ class BrandFactory extends Factory
  
     public function definition()
     {  
-        $brands = ['Nike', 'Adidas', 'Louis Vuitton'];
+        $brands = ['Nike', 'Adidas', 'Louis Vuitton','Puma','Dr Martens'];
 
         return [
             'name' => $this->faker->unique()->randomElement($brands)

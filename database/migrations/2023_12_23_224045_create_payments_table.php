@@ -17,16 +17,17 @@ return new class extends Migration
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('order_id')->index();
+            $table->string('name',50);
+            $table->string('lastname',50);
             $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
             $table->decimal('amount',10,2);
-            $table->string('status');
+            $table->enum('status', ['process','success','reject'])->default("process");
             $table->string('type');
-            $table->foreignIdFor(User::class,'created_by')->nullable();
-            $table->foreignIdFor(User::class,'updated_by')->nullable();
+           
             $table->timestamps();
         });
     }
-
+ 
     /**
      * Reverse the migrations.
      *
