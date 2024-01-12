@@ -13634,7 +13634,7 @@ body.open .closeMask {
 }
 
 .axil-checkout-billing .form-group input {
-    height: 60px;
+    height: 40px;
     border-color: var(--color-light);
     padding: 0 30px
 }

@@ -1,5 +1,7 @@
 <script setup>
+import { useAuthStore } from "@/store/authStore.js";
 
+const authStore=useAuthStore()
 </script>
 <template lang="">
    <main class="main-wrapper">
@@ -9,7 +11,7 @@
                     <div class="axil-dashboard-author">
                         <div class="media">
                             <div class="thumbnail">
-                                <img src="assets/images/product/fashion/product1.png" alt="Hello Ben">
+                                <img src="" alt="Hello Ben">
                             </div>
                             <div class="media-body">
                                 <h5 class="title mb-0">Hello Ben</h5>
@@ -117,15 +119,16 @@
                                                     <div class="col-lg-6">
                                                         <div class="form-group">
                                                             <label>First Name</label>
-                                                            <input type="text" class="form-control" value="Ben">
+                                                            <input type="text" class="form-control" v-model="authStore.user.first_name">
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-6">
                                                         <div class="form-group">
                                                             <label>Last Name</label>
-                                                            <input type="text" class="form-control" value="Ngovi">
+                                                            <input type="text" class="form-control" v-model="authStore.user.last_name">
                                                         </div>
                                                     </div>
+                                                    
                                                     <div class="col-12">
                                                         <div class="form-group mb--40">
                                                             <label>Country/ Region</label>

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\shopping_process;
 
 use App\Models\shopping_process\OrderItem;
 use App\Models\User;
-use App\Models\Customer;
+use App\Models\customer_management\Customer;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;

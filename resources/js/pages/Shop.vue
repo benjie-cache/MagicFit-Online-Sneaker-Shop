@@ -12,7 +12,7 @@
                                 <li class="separator"></li>
                                 <li class="axil-breadcrumb-item active" aria-current="page">Shop Now</li>
                             </ul>
-                            <h1 class="title">Doors To A World Of Drip</h1>
+                            <h4 class="title">Doors To A World Of Drip</h4>
                         </div>
                     </div>
                     <div class="col-lg-6 col-md-4">

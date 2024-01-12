@@ -38,8 +38,12 @@
                     >
                         Create Account
                     </button>
+                 
+                   
                 </div>
+                
             </form>
+            
         </div>
     </div>
 </template>
@@ -52,21 +56,17 @@ const router = useRouter();
 const first_name = ref("");
 const email = ref("");
 const password = ref("");
-
+const authStore=useAuthStore()
 const register = async () => {
     try {
-        await useAuthStore().signUp(
+        await authStore.signUp(
             first_name.value,
             email.value,
             password.value
         );
         // Redirect to a new route after successful registration
         // For example, you can redirect to the login page
-        try{
-            router.push({ name: "home" });
-        }catch(error){
-            console.error('Redirect failed',error.message)
-        }
+       
         
     } catch (error) {
         console.error("Registration failed:", error.message);

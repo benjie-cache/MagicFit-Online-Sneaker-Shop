@@ -41,5 +41,9 @@ Route::prefix('products')->group(function (){
 
 Route::get('/entities', [EntityController::class, 'getEntities']);
 
-//Checkout api
-Route::post('checkout/save_checkout_information',[CheckoutController::class,'save_checkout_information']);
+
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::post('checkout/save_checkout_information', [CheckoutController::class, 'save_checkout_information']);
+    
+ 
+});

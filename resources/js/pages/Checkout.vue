@@ -2,7 +2,6 @@
 import { defineAsyncComponent, reactive, ref, watch } from "vue";
 import { ElNotification } from "element-plus";
 
-
 import { useAuthStore } from "@/store/authStore.js";
 
 import { useOrderStore } from "@/store/orderStore.js";
@@ -11,7 +10,7 @@ import useCartStore from "@/store/cartStore.js";
 const authStore = useAuthStore();
 const cartStore = useCartStore();
 const orderStore = useOrderStore();
-const paymentMethod =orderStore.paymentMethod;
+const paymentMethod = orderStore.paymentMethod;
 
 const cartTotal = ref(parseFloat(cartStore.totalCost).toFixed(2));
 const cartItems = ref(cartStore.items);
@@ -22,9 +21,9 @@ const showNotification = (title, message, type) => {
         type,
     });
 };
-const getBillingInfo=()=>{
-    console.log(orderStore.billingInfo)
-}
+const getBillingInfo = () => {
+    console.log(orderStore.billingInfo);
+};
 watch(
     () => cartStore.items,
     (newItems) => {
@@ -37,14 +36,11 @@ watch(
         cartTotal.value = parseFloat(newTotalCost).toFixed(2);
     }
 );
-
-
-
 </script>
 <template lang="">
     <main class="main-wrapper">
         <div class="axil-checkout-area axil-section-gap">
-            <div class="container">
+            <div class="container" v-if="cartItems.length">
                 <form action="#">
                     <div class="row">
                         <div class="col-lg-8">
@@ -101,11 +97,12 @@ watch(
                             </div>
                             <div class="axil-checkout-billing">
                                 <h4 class="title mb--40">Billing details</h4>
-                                <form @submit.prevent="orderStore.handleBillingInfo">
-                                <div class="row">
-                                  
-
-                                         
+                                <form
+                                    @submit.prevent="
+                                        orderStore.handleBillingInfo
+                                    "
+                                >
+                                    <div class="row">
                                         <div class="form-group col-lg-6">
                                             <label
                                                 >First Name
@@ -115,27 +112,36 @@ watch(
                                                 type="text"
                                                 id="first-name"
                                                 placeholder="Your First Name"
-                                                v-model="orderStore.billingInfo.first_name"
+                                                v-model="
+                                                    orderStore.billingInfo
+                                                        .first_name
+                                                "
                                             />
                                         </div>
-                                        <div class=" form-group col-lg-6">
-                                        
-                                                <label
-                                                    >Last Name <span>*</span></label
-                                                >
-                                                <input
-                                                    type="text"
-                                                    id="last-name"
-                                                    placeholder="Enter Your Last Name"
-                                                    v-model="orderStore.billingInfo.last_name"
-                                                />
-                                    
+                                        <div class="form-group col-lg-6">
+                                            <label
+                                                >Last Name <span>*</span></label
+                                            >
+                                            <input
+                                                type="text"
+                                                id="last-name"
+                                                placeholder="Enter Your Last Name"
+                                                v-model="
+                                                    orderStore.billingInfo
+                                                        .last_name
+                                                "
+                                            />
                                         </div>
                                         <div class="form-group col-lg-6">
                                             <label>Phone <span>*</span></label>
-                                            <input type="text" id="phone"   
-                                              placeholder="Phone Number"
-                                                v-model="orderStore.billingInfo.phone" />
+                                            <input
+                                                type="text"
+                                                id="phone"
+                                                placeholder="Phone Number"
+                                                v-model="
+                                                    orderStore.billingInfo.phone
+                                                "
+                                            />
                                         </div>
                                         <div class="form-group col-lg-6">
                                             <label>Estate <span>*</span></label>
@@ -143,11 +149,14 @@ watch(
                                                 type="text"
                                                 id="estate"
                                                 placeholder="Where do you live?"
-                                                v-model="orderStore.billingInfo.estate"
+                                                v-model="
+                                                    orderStore.billingInfo
+                                                        .estate
+                                                "
                                             />
                                         </div>
                                         <div class="form-group col-lg-6">
-                                        <label
+                                            <label
                                                 >Street Name
                                                 <span>*</span></label
                                             >
@@ -156,11 +165,13 @@ watch(
                                                 id="address1"
                                                 class="mb--15"
                                                 placeholder="Street Name"
-                                                v-model="orderStore.billingInfo.street_address"
+                                                v-model="
+                                                    orderStore.billingInfo
+                                                        .street_address
+                                                "
                                             />
-
                                         </div>
-                                    
+
                                         <div class="form-group col-lg-6">
                                             <label
                                                 >Apartment Name
@@ -170,7 +181,10 @@ watch(
                                                 type="text"
                                                 id="address2"
                                                 placeholder="Apartment Name"
-                                                v-model="orderStore.billingInfo.apartment_name"
+                                                v-model="
+                                                    orderStore.billingInfo
+                                                        .apartment_name
+                                                "
                                             />
                                         </div>
                                         <div class="form-group col-lg-6">
@@ -182,17 +196,26 @@ watch(
                                                 type="text"
                                                 id="address2"
                                                 placeholder="Apartment Name"
-                                                v-model="orderStore.billingInfo.house_number"
+                                                v-model="
+                                                    orderStore.billingInfo
+                                                        .house_number
+                                                "
                                             />
                                         </div>
-                                       
-                                        <button type="submit" class="btn btn-primary">Update Billing Info</button>
-                                
-                                </div>
-                            </form>
-                              
 
-                                <div class="form-group input-group"   v-if="!authStore.user">
+                                        <button
+                                            type="submit"
+                                            class="btn btn-primary pay button "
+                                        >
+                                            Update Billing Info
+                                        </button>
+                                    </div>
+                                </form>
+
+                                <div
+                                    class="form-group input-group"
+                                    v-if="!authStore.user"
+                                >
                                     <input
                                         type="checkbox"
                                         id="checkbox1"
@@ -202,95 +225,9 @@ watch(
                                         >Create an account</label
                                     >
                                 </div>
-                                <!-- <div class="form-group different-shippng">
-                                    <div class="toggle-bar">
-                                        <a
-                                            href="javascript:void(0)"
-                                            class="toggle-btn"
-                                        >
-                                            <input
-                                                type="checkbox"
-                                                id="checkbox2"
-                                                name="diffrent-ship"
-                                            />
-                                            <label for="checkbox2"
-                                                >Ship to a different
-                                                address?</label
-                                            >
-                                        </a>
-                                    </div>
-                                    <div class="toggle-open">
-                                        <div class="form-group">
-                                            <label
-                                                >Country/ Region
-                                                <span>*</span></label
-                                            >
-                                            <select id="Region">
-                                                <option value="3">
-                                                    Australia
-                                                </option>
-                                                <option value="4">
-                                                    England
-                                                </option>
-                                                <option value="6">
-                                                    New Zealand
-                                                </option>
-                                                <option value="5">
-                                                    Switzerland
-                                                </option>
-                                                <option value="1">
-                                                    United Kindom (UK)
-                                                </option>
-                                                <option value="2">
-                                                    United States (USA)
-                                                </option>
-                                            </select>
-                                        </div>
-                                        <div class="form-group">
-                                            <label
-                                                >Street Address
-                                                <span>*</span></label
-                                            >
-                                            <input
-                                                type="text"
-                                                id="address1"
-                                                class="mb--15"
-                                                placeholder="House number and street name"
-                                            />
-                                            <input
-                                                type="text"
-                                                id="address2"
-                                                placeholder="Apartment, suite, unit, etc. (optonal)"
-                                            />
-                                        </div>
-                                        <div class="form-group">
-                                            <label
-                                                >Town/ City
-                                                <span>*</span></label
-                                            >
-                                            <input type="text" id="town" />
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Country</label>
-                                            <input type="text" id="country" />
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Phone <span>*</span></label>
-                                            <input type="tel" id="phone" />
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label>Other Notes (optional)</label>
-                                    <textarea
-                                        id="notes"
-                                        rows="2"
-                                        placeholder="Notes about your order, e.g. speacial notes for delivery."
-                                    ></textarea>
-                                </div> -->
                             </div>
                         </div>
-                        <div class="col-md-4 order-md-2 mb-4">
+                        <div class="col-md-4 order-md-2 mb-4 ">
                             <h6
                                 class="d-flex justify-content-between align-items-center mb-3"
                             >
@@ -303,6 +240,8 @@ watch(
                                     :key="index"
                                 >
                                     <div>
+                                     
+                                      
                                         <h6 class="my-0">
                                             {{
                                                 item.name
@@ -326,7 +265,7 @@ watch(
                                             }}</small
                                         >
                                     </div>
-                                    <span class="text-muted"
+                                    <span class="text-dark fw-bolder"
                                         >KSH
                                         {{
                                             item.subtotal.toLocaleString()
@@ -344,12 +283,294 @@ watch(
                                     >
                                 </li>
                             </ul>
+                            <button
+                                type="button"
+                                class="btn btn-primary launch"
+                                data-bs-toggle="modal"
+                                data-bs-target="#staticBackdrop"
+                            >
+                                <i class="fa fa-rocket"></i> Pay Now
+                            </button>
                         </div>
                     </div>
                 </form>
             </div>
+            <div class="d-flex justify-content-center" v-else>
+                <div 
+                        class="content"
+                       
+                    >
+                        <span class="title-highlighter highlighter-secondary">
+                            <i class="fa-solid fa-circle-exclamation"></i> You have no products in your Cart to checkout</span
+                        >
+                      
+                        <p>
+                          Continue Shopping if you find products you like add them....
+                        </p>
+                        <router-link
+                            to="/shop"
+                            class="axil-btn btn-bg-secondary right-icon"
+                        >
+                            Back To Shopping
+                            <i class="fa fa-cart-arrow-down"></i>
+                        </router-link>
+            </div>
+            </div>
+            
         </div>
+        <!-- Modal -->
     </main>
+    <div 
+        class="modal fade"
+        id="staticBackdrop"
+        data-bs-backdrop="static"
+        data-bs-keyboard="false"
+        tabindex="-1"
+        aria-labelledby="staticBackdropLabel"
+        aria-hidden="true"
+    >
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="text-right">
+                        <i
+                            class="fa fa-close close"
+                            data-bs-dismiss="modal"
+                        ></i>
+                    </div>
+                    <div class="tabs mt-3">
+                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <a
+                                    class="nav-link active"
+                                    id="visa-tab"
+                                    data-bs-toggle="tab"
+                                    href="#visa"
+                                    role="tab"
+                                    aria-controls="visa"
+                                    aria-selected="true"
+                                >
+                                    <i class="fa-solid fa-credit-card"></i><span class="text-center">
+                                    card
+                                    </span>
+                                </a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a
+                                    class="nav-link"
+                                    id="paypal-tab"
+                                    data-bs-toggle="tab"
+                                    href="#paypal"
+                                    role="tab"
+                                    aria-controls="paypal"
+                                    aria-selected="false"
+                                >
+                                    <i class="fa-solid fa-mobile-screen"></i><span> Mpesa</span>
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="tab-content" id="myTabContent">
+                            <div
+                                class="tab-pane fade show active"
+                                id="visa"
+                                role="tabpanel"
+                                aria-labelledby="visa-tab"
+                            >
+                                <div class="mt-4 mx-4">
+                                    
+                                    <div class="form mt-3">
+                                        <form action="">
+                                            <div class="inputbox">
+                                                <input
+                                                    type="text"
+                                                    name="name"
+                                                    class="form-control"
+                                                    required="required"
+                                                />
+                                                <span>Cardholder Name</span>
+                                            </div>
+                                            <div class="inputbox">
+                                                <input
+                                                    type="text"
+                                                    name="name"
+                                                    min="1"
+                                                    max="999"
+                                                    class="form-control"
+                                                    required="required"
+                                                />
+                                                <span>Card Number</span>
+                                                <i class="fa fa-eye"></i>
+                                            </div>
+                                            <div class="d-flex flex-row">
+                                                <div class="inputbox">
+                                                    <input
+                                                        type="text"
+                                                        name="name"
+                                                        min="1"
+                                                        max="999"
+                                                        class="form-control"
+                                                        required="required"
+                                                    />
+                                                    <span>Expiration Date</span>
+                                                </div>
+                                                <div class="inputbox">
+                                                    <input
+                                                        type="text"
+                                                        name="name"
+                                                        min="1"
+                                                        max="999"
+                                                        class="form-control"
+                                                        required="required"
+                                                    />
+                                                    <span>CVV</span>
+                                                </div>
+                                            </div>
+                                            <div class="px-2 pay">
+                                                <button
+                                                    class="btn btn-primary btn-block"
+                                                >
+                                                    Process Payment
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <div
+                                class="tab-pane fade"
+                                id="paypal"
+                                role="tabpanel"
+                                aria-labelledby="paypal-tab"
+                            >
+                                <div class="px-5 mt-5">
+                                    <div class="text-center">
+                                        <h5>Lipa na M-pesa</h5>
+                                    </div>
+                                    <div class="inputbox">
+                                        <input
+                                            type="text"
+                                            name="name"
+                                            class="form-control"
+                                            required="required"
+                                        />
+                                        <span>Your Mobile Number</span>
+                                    </div>
+                                    <div class="pay px-5">
+                                        <button
+                                            class="btn btn-primary btn-block"
+                                        >
+                                            Get Payment Notification
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </template>
 
-<style lang=""></style>
+<style scoped>
+.launch {
+    height: 50px;
+}
+
+.close {
+    font-size: 21px;
+    cursor: pointer;
+}
+
+.modal-body {
+    height: auto;
+}
+
+.nav-tabs {
+    border: none !important;
+}
+
+.nav-tabs .nav-link.active {
+    color: #495057;
+    background-color: #fff;
+    border-color: #ffffff #ffffff #fff;
+    border-top: 3px solid rgb(54, 4, 50) !important;
+}
+
+.nav-tabs .nav-link {
+    margin-bottom: -1px;
+    border: 1px solid transparent;
+    border-top-left-radius: 0rem;
+    border-top-right-radius: 0rem;
+    border-top: 3px solid #eee;
+    font-size: 20px;
+}
+
+.nav-tabs .nav-link:hover {
+    border-color: #e9ecef #ffffff #ffffff;
+}
+
+.nav-tabs {
+    display: table !important;
+    width: 100%;
+}
+
+.nav-item {
+    display: table-cell;
+}
+
+.form-control {
+    border-bottom: 1px solid #eee !important;
+    border: none;
+    font-weight: 600;
+}
+
+.form-control:focus {
+    color: #495057;
+    background-color: #fff;
+    border-color: #8bbafe;
+    outline: 0;
+    box-shadow: none;
+}
+
+.inputbox {
+    position: relative;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.inputbox span {
+    position: absolute;
+    top: 7px;
+    left: 11px;
+    transition: 0.5s;
+}
+
+.inputbox i {
+    position: absolute;
+    top: 13px;
+    right: 8px;
+    transition: 0.5s;
+    color: #3f51b5;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.inputbox input:focus~span {
+    transform: translateX(-0px) translateY(-15px);
+    font-size: 12px;
+}
+
+.inputbox input:valid~span {
+    transform: translateX(-0px) translateY(-15px);
+    font-size: 12px;
+}
+
+.pay button {
+    height: 30px;
+    border-radius: 37px;
+}</style>

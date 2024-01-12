@@ -2,7 +2,14 @@
 import { defineStore } from 'pinia';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
-
+import { ElNotification } from 'element-plus';
+const showNotification = (title, message, type) => {
+  ElNotification({
+    title,
+    message,
+    type,
+  });
+};
 export const useAuthStore = defineStore({
   id: 'auth',
   state: () => ({
@@ -22,10 +29,23 @@ export const useAuthStore = defineStore({
         },
         {headers}
         );
-
-        const { user, token } = response.data.data;
-        this.setUserToken(user, token);
-
+       const user=response.data.data.user
+       
+       const token=response.data.data.token
+       
+      this.setUserToken(user, token);
+      try{
+        this.router.push({ name: "home" });
+        try{
+          showNotification("Success", "You have succefully Registered", "success");
+        }catch(error){
+          console.log(error)
+          throw error
+        }
+       
+       }catch(error){
+        console.error('Redirect failed',error.message)
+       }
         return user;
       } catch (error) {
         console.error('There was an error signing up', error.message);
@@ -35,6 +55,7 @@ export const useAuthStore = defineStore({
 
     async signIn(email, password) {
       try {
+        console.log(email,password)
         const headers = this.getHeadersWithoutToken()
    
         const response = await axios.post('api/auth/login', {
@@ -43,9 +64,23 @@ export const useAuthStore = defineStore({
         },
           {headers});
 
-        const { user, token } = response.data.data;
-        this.setUserToken(user, token);
-    
+        const user=response.data.data.user
+       
+        const token=response.data.data.token
+          
+         this.setUserToken(user, token);
+         try{
+          this.router.push({ name: "home" });
+          try{
+            showNotification("Success", "You have succefully logged in", "success");
+          }catch(error){
+            console.log(error)
+            throw error
+          }
+         
+         }catch(error){
+          console.error('Redirect failed',error.message)
+         }
         return user;
       } catch (error) {
         console.error('There was an error signing in:', error.message);

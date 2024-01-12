@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\customer_management;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -9,10 +9,12 @@ use App\Models\shopping_process\Order;
 use App\Models\shopping_process\OrderDetail;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use  Illuminate\Database\Eloquent\Relations\BelongsTo;
-
+use App\Models\customer_management\CustomerAddress;
 class Customer extends Model
 {
     use HasFactory;
+    protected $fillable=['first_name','last_name','phone'];
+    
     public function user():BelongsTo{
         return $this->belongsTo(User::class);
     }

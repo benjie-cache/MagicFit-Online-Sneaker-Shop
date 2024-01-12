@@ -58,7 +58,7 @@ const cartStore = useCartStore();
                     </li>
                     <li class="select-option">
                         <a @click="useCartStore().addItem(product)"
-                            >Add to Cart</a
+                            ><i class="fa fa-shopping-cart"></i></a
                         >
                     </li>
                     <li class="quickview">

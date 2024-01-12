@@ -34,9 +34,9 @@ const sortProducts = () => {
 };
 const fetchProducts = async () => {
     try {
-        const res = await axios.get(FETCH_PRODUCTS_URL, headers);
+        const res = await axios.get(FETCH_PRODUCTS_URL,headers);
         productStore.setProducts(res.data.data);
-        console.log(res.data)
+      
     } catch (error) {
         console.error("An error occurred while fetching products:", error);
         throw error;
@@ -54,7 +54,7 @@ onMounted(() => {
 </script>
 
 <template lang="">
-    <div class="col-lg-9">
+    <div class="col-lg-10">
         <div class="row">
             <div class="col-lg-12">
                 <div class="axil-shop-top mb--40">
@@ -84,7 +84,7 @@ onMounted(() => {
         <!-- End .row -->
         <div class="row row--15" id="prod-list">
             <div
-                class="col-xl-4 col-sm-6"
+                class="col-xl-3 col-sm-6"
                 v-for="(product,index) in productStore.sortedProducts"
                 :key="index"
             >

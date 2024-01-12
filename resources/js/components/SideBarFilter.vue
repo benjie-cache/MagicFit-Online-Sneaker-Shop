@@ -20,7 +20,7 @@ const applyFilters=()=>{
 </script>
 
 <template>
-    <div class="col-lg-3">
+    <div class="col-lg-2">
         <div class="axil-shop-sidebar  mt-5 pt-5">
             <el-row style="margin-top:25px">
       <el-col :span="24">

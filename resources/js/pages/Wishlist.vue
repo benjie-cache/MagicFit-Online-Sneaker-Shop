@@ -11,8 +11,8 @@ const wishlistStore=useWishlistStore();
                 <div class="product-table-heading">
                     <h4 class="title">My Wish List on MagicFit</h4>
                 </div>
-                <div class="table-responsive">
-                    <table class="table axil-product-table axil-wishlist-table" v-if="wishlistStore.wishlistItems.length">
+                <div class="table-responsive" v-if="wishlistStore.wishlistItems.length">
+                    <table class="table axil-product-table axil-wishlist-table" >
                         <thead>
                             <tr>
                                 <th scope="col" class="product-remove"></th>
@@ -35,7 +35,28 @@ const wishlistStore=useWishlistStore();
                             </tr>
                            
                         </tbody>
+                         
                     </table>
+                  
+                </div>
+                <div v-else
+                        class="content"
+                       
+                    >
+                        <span class="title-highlighter highlighter-secondary">
+                            <i class="fal fa-exclamation-circle"></i> You have no products in your wish list</span
+                        >
+                      
+                        <p>
+                          Continue Shopping if you find products you like add them....
+                        </p>
+                        <router-link
+                            to="/shop"
+                            class="axil-btn btn-bg-secondary right-icon"
+                        >
+                            Back To Shopping
+                            <i class="fa fa-long-arrow-right"></i>
+                        </router-link>
                 </div>
             </div>
         </div>
