@@ -1,7 +1,7 @@
 <script setup >
-import HeaderTop from './header-components/HeaderTop.vue';
-import MainMenu from './header-components/MainMenu.vue';
-import HeaderCampaign from './header-components/HeaderCampaign.vue';
+import HeaderTop from '@/components/header-components/HeaderTop.vue';
+import MainMenu from '@/components/header-components/MainMenu.vue';
+import HeaderCampaign from '@/components/header-components/HeaderCampaign.vue';
 import { onMounted } from 'vue';
 
 onMounted(() => {
@@ -31,15 +31,14 @@ onMounted(() => {
 <template lang="">
     
 <header class="header axil-header header-style-5">
-    <HeaderTop/>
-    <!-- Start Mainmenu Area  -->
-    <div id="axil-sticky-placeholder"></div>
+<HeaderTop/>
+ 
+<div id="axil-sticky-placeholder"></div>
 <MainMenu/>
 <HeaderCampaign/>
-        <!-- End Mainmenu Area -->
+  
  
-    </header>
+</header>
     
 </template>
 
-<style></style>

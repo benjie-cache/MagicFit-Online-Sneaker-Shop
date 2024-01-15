@@ -22,7 +22,7 @@ const handleThumbnailChange=(index)=> {
 
 </script>
 
-<template lang="" >
+<template  >
  <div class="single-product-thumb">
                         <div class="row">
                             <div class="col-lg-7 mb--40">
@@ -120,7 +120,3 @@ const handleThumbnailChange=(index)=> {
                     </div> 
    
 </template>
-<style scoped>
-@import "slick-carousel/slick/slick.css";
-@import "slick-carousel/slick/slick-theme.css";
-</style>

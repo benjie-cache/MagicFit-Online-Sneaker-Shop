@@ -1,26 +1,19 @@
 <template>
-  
-
-   
-        <!-- End Header -->
-
-       
-           
-            <div class="container">
+  <div class="container">
            
                 <div class="d-flex justify-content-center">
                     
-                             <div class="axil-signin-form">
+                            <div class="axil-signin-form">
                                 <div class="d-flex mb-5 justify-content-center">
-                                    <h3 class="title">Login To MagicFit</h3>
+                                    <h3 class="title">Login To <span>   <img :src="logo" alt="Site Logo"></span></h3>
                                     
                                 </div>
                                
-                                <el-form :model="form" ref="loginForm" :rules="rules" label-width="80px">
-                                    <el-form-item prop="email">
+                                <el-form :model="form" ref="loginForm" :rules="rules" label-width="80px" show-message :label-position="labelPosition">
+                                    <el-form-item prop="email" label="Email">
                                         <el-input v-model="form.email" placeholder="Enter your email"></el-input>
                                     </el-form-item>
-                                    <el-form-item prop="password">
+                                    <el-form-item prop="password" label="Password">
                                         <el-input type="password" v-model="form.password"
                                             placeholder="Enter your password"></el-input>
                                     </el-form-item>
@@ -43,7 +36,7 @@
                                      
                                     
                                 </el-form>
-                    </div>
+                            </div>
             
                 </div>
             
@@ -59,6 +52,8 @@ import { useAuthStore } from '@/store/authStore.js';
 import { ElForm, ElFormItem, ElInput, ElButton, ElLink } from 'element-plus';
 const router =useRouter()
 
+
+const labelPosition =ref('top');
 
  const form = reactive({
      email:'',
@@ -83,20 +78,13 @@ const returnHome=()=>{
 }
 const login = async () => {
     try {
-      //  console.log(form.email)
-       // console.log(form.password)
+     
    
         await useAuthStore().signIn(form.email,form.password);
-        // Redirect to a new route after successful login
-      // Access router directly in script setup
-      
          
-    
-      
-       
     } catch (error) {
         console.error('Login failed:', error.message);
-        // Handle login failure (e.g., show an error message to the user)
+
     }
 };
 </script>

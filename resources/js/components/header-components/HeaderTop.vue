@@ -18,7 +18,7 @@ const authStore=useAuthStore();
                                 <li><router-link to="/login"><a>Return Customer? Login</a></router-link></li>
                             </ul>
                             <ul class="quick-link" v-else>
-                                <li><a href="#">magicfit.wendani@gamil.com</a></li>
+                                <li><a href="#">magicfit.wendani@gmail.com</a></li>
                                 <li><p class="fw-bold text-white">Welcome {{authStore.user.first_name}}</p> </li>
                                 <li><router-link to="/account"><a>Your Orders & Details</a></router-link></li>
                             </ul>

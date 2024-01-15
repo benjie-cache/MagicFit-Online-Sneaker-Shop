@@ -1,13 +1,15 @@
 <?php
 
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\CustomerController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\product_management\ProductController;
-use App\Http\Controllers\shopping_process\ShoppingSessionController;
+
 use App\Http\Controllers\UserAuthenticationController;
 use App\Http\Controllers\EntityController;
 use App\Http\Controllers\OrderController;
+use App\Models\customer_management\Customer;
 
 /*
 |--------------------------------------------------------------------------
@@ -44,6 +46,7 @@ Route::get('/entities', [EntityController::class, 'getEntities']);
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('checkout/save_checkout_information', [CheckoutController::class, 'save_checkout_information']);
-    
+    Route::get('get-customer-info', [CustomerController::class, 'getCustomerInfo']);
+    Route::post('checkout/process-order',[CheckoutController::class, 'processOrder']);
  
 });

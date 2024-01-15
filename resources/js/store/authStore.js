@@ -3,6 +3,8 @@ import { defineStore } from 'pinia';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
 import { ElNotification } from 'element-plus';
+import { useCustomerStore } from "@/store/customerStore.js";
+
 const showNotification = (title, message, type) => {
   ElNotification({
     title,
@@ -15,10 +17,26 @@ export const useAuthStore = defineStore({
   state: () => ({
     user: JSON.parse(localStorage.getItem('user')) || null,
     token: localStorage.getItem('token') || null,
-    router : useRouter()
+    router: useRouter(),
+    customerStore:useCustomerStore()
   }),
   actions: {
+    async getCustomerInfo() {
+      try {
+        const headers = this.getHeaders();
+        const response = await axios.get('api/get-customer-info', { headers });
 
+        if (response.data.customer) {
+       ///set the associated customer info after login
+          this.customerStore.setCustomerInfo(response.data.customer);
+          console.log("Customer Info Has Been Set")
+        }else{
+          console.error("no such customer is available")
+        }
+      } catch (error) {
+           console.error("There was an error getting customer info",error)
+      }
+    },
     async signUp(first_name, email, password) {
       try {
         const headers = this.getHeadersWithoutToken()
@@ -27,25 +45,27 @@ export const useAuthStore = defineStore({
           email,
           password,
         },
-        {headers}
+          { headers }
         );
-       const user=response.data.data.user
-       
-       const token=response.data.data.token
-       
-      this.setUserToken(user, token);
-      try{
-        this.router.push({ name: "home" });
-        try{
-          showNotification("Success", "You have succefully Registered", "success");
-        }catch(error){
-          console.log(error)
-          throw error
+        const user = response.data.data.user
+
+        const token = response.data.data.token
+
+        this.setUserToken(user, token);
+        try {
+          this.router.push({ name: "account" });
+          try {
+            showNotification("Success", "You have succefully Registered.Finish setting up your Customer Account", "success");
+            this.getCustomerInfo()
+
+          } catch (error) {
+            console.log(error)
+            throw error
+          }
+
+        } catch (error) {
+          console.error('Redirect failed', error.message)
         }
-       
-       }catch(error){
-        console.error('Redirect failed',error.message)
-       }
         return user;
       } catch (error) {
         console.error('There was an error signing up', error.message);
@@ -55,35 +75,42 @@ export const useAuthStore = defineStore({
 
     async signIn(email, password) {
       try {
-        console.log(email,password)
+       
         const headers = this.getHeadersWithoutToken()
-   
+
         const response = await axios.post('api/auth/login', {
           email,
           password,
         },
-          {headers});
+          { headers });
 
-        const user=response.data.data.user
-       
-        const token=response.data.data.token
-          
-         this.setUserToken(user, token);
-         try{
+        const user = response.data.data.user
+
+        const token = response.data.data.token
+
+        this.setUserToken(user, token);
+        try {
           this.router.push({ name: "home" });
-          try{
+          try {
+           
+           
             showNotification("Success", "You have succefully logged in", "success");
-          }catch(error){
-            console.log(error)
+             this.getCustomerInfo()
+          } catch (error) {
+               console.log(error.status)
+             //  if(response.status==401){
+
+              // }
             throw error
           }
-         
-         }catch(error){
-          console.error('Redirect failed',error.message)
-         }
+
+        } catch (error) {
+          console.error('Redirect failed', error.message)
+        }
         return user;
       } catch (error) {
         console.error('There was an error signing in:', error.message);
+        showNotification("Invalid Credentials", "Check your email and password", "warning");
         throw error;
       }
     },
@@ -94,8 +121,10 @@ export const useAuthStore = defineStore({
         await axios.post('api/auth/logout', null, { headers });
 
         this.clearUserToken();
-       
+
         this.router.push({ name: 'login' });
+        this.customerStore.clearCustomerInfo()
+        showNotification("Success", "You have been Successfully logged out", "success");
       } catch (error) {
         console.error('There was an error logging out ', error);
         throw error;

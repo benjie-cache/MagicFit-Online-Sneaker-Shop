@@ -2,8 +2,8 @@ import { ref, watch } from 'vue';
 import { defineStore } from 'pinia';
 import { ElNotification } from 'element-plus';
 import useCartStore from "@/store/cartStore.js";
-export const useWishlistStore = defineStore('useWishlistStore', ()=> {
-    const useCart= useCartStore();
+export const useWishlistStore = defineStore('useWishlistStore', () => {
+  const useCart = useCartStore();
   const WISHLIST_KEY = 'wishlistItems';
   const wishlistItems = ref(JSON.parse(localStorage.getItem(WISHLIST_KEY)) || []);
 
@@ -20,15 +20,15 @@ export const useWishlistStore = defineStore('useWishlistStore', ()=> {
   }, { deep: true });
 
   const addToWishlist = (item) => {
-    wishlistItems.value.push(item);
-    showNotification('Success', 'Item added to the wishlist', 'success');
-    //const isAlreadyInWishlist = wishlistItems.value.find(currItem => currItem.id === item.id);
-    
-   // if (!isAlreadyInWishlist) {
-    
-    //} else {
-    //  showNotification('Info', 'Item is already in the wishlist', 'info');
-   // }
+
+    const isAlreadyInWishlist = wishlistItems.value.find(currItem => currItem.id === item.id);
+
+    if (!isAlreadyInWishlist) {
+      wishlistItems.value.push(item);
+      showNotification('Success', 'Item added to the wishlist', 'success');
+    } else {
+      showNotification('Info', 'Item is already in the wishlist', 'info');
+    }
   };
 
   const removeFromWishlist = (item) => {
@@ -42,7 +42,7 @@ export const useWishlistStore = defineStore('useWishlistStore', ()=> {
 
     // Add item to cart
     useCart.addItem(item);
-  //  showNotification('Success', 'Item added to the cart from the wishlist', 'success');
+ 
   };
 
   return {
@@ -50,6 +50,6 @@ export const useWishlistStore = defineStore('useWishlistStore', ()=> {
     addToWishlist,
     removeFromWishlist,
     moveItemToCart,
-   
+
   };
 });

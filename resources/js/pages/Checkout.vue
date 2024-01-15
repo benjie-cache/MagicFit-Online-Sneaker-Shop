@@ -1,19 +1,84 @@
 <script setup>
-import { defineAsyncComponent, reactive, ref, watch } from "vue";
-import { ElNotification } from "element-plus";
+import {onMounted,ref}  from "vue";
+import { ElNotification,ElMessageBox } from "element-plus";
 
 import { useAuthStore } from "@/store/authStore.js";
+import { useCustomerStore } from "@/store/customerStore.js";
 
-import { useOrderStore } from "@/store/orderStore.js";
 
 import useCartStore from "@/store/cartStore.js";
+import { useRouter } from "vue-router";
+
+
+
+
+
 const authStore = useAuthStore();
 const cartStore = useCartStore();
-const orderStore = useOrderStore();
-const paymentMethod = orderStore.paymentMethod;
 
-const cartTotal = ref(parseFloat(cartStore.totalCost).toFixed(2));
-const cartItems = ref(cartStore.items);
+const customerStore= useCustomerStore();
+const phone_number=ref('')
+
+
+const router=useRouter()
+const processOrder = async () => {
+
+if(cartStore.items.length){
+    try {
+    const headers = authStore.getHeaders();
+    const data = {
+      'orderItems': cartStore.items,
+      'cartTotal': cartStore.totalCost
+    };
+
+    const res = await axios.post('api/checkout/process-order', JSON.stringify(data), { headers });
+
+    // Check the status from the response
+    if (res.status === 200 && res.data && res.data.message === 'Order processed') {
+    
+   
+        paymentModalOpen.value =! paymentModalOpen.value
+      showNotification('Success', 'Order processed successfully', 'success');
+      ElMessageBox.confirm('Order placed successfully. What would you like to do?', 'Success', {
+        confirmButtonText: 'View Orders',
+        cancelButtonText: 'Continue Shopping',
+        type: 'success'
+      }).then(() => {
+          router.push({name:'account'})
+         
+      }).catch(() => {
+       
+        router.push({name:'shop'})
+      
+      });
+    } else {
+      //Handle other status or errors
+      showNotification('Error', res.data.message || 'There was an issue processing the order', 'error');
+    }
+
+    cartStore.clearCart();
+  } catch (error) {
+    console.error('Error processing order:', error);
+    showNotification('Error', 'There was an unexpected error processing the order', 'error');
+  }
+}else{
+    showNotification('No Cart Items',"You have no items in your cart",'warning')
+}
+ 
+
+
+};
+const paymentModalOpen=ref(false);
+const loading = ref(false)
+const handlePayment = () => {
+  loading.value = true;
+  setTimeout(() => {
+    //processOrder();
+    loading.value = false;
+
+  }, 5000);
+};
+
 const showNotification = (title, message, type) => {
     ElNotification({
         title,
@@ -21,87 +86,22 @@ const showNotification = (title, message, type) => {
         type,
     });
 };
-const getBillingInfo = () => {
-    console.log(orderStore.billingInfo);
+const togglePaymentModal=()=>{
+    paymentModalOpen.value =! paymentModalOpen.value
 };
-watch(
-    () => cartStore.items,
-    (newItems) => {
-        cartItems.value = newItems;
-    }
-);
-watch(
-    () => cartStore.totalCost,
-    (newTotalCost) => {
-        cartTotal.value = parseFloat(newTotalCost).toFixed(2);
-    }
-);
+
 </script>
 <template lang="">
     <main class="main-wrapper">
         <div class="axil-checkout-area axil-section-gap">
-            <div class="container" v-if="cartItems.length">
+            <div class="container" v-if="cartStore.items.length">
                 <form action="#">
                     <div class="row">
                         <div class="col-lg-8">
-                            <div
-                                class="axil-checkout-notice"
-                                v-if="!authStore.user"
-                            >
-                                <div class="axil-toggle-box">
-                                    <div class="toggle-bar">
-                                        <i class="fas fa-user"></i> Returning
-                                        customer?
-                                        <a
-                                            href="javascript:void(0)"
-                                            class="toggle-btn"
-                                            >Click here to login
-                                            <i class="fas fa-angle-down"></i
-                                        ></a>
-                                    </div>
-                                    <div
-                                        class="axil-checkout-login toggle-open"
-                                    >
-                                        <p>
-                                            If you didn't Logged in, Please Log
-                                            in first.
-                                        </p>
-                                        <div class="signin-box">
-                                            <div class="form-group">
-                                                <label>Email</label>
-                                                <input
-                                                    type="email"
-                                                    class="form-control"
-                                                    name="email"
-                                                />
-                                            </div>
-                                            <div class="form-group">
-                                                <label>Password</label>
-                                                <input
-                                                    type="password"
-                                                    class="form-control"
-                                                    name="password"
-                                                />
-                                            </div>
-                                            <div class="form-group mb--0">
-                                                <button
-                                                    type="submit"
-                                                    class="axil-btn btn-bg-primary submit-btn"
-                                                >
-                                                    Sign In
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            
                             <div class="axil-checkout-billing">
-                                <h4 class="title mb--40">Billing details</h4>
-                                <form
-                                    @submit.prevent="
-                                        orderStore.handleBillingInfo
-                                    "
-                                >
+                                <h4 class="title mb--40">Receiver details</h4>
+                                <form>
                                     <div class="row">
                                         <div class="form-group col-lg-6">
                                             <label
@@ -112,10 +112,8 @@ watch(
                                                 type="text"
                                                 id="first-name"
                                                 placeholder="Your First Name"
-                                                v-model="
-                                                    orderStore.billingInfo
-                                                        .first_name
-                                                "
+                                                v-model="customerStore.customerInfo.first_name"
+                                                
                                             />
                                         </div>
                                         <div class="form-group col-lg-6">
@@ -126,10 +124,7 @@ watch(
                                                 type="text"
                                                 id="last-name"
                                                 placeholder="Enter Your Last Name"
-                                                v-model="
-                                                    orderStore.billingInfo
-                                                        .last_name
-                                                "
+                                                v-model="customerStore.customerInfo.last_name"
                                             />
                                         </div>
                                         <div class="form-group col-lg-6">
@@ -138,9 +133,7 @@ watch(
                                                 type="text"
                                                 id="phone"
                                                 placeholder="Phone Number"
-                                                v-model="
-                                                    orderStore.billingInfo.phone
-                                                "
+                                                v-model="customerStore.customerInfo.phone"
                                             />
                                         </div>
                                         <div class="form-group col-lg-6">
@@ -149,10 +142,7 @@ watch(
                                                 type="text"
                                                 id="estate"
                                                 placeholder="Where do you live?"
-                                                v-model="
-                                                    orderStore.billingInfo
-                                                        .estate
-                                                "
+                                                v-model="customerStore.customerInfo.addresses[0].estate"
                                             />
                                         </div>
                                         <div class="form-group col-lg-6">
@@ -165,10 +155,7 @@ watch(
                                                 id="address1"
                                                 class="mb--15"
                                                 placeholder="Street Name"
-                                                v-model="
-                                                    orderStore.billingInfo
-                                                        .street_address
-                                                "
+                                                v-model="customerStore.customerInfo.addresses[0].street_address"
                                             />
                                         </div>
 
@@ -181,10 +168,7 @@ watch(
                                                 type="text"
                                                 id="address2"
                                                 placeholder="Apartment Name"
-                                                v-model="
-                                                    orderStore.billingInfo
-                                                        .apartment_name
-                                                "
+                                                v-model="customerStore.customerInfo.addresses[0].apartment_name"
                                             />
                                         </div>
                                         <div class="form-group col-lg-6">
@@ -195,36 +179,21 @@ watch(
                                             <input
                                                 type="text"
                                                 id="address2"
-                                                placeholder="Apartment Name"
-                                                v-model="
-                                                    orderStore.billingInfo
-                                                        .house_number
-                                                "
+                                                placeholder="House Number"
+                                                v-model="customerStore.customerInfo.addresses[0].house_number"
                                             />
                                         </div>
 
                                         <button
                                             type="submit"
-                                            class="btn btn-primary pay button "
+                                            class="axil-btn btn-bg-primary viewcart-btn"
                                         >
-                                            Update Billing Info
+                                           Update Receiver Details
                                         </button>
                                     </div>
                                 </form>
 
-                                <div
-                                    class="form-group input-group"
-                                    v-if="!authStore.user"
-                                >
-                                    <input
-                                        type="checkbox"
-                                        id="checkbox1"
-                                        name="account-create"
-                                    />
-                                    <label for="checkbox1"
-                                        >Create an account</label
-                                    >
-                                </div>
+                               
                             </div>
                         </div>
                         <div class="col-md-4 order-md-2 mb-4 ">
@@ -236,7 +205,7 @@ watch(
                             <ul class="list-group mb-3">
                                 <li
                                     class="list-group-item d-flex justify-content-between lh-condensed"
-                                    v-for="(item, index) in cartItems"
+                                    v-for="(item, index) in cartStore.items"
                                     :key="index"
                                 >
                                     <div>
@@ -279,18 +248,19 @@ watch(
                                     <span>Total (KSH )</span>
                                     <strong
                                         >KSH
-                                        {{ cartTotal.toLocaleString() }}</strong
+                                        {{ cartStore.totalCost.toLocaleString() }}</strong
                                     >
                                 </li>
                             </ul>
                             <button
                                 type="button"
-                                class="btn btn-primary launch"
+                            class="axil-btn btn-bg-secondary checkout-btn"
                                 data-bs-toggle="modal"
                                 data-bs-target="#staticBackdrop"
+                               @click.prevent="togglePaymentModal"
                             >
                                 <i class="fa fa-rocket"></i> Pay Now
-                            </button>
+                        </button>
                         </div>
                     </div>
                 </form>
@@ -328,10 +298,11 @@ watch(
         tabindex="-1"
         aria-labelledby="staticBackdropLabel"
         aria-hidden="true"
+       
     >
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-body">
+                <div class="modal-body" v-loading="loading" element-loading-text="Processing Payment">
                     <div class="text-right">
                         <i
                             class="fa fa-close close"
@@ -340,104 +311,13 @@ watch(
                     </div>
                     <div class="tabs mt-3">
                         <ul class="nav nav-tabs" id="myTab" role="tablist">
-                            <li class="nav-item" role="presentation">
-                                <a
-                                    class="nav-link active"
-                                    id="visa-tab"
-                                    data-bs-toggle="tab"
-                                    href="#visa"
-                                    role="tab"
-                                    aria-controls="visa"
-                                    aria-selected="true"
-                                >
-                                    <i class="fa-solid fa-credit-card"></i><span class="text-center">
-                                    card
-                                    </span>
-                                </a>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <a
-                                    class="nav-link"
-                                    id="paypal-tab"
-                                    data-bs-toggle="tab"
-                                    href="#paypal"
-                                    role="tab"
-                                    aria-controls="paypal"
-                                    aria-selected="false"
-                                >
-                                    <i class="fa-solid fa-mobile-screen"></i><span> Mpesa</span>
-                                </a>
-                            </li>
+                            
+                          
                         </ul>
                         <div class="tab-content" id="myTabContent">
+                           
                             <div
                                 class="tab-pane fade show active"
-                                id="visa"
-                                role="tabpanel"
-                                aria-labelledby="visa-tab"
-                            >
-                                <div class="mt-4 mx-4">
-                                    
-                                    <div class="form mt-3">
-                                        <form action="">
-                                            <div class="inputbox">
-                                                <input
-                                                    type="text"
-                                                    name="name"
-                                                    class="form-control"
-                                                    required="required"
-                                                />
-                                                <span>Cardholder Name</span>
-                                            </div>
-                                            <div class="inputbox">
-                                                <input
-                                                    type="text"
-                                                    name="name"
-                                                    min="1"
-                                                    max="999"
-                                                    class="form-control"
-                                                    required="required"
-                                                />
-                                                <span>Card Number</span>
-                                                <i class="fa fa-eye"></i>
-                                            </div>
-                                            <div class="d-flex flex-row">
-                                                <div class="inputbox">
-                                                    <input
-                                                        type="text"
-                                                        name="name"
-                                                        min="1"
-                                                        max="999"
-                                                        class="form-control"
-                                                        required="required"
-                                                    />
-                                                    <span>Expiration Date</span>
-                                                </div>
-                                                <div class="inputbox">
-                                                    <input
-                                                        type="text"
-                                                        name="name"
-                                                        min="1"
-                                                        max="999"
-                                                        class="form-control"
-                                                        required="required"
-                                                    />
-                                                    <span>CVV</span>
-                                                </div>
-                                            </div>
-                                            <div class="px-2 pay">
-                                                <button
-                                                    class="btn btn-primary btn-block"
-                                                >
-                                                    Process Payment
-                                                </button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                            <div
-                                class="tab-pane fade"
                                 id="paypal"
                                 role="tabpanel"
                                 aria-labelledby="paypal-tab"
@@ -445,23 +325,29 @@ watch(
                                 <div class="px-5 mt-5">
                                     <div class="text-center">
                                         <h5>Lipa na M-pesa</h5>
+                                        <p class="text-dark">You will receive mpesa notification prompting you to pay KSH
+                                        {{ cartStore.totalCost.toLocaleString() }}</p>
                                     </div>
+                                    <form  >
                                     <div class="inputbox">
-                                        <input
-                                            type="text"
-                                            name="name"
+                                        <input v-model="phone_number"
+                                           type="tel"
+                                            name="mpesa number"
                                             class="form-control"
                                             required="required"
                                         />
                                         <span>Your Mobile Number</span>
                                     </div>
                                     <div class="pay px-5">
-                                        <button
-                                            class="btn btn-primary btn-block"
+                                        <a
+                                        @click.prevent="handlePayment"
+                                         type="submit"
+                                            class="axil-btn btn-outline"
                                         >
                                             Get Payment Notification
-                                        </button>
+                                    </a>
                                     </div>
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -520,7 +406,7 @@ watch(
 }
 
 .form-control {
-    border-bottom: 1px solid #eee !important;
+    border-bottom: 1px solid #807777 !important;
     border: none;
     font-weight: 600;
 }

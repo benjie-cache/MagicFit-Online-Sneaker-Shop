@@ -2884,11 +2884,11 @@ input[type=submit]:hover {
 .axil-breadcrumb-area {
     position: relative;
     background-color: #f8f8f8;
-    padding: 40px 0 45px
+    padding: 15px 0 25px
 }
 
 .axil-breadcrumb-area .inner .title {
-    font-size: 40px;
+    font-size: 30px;
     margin-bottom: 0
 }
 
@@ -9503,12 +9503,12 @@ button.axil-btn.btn-size-md i {
 
 .cart-dropdown .cart-content-wrap {
     background-color: var(--color-white);
-    padding: 60px 50px;
-    width: 600px;
+    padding: 30px 25px;
+    width: 400px;
     height: 100%;
     display: flex;
     flex-direction: column;
-    overflow: auto
+    overflow-y: auto;
 }
 
 @media only screen and (max-width: 767px) {
@@ -9550,11 +9550,11 @@ button.axil-btn.btn-size-md i {
     align-items: center;
     justify-content: space-between;
     border-bottom: 2px solid #f6f7fb;
-    padding-bottom: 18px
+    padding-bottom: 9px
 }
 
 .cart-dropdown .cart-header .header-title {
-    font-size: 26px;
+    font-size: 18px;
     color: #27272e;
     margin-bottom: 0
 }
@@ -9566,9 +9566,9 @@ button.axil-btn.btn-size-md i {
 }
 
 .cart-dropdown .cart-header .cart-close {
-    height: 40px;
-    width: 40px;
-    font-size: 16px;
+    height: 30px;
+    width: 30px;
+    font-size: 13px;
     color: var(--color_black);
     border-radius: 50%
 }
@@ -9579,16 +9579,16 @@ button.axil-btn.btn-size-md i {
 }
 
 .cart-dropdown .cart-body {
-    padding: 30px 0;
+    padding: 20px 0;
     flex: auto
 }
 
 .cart-dropdown .cart-item {
     display: flex;
     align-items: center;
-    margin-bottom: 30px;
+    margin-bottom: 10px;
     border-bottom: 1px solid #f6f7fb;
-    padding-bottom: 30px
+    padding-bottom: 10px
 }
 
 @media only screen and (max-width: 479px) {
@@ -9626,23 +9626,23 @@ button.axil-btn.btn-size-md i {
 }
 
 .cart-dropdown .cart-item .item-img a img {
-    border-radius: 10px;
-    height: 100px;
-    width: 100px;
+    border-radius: 5px;
+    height: 50px;
+    width: 50px;
     object-fit: cover
 }
 
 .cart-dropdown .cart-item .item-img .close-btn {
-    height: 31px;
-    width: 31px;
+    height: 18px;
+    width: 18px;
     background-color: #f6f7fb;
     border: 2px solid var(--color-white);
     border-radius: 50%;
-    font-size: 12px;
+    font-size: 10px;
     color: var(--color-black);
     position: absolute;
-    top: -15px;
-    left: -10px;
+    top: -10px;
+    left: -13px;
     transition: all .3s ease-in-out
 }
 
@@ -9687,8 +9687,9 @@ button.axil-btn.btn-size-md i {
 }
 
 .cart-dropdown .cart-item .item-title {
-    font-size: 16px;
+    font-size: 15px;
     color: var(--color-black);
+    text-transform: capitalize;
     margin-bottom: 10px;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -9711,7 +9712,8 @@ button.axil-btn.btn-size-md i {
 }
 
 .cart-dropdown .cart-item .item-price {
-    font-size: 18px;
+    font-size: 13px;
+    text-transform: capitalize;
     font-family: var(--font-secondary);
     color: var(--color-black)
 }
@@ -9744,10 +9746,10 @@ button.axil-btn.btn-size-md i {
 
 .cart-dropdown .cart-item .item-quantity .qtybtn {
     text-align: center;
-    height: 26px;
-    width: 26px;
-    line-height: 20px;
-    font-size: 18px;
+    height: 13px;
+    width: 13px;
+    line-height: 10px;
+    font-size: 13px;
     color: var(--color-black);
     background-color: #f6f7fb;
     border-radius: 50%;
@@ -9760,7 +9762,7 @@ button.axil-btn.btn-size-md i {
 }
 
 .cart-dropdown .cart-item .item-quantity .quantity-input {
-    font-size: 16px;
+    font-size: 13px;
     font-weight: 600;
     color: #27272e;
     height: 26px;
@@ -9790,7 +9792,7 @@ button.axil-btn.btn-size-md i {
     justify-content: space-between;
     margin: 22px 0 30px;
     color: var(--color-black);
-    font-size: 20px
+    font-size: 14px
 }
 
 .cart-dropdown .cart-footer .cart-subtotal .subtotal-amount {
@@ -9800,7 +9802,8 @@ button.axil-btn.btn-size-md i {
 .cart-dropdown .cart-footer .group-btn {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    column-gap: 20px
+    column-gap: 20px;
+   
 }
 
 @media only screen and (max-width: 575px) {

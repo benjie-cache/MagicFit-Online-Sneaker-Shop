@@ -13,9 +13,7 @@ const productStore = useProductStore();
 const entitiesStore = useEntitiesStore();
 
 
-const applyFilters=()=>{
-  console.log(productStore.filters)
-}
+
 
 </script>
 
@@ -25,7 +23,7 @@ const applyFilters=()=>{
             <el-row style="margin-top:25px">
       <el-col :span="24">
         <h5>Brands</h5>
-        <el-checkbox-group v-model="productStore.filters.brands">
+        <el-checkbox-group v-model="productStore.filters.brands"  @change="productStore.applyFilters">
           <el-checkbox
             v-for="brand in entitiesStore.brands"
             :key="brand.id"
@@ -39,7 +37,7 @@ const applyFilters=()=>{
     <el-row style="margin-top:5px">
       <el-col :span="24">
         <h5>Categories</h5>
-        <el-checkbox-group v-model="productStore.filters.categories">
+        <el-checkbox-group v-model="productStore.filters.categories" @change="productStore.applyFilters">
           <el-checkbox
             v-for="category in entitiesStore.categories"
             :key="category.id"
@@ -49,9 +47,7 @@ const applyFilters=()=>{
       </el-col>
     </el-row>
               
-    <button @click="productStore.applyFilters" class="axil-btn btn-bg-primary">
-                 Filter
-    </button>
+
         </div>
     </div>
 </template>

@@ -1,6 +1,6 @@
 <script setup>
 import axios from "axios";
-import { onMounted, ref,watch } from "vue";
+import { onMounted,ref } from "vue";
 import { useProductStore } from "@/store/productStore.js";
 import { defineAsyncComponent } from "vue";
 const Product = defineAsyncComponent(() => import("./Product.vue"));
@@ -36,19 +36,17 @@ const fetchProducts = async () => {
     try {
         const res = await axios.get(FETCH_PRODUCTS_URL,headers);
         productStore.setProducts(res.data.data);
+        console.log(res.data.data)
       
     } catch (error) {
         console.error("An error occurred while fetching products:", error);
         throw error;
     }
 };
-// Watch for changes in sortedProducts and apply the changes to the displayed products
 
-watch(() => productStore.sortedProducts, (newlySorted) => {
-    productStore.sortedProducts=newlySorted
-});
 onMounted(() => {
     fetchProducts();
+  
 });
 
 </script>
@@ -63,7 +61,7 @@ onMounted(() => {
                     >
                         <!-- Start Single Select  -->
                         <span class="filter-results"
-                            >Showing 1-12 of 84 results</span
+                        >Showing  {{ productStore.sortedProducts.length}} results</span
                         >
                         <select
                             class="single-select"
@@ -91,6 +89,10 @@ onMounted(() => {
                 <Product :product="product" />
             </div>
             <!-- End Single Product  -->
+        </div>
+        <div class="text-center pt--20">
+            <el-pagination background layout="prev, pager, next" :total="productStore.totalPages" />
+            
         </div>
        
     </div>

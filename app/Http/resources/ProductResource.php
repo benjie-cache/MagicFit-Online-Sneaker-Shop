@@ -34,10 +34,7 @@ class ProductResource extends JsonResource
                 return SizeResource::collection($this->sizes);
             }),
         ];
- // Include brand information if available
-//  if ($this->relationLoaded('brand') && $this->brand) {
-//     $data['brand'] = BrandResource::collection($this->brand);
-// }
+ 
 
         // Include images if available
         if ($this->relationLoaded('images') && $this->images->isNotEmpty()) {

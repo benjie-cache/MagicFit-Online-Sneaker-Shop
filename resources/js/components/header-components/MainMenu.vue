@@ -8,80 +8,10 @@ import useCartStore from '@/store/cartStore.js';
 
 import useDropdownStore from '@/store/dropdownStore.js';
 import {useAuthStore} from '@/store/authStore.js';
-
-
 const cartStore = useCartStore();
-
-const cartItemCount = ref(cartStore.totalItems);
-const cartTotal = ref(parseFloat(cartStore.totalCost).toFixed(2));
-const cartItems = ref(cartStore.items);
-
 //initialize authstore
 const authStore=useAuthStore();
-//handle cart drop down
-const showAlert = ref(false);
-
-const handleQuantityInput = (item) => {
-    console.log(item)
-    // Validate the input here
-    if (item.count < 1) {
-        showAlert.value = true;
-        // You can also reset the input value if needed
-        item.count = 1;
-        showAlert.value = false;
-    } else {
-        showAlert.value = false;
-    }
-};
-//This is state that controls opening of the cart
 const dropDownStore = useDropdownStore();
-const isOpen = ref(dropDownStore.isOpen)
-//This is state that controls opening of the header search modal
-
-
-const isHeaderSearchOpen = ref(dropDownStore.isHeaderSearchOpen);
-
-
-
-
-watch(() => dropDownStore.isHeaderSearchOpen, (newHeaderSearchIsOpen) => {
-    isHeaderSearchOpen.value = newHeaderSearchIsOpen;
-});
-watch(() => dropDownStore.isOpen, (newIsOpen) => {
-    isOpen.value = newIsOpen
-});
-
-///handle account dropdown
-const isAccountDropdownopen=ref(dropDownStore.isAccountDropdownopen);
-watch(()=>dropDownStore.isAccountDropdownopen,(newisAccountDropdownopen)=>{
-          isAccountDropdownopen.value=newisAccountDropdownopen
-});
-watch(() => cartStore.totalItems, (newTotalItems) => {
-    cartItemCount.value = newTotalItems;
-});
-
-
-watch(() => cartStore.totalCost, (newTotalCost) => {
-    cartTotal.value = parseFloat(newTotalCost).toFixed(2);
-});
-
-watch(() => cartStore.items, (newItems) => {
-    cartItems.value = newItems;
-});
-const handleAccountDropdownClick=()=>{
-    dropDownStore.toggleAccountDropdown()
-}
-const handleHeaderSearchFocus = () => {
-    dropDownStore.toggleHeaderSearchDropdown();
-}
-const handleCartButtonClick = () => {
-
-
-    dropDownStore.toggleDropdown();
-
-};
-
-
 const handleLogOut=async()=>{
 
     const res= await authStore.logOut()
@@ -124,7 +54,7 @@ const handleLogOut=async()=>{
                     <div class="header-action">
                         <ul class="action-list">
                             <li class="axil-search d-xl-block d-none">
-                                <input type="search" class="placeholder product-search-input"  @click="handleHeaderSearchFocus" name="search2" id="search2" value="" maxlength="128" placeholder="What are you looking for?" autocomplete="off">
+                                <input type="search" class="placeholder product-search-input"  @click="dropDownStore.toggleHeaderSearchDropdown" name="search2" id="search2" value="" maxlength="128" placeholder="What are you looking for?" autocomplete="off">
                                 <button type="submit" class="icon wooc-btn-search">
                                     <i class="flaticon-magnifying-glass"></i>
                                 </button>
@@ -145,16 +75,16 @@ const handleLogOut=async()=>{
                                 </router-link>
                             </li>
                             <li class="shopping-cart">
-                                <a  class="cart-dropdown-btn"  @click="handleCartButtonClick"  >
-                                    <span class="cart-count">{{cartItemCount}}</span>
+                                <a  class="cart-dropdown-btn"  @click="dropDownStore.toggleDropdown"  >
+                                    <span class="cart-count">{{cartStore.totalItems}}</span>
                                     <i class="flaticon-shopping-cart"></i>
                                 </a>
                             </li>
                             <li class="my-account">
-                                <a @click="handleAccountDropdownClick" :class={open:isAccountDropdownopen}>
+                                <a @click="dropDownStore.toggleAccountDropdown()" :class={open:dropDownStore.isAccountDropdownopen}>
                                     <i class="flaticon-person"></i>
                                 </a>
-                                <div :class="['my-account-dropdown' , isAccountDropdownopen ? 'open':'' ]" >
+                                <div :class="['my-account-dropdown' , dropDownStore.isAccountDropdownopen ? 'open':'' ]" >
                                     <span class="title">QUICKLINKS</span>
                                     <ul>
                                         <li >
@@ -181,8 +111,8 @@ const handleLogOut=async()=>{
       
       
    
-<div  :class="['header-search-modal' ,isHeaderSearchOpen? 'open':'' ]" id="header-search-modal">
-        <button class="card-close sidebar-close"  @click="handleHeaderSearchFocus"><i class="fas fa-times"></i></button>
+<div  :class="['header-search-modal' ,dropDownStore.isHeaderSearchOpen? 'open':'' ]" id="header-search-modal">
+        <button class="card-close sidebar-close"  @click="dropDownStore.toggleHeaderSearchDropdown"><i class="fas fa-times"></i></button>
         <div class="header-search-wrap">
             <div class="card-header">
                 <form action="#">
@@ -223,12 +153,12 @@ const handleLogOut=async()=>{
         </div>
     </div>     
        
-<div  id="cart-dropdown"  :class="['cart-dropdown' ,isOpen? 'open':'' ]">
-        <CAlert color="danger" v-show="showAlert">Quantity Needs to be 1+</CAlert>
+<div  id="cart-dropdown"  :class="['cart-dropdown' ,dropDownStore.isOpen? 'open':'' ]">
+       
         <div class="cart-content-wrap">
             <div class="cart-header">
                 <h2 class="header-title">Cart review</h2>
-                <button class="cart-close sidebar-close" @click="handleCartButtonClick">
+                <button class="cart-close sidebar-close" @click="dropDownStore.toggleDropdown">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
@@ -236,8 +166,8 @@ const handleLogOut=async()=>{
                 <ul class="cart-item-list">
                     <li
                         class="cart-item"
-                        v-if="cartItems.length"
-                        v-for="(item, index) in cartItems"
+                        v-if="cartStore.items.length"
+                        v-for="(item, index) in cartStore.items"
                         :key="index"
                     >
                         <div class="item-img">
@@ -270,18 +200,18 @@ const handleLogOut=async()=>{
                     <h6 v-else>You havent added any items in your cart yet</h6>
                 </ul>
             </div>
-            <div class="cart-footer"  v-if="cartItems.length > 0 && !showAlert">
+            <div class="cart-footer"  v-if="cartStore.items.length > 0 && !showAlert">
                 <h3 class="cart-subtotal">
                     <span class="subtotal-title">Subtotal:</span>
-                    <span class="subtotal-amount">{{ cartTotal }}</span>
+                    <span class="subtotal-amount">{{ parseFloat(cartStore.totalCost).toFixed(2)}}</span>
                 </h3>
                 <div class="group-btn" >
                      <router-link to="/cart">
-                        <a @click="handleCartButtonClick" class="axil-btn btn-bg-primary viewcart-btn"
+                        <a @click="dropDownStore.toggleDropdown" class="axil-btn btn-bg-primary viewcart-btn"
                             >View Cart</a
                         ></router-link
                     > 
-         <router-link to="/checkout"> <a  @click="handleCartButtonClick"
+         <router-link to="/checkout"> <a  @click="dropDownStore.toggleDropdown"
                        
                        class="axil-btn btn-bg-secondary checkout-btn"
                        >Checkout</a

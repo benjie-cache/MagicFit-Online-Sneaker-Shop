@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class OrderItem extends Model
 {
     use HasFactory;
+    protected $fillable=['quantity','unit_price','total','order_id','product_id'];
     public function product():BelongsTo{
         return $this->belongsTo(Product::class);
     }

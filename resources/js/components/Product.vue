@@ -33,8 +33,8 @@ const cartStore = useCartStore();
 <template lang="">
     <div class="axil-product product-style-one mb--30">
         <div class="thumbnail">
-            <a href="single-product.html">
-                <!-- <img :src="prodImgUrl" alt="Image"> -->
+            <a>
+               
 
                 <img
                     v-if="

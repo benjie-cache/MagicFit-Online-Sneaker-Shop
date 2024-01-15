@@ -6,10 +6,9 @@ import prodImgUrl3 from '../../../images/others/Nike G.T black.png';
 const featured_images=reactive(
 {'white':prodImgUrl,
 'black':prodImgUrl2,
-'red':prodImgUrl3})
+'red':prodImgUrl3});
 
-onMounted(()=>{
-   
+onMounted(() => {
     $('.slider-activation-two').slick({
                 infinite: true,
                 autoplay: false,
@@ -46,6 +45,6 @@ onMounted(()=>{
                     </div>
                 </div>
             </div>
-        </div>
+    </div>
     
 </template>
