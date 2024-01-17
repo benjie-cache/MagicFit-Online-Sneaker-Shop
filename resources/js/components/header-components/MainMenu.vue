@@ -1,6 +1,7 @@
 <script setup>
 import logo from '../../../images/logo/logo1.png';
 import prodImgUrl from '../../../images/others/luka 2 caves.webp';
+
 import favicon from '../../../images/others/Nike G.T black.png';
 import { ref, watch } from 'vue'
 import useCartStore from '@/store/cartStore.js';
@@ -68,12 +69,12 @@ const handleLogOut=async()=>{
                             <li class="shopping-cart">
                                  <router-link to="/wishlist" class="cart-dropdown-btn">
                                     
-                                 
+                                   
                                     <i class="flaticon-heart"></i>
 
-                                   
                                 </router-link>
                             </li>
+                          
                             <li class="shopping-cart">
                                 <a  class="cart-dropdown-btn"  @click="dropDownStore.toggleDropdown"  >
                                     <span class="cart-count">{{cartStore.totalItems}}</span>
@@ -234,5 +235,15 @@ const handleLogOut=async()=>{
 
 .cart-dropdown.open {
     right: 0
+}
+.el-popper.is-customized {
+  /* Set padding to ensure the height is 32px */
+  padding: 6px 12px;
+  background: linear-gradient(90deg, rgb(159, 229, 151), rgb(204, 229, 129));
+}
+
+.el-popper.is-customized .el-popper__arrow::before {
+  background: linear-gradient(45deg, #b2e68d, #bce689);
+  right: 0;
 }
 </style>

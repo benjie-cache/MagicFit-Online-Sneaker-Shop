@@ -45,8 +45,10 @@ Route::get('/entities', [EntityController::class, 'getEntities']);
 
 
 Route::middleware(['auth:sanctum'])->group(function () {
-    Route::post('checkout/save_checkout_information', [CheckoutController::class, 'save_checkout_information']);
-    Route::get('get-customer-info', [CustomerController::class, 'getCustomerInfo']);
+    Route::post('customer/update-delivery-info', [CustomerController::class, 'update_delivery_info']);
+    Route::get('customer/get-customer-info', [CustomerController::class, 'getCustomerInfo']);
+    Route::get('customer/get-customer-orders',[CustomerController::class, 'getCustomerOrders']);
     Route::post('checkout/process-order',[CheckoutController::class, 'processOrder']);
+    
  
 });

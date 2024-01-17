@@ -21,7 +21,7 @@ return new class extends Migration
             $table->enum('type',['guest','authenticated'])->default('authenticated');
             
             $table->timestamps();
-            //foreign keys
+            
               //foreign keys
               $table->foreignId('user_id')->nullable()->index()->constrained()->onDelete('cascade');
               

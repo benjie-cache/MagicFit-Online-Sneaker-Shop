@@ -5,7 +5,7 @@ import { useProductStore } from "@/store/productStore.js";
 import { defineAsyncComponent } from "vue";
 const Product = defineAsyncComponent(() => import("./Product.vue"));
 const productStore = useProductStore();
-const FETCH_PRODUCTS_URL = "api/products";
+
 
 const headers = {
     "Content-Type": "application/json",
@@ -32,20 +32,10 @@ const sortProducts = () => {
             break;
     }
 };
-const fetchProducts = async () => {
-    try {
-        const res = await axios.get(FETCH_PRODUCTS_URL,headers);
-        productStore.setProducts(res.data.data);
-        console.log(res.data.data)
-      
-    } catch (error) {
-        console.error("An error occurred while fetching products:", error);
-        throw error;
-    }
-};
+
 
 onMounted(() => {
-    fetchProducts();
+    productStore.fetchProducts();
   
 });
 
@@ -91,7 +81,8 @@ onMounted(() => {
             <!-- End Single Product  -->
         </div>
         <div class="text-center pt--20">
-            <el-pagination background layout="prev, pager, next" :total="productStore.totalPages" />
+            <el-pagination background layout="prev, pager, next" 
+      :total="productStore.total"   @current-change="productStore.applyFilters"  hide-on-single-page  />
             
         </div>
        

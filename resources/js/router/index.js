@@ -56,7 +56,7 @@ router.beforeEach((to, from, next) => {
     next({ name: 'login' ,
     params: { nextUrl: to.fullPath },
      });
-     showNotification('Login First','You have to be logged in to checkout..','warning')
+     showNotification('Login First','You have to be logged in to access that {}..','warning')
   } 
   const loadingInstance = ElLoading.service({ fullscreen: true});
   document.title = to.meta.title || 'MagicFit';

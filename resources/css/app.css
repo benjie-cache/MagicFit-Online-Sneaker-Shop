@@ -11110,7 +11110,7 @@ body.open .closeMask {
 }
 
 .axil-shop-sidebar {
-    padding-right: 20px;
+    padding-right: 10px;
     position: relative
 }
 
@@ -15725,7 +15725,7 @@ body.open .closeMask {
 }
 
 .axil-section-gap {
-    padding: 80px 0
+    padding: 30px 0
 }
 
 @media only screen and (max-width: 767px) {

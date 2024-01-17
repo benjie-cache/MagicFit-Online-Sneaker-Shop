@@ -15,7 +15,7 @@ class Order extends Model
 {
     use HasFactory;
     protected $fillable = ['total_price', 'status', 'user_id','customer_id'];
-    public function order_items():HasMany{
+    public function orderItems():HasMany{
         return $this->hasMany(OrderItem::class);
     }
     public function payments():HasMany{

@@ -19,10 +19,10 @@ const entitiesStore = useEntitiesStore();
 
 <template>
     <div class="col-lg-2">
-        <div class="axil-shop-sidebar  mt-5 pt-5">
-            <el-row style="margin-top:25px">
-      <el-col :span="24">
-        <h5>Brands</h5>
+        <div class="axil-shop-sidebar">
+    <el-row style="margin-top:25px">
+      <el-col :span="15">
+        <h5 class="text-primary mt-2">Brands</h5>
         <el-checkbox-group v-model="productStore.filters.brands"  @change="productStore.applyFilters">
           <el-checkbox
             v-for="brand in entitiesStore.brands"
@@ -35,8 +35,8 @@ const entitiesStore = useEntitiesStore();
 
     <!-- Categories -->
     <el-row style="margin-top:5px">
-      <el-col :span="24">
-        <h5>Categories</h5>
+      <el-col :span="17">
+        <h5 class="text-primary mt-2">Categories</h5>
         <el-checkbox-group v-model="productStore.filters.categories" @change="productStore.applyFilters">
           <el-checkbox
             v-for="category in entitiesStore.categories"

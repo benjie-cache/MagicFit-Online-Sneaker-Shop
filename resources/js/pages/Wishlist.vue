@@ -8,8 +8,8 @@ const wishlistStore=useWishlistStore();
         <!-- Start Wishlist Area  -->
         <div class="axil-wishlist-area axil-section-gap">
             <div class="container">
-                <div class="product-table-heading">
-                    <h4 class="title">My Wish List on MagicFit</h4>
+                <div class="product-table-heading" v-if="wishlistStore.wishlistItems.length">
+                    <h4 class="title">My Wishlist on MagicFit</h4>
                 </div>
                 <div class="table-responsive" v-if="wishlistStore.wishlistItems.length">
                     <table class="table axil-product-table axil-wishlist-table" >
@@ -39,7 +39,8 @@ const wishlistStore=useWishlistStore();
                     </table>
                   
                 </div>
-                <div v-else
+                <div v-else class="d-flex justify-content-center">
+                    <div 
                         class="content"
                        
                     >
@@ -52,12 +53,14 @@ const wishlistStore=useWishlistStore();
                         </p>
                         <router-link
                             to="/shop"
-                            class="axil-btn btn-bg-secondary right-icon"
-                        >
-                            Back To Shopping
-                            <i class="fa fa-long-arrow-right"></i>
+                          
+                        ><a  class="axil-btn btn-bg-secondary right-icon"> Back To Shopping
+                            <i class="fa fa-cart-arrow-down"></i></a>
+                           
                         </router-link>
                 </div>
+                </div>
+               
             </div>
         </div>
     </main>

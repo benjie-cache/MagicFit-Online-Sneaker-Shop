@@ -6,6 +6,7 @@ export const useProductStore = defineStore({
   state: () => ({
     products: [],
     sortedProducts: [],
+
   
 
   
@@ -15,6 +16,12 @@ export const useProductStore = defineStore({
     },
     current_page: 1,
     totalPages: 1,
+    total:1,
+    page:1,
+    FETCH_PRODUCTS_URL :'api/products',
+
+    //per_page:1,
+
   }),
   getters: {
     getProductById: (state) => (productId) => {
@@ -36,28 +43,50 @@ export const useProductStore = defineStore({
         return aValue.localeCompare ? aValue.localeCompare(bValue) : aValue - bValue;
       });
     },
-    async applyFilters() {
+    async fetchProducts (newPage=1) {
+      const headers={   "Content-Type": "application/json"}
       try {
-       const headers={   "Content-Type": "application/json"}
-        const apiUrl = 'api/products';
+          const res = await axios.get(this.FETCH_PRODUCTS_URL,
+          {headers,
+              params:  {page: newPage }
+          }
+         );
+          this.setProducts(res.data.data);
+         this.totalPages = res.data.meta.last_page;
+          this.current_page = res.data.meta.current_page;
+         this.total=res.data.meta.total;
+         this.per_page=res.data.meta.per_page
+         // console.log(response.data.meta)
+        
+      } catch (error) {
+          console.error("An error occurred while fetching products:", error);
+          throw error;
+      }
+  },
+    async applyFilters(newPage) {
+      try {
+      
+       
       // Send filters to the backend as query parameters
           
-          const response = await axios.get(apiUrl, {
-            params:  { filters: JSON.stringify(this.filters),   page: this.current_page },
+          const response = await axios.get(this.FETCH_PRODUCTS_URL,{
+            params:  { filters: JSON.stringify(this.filters),   page:newPage },
             headers: { "Content-Type": "application/json" },
           });
-        console.log(response.data)
+        console.log(response.meta)
         // Update the sortedProducts in the store with the filtered products from the backend
         this.sortedProducts = response.data.data;
         this.totalPages = response.data.meta.last_page;
         this.current_page = response.data.meta.current_page;
+        this.total=response.data.meta.total;
+        this.per_page=response.data.meta.per_page
+
       
       } catch (error){
         console.error('Error applying filters:', error);
       }
     },
   
-     
     
     },
     nextPage() {

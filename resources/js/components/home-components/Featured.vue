@@ -9,6 +9,7 @@ const featured_images=reactive(
 'red':prodImgUrl3});
 
 onMounted(() => {
+  $(document).ready(() => {
     $('.slider-activation-two').slick({
                 infinite: true,
                 autoplay: false,
@@ -21,6 +22,7 @@ onMounted(() => {
                 cssEase: 'linear',
                 speed: 400
             });
+          })
 });
 </script>
 <template lang="">

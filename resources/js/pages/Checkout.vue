@@ -1,84 +1,15 @@
 <script setup>
-import {onMounted,ref}  from "vue";
-import { ElNotification,ElMessageBox } from "element-plus";
+import { reactive, ref,onMounted } from "vue";
+import { ElNotification, ElMessageBox } from "element-plus";
 
 import { useAuthStore } from "@/store/authStore.js";
 import { useCustomerStore } from "@/store/customerStore.js";
-
-
 import useCartStore from "@/store/cartStore.js";
 import { useRouter } from "vue-router";
-
-
-
-
-
+import { ElForm, ElFormItem, ElInput } from "element-plus";
+const customerStore = useCustomerStore();
 const authStore = useAuthStore();
 const cartStore = useCartStore();
-
-const customerStore= useCustomerStore();
-const phone_number=ref('')
-
-
-const router=useRouter()
-const processOrder = async () => {
-
-if(cartStore.items.length){
-    try {
-    const headers = authStore.getHeaders();
-    const data = {
-      'orderItems': cartStore.items,
-      'cartTotal': cartStore.totalCost
-    };
-
-    const res = await axios.post('api/checkout/process-order', JSON.stringify(data), { headers });
-
-    // Check the status from the response
-    if (res.status === 200 && res.data && res.data.message === 'Order processed') {
-    
-   
-        paymentModalOpen.value =! paymentModalOpen.value
-      showNotification('Success', 'Order processed successfully', 'success');
-      ElMessageBox.confirm('Order placed successfully. What would you like to do?', 'Success', {
-        confirmButtonText: 'View Orders',
-        cancelButtonText: 'Continue Shopping',
-        type: 'success'
-      }).then(() => {
-          router.push({name:'account'})
-         
-      }).catch(() => {
-       
-        router.push({name:'shop'})
-      
-      });
-    } else {
-      //Handle other status or errors
-      showNotification('Error', res.data.message || 'There was an issue processing the order', 'error');
-    }
-
-    cartStore.clearCart();
-  } catch (error) {
-    console.error('Error processing order:', error);
-    showNotification('Error', 'There was an unexpected error processing the order', 'error');
-  }
-}else{
-    showNotification('No Cart Items',"You have no items in your cart",'warning')
-}
- 
-
-
-};
-const paymentModalOpen=ref(false);
-const loading = ref(false)
-const handlePayment = () => {
-  loading.value = true;
-  setTimeout(() => {
-    //processOrder();
-    loading.value = false;
-
-  }, 5000);
-};
-
 const showNotification = (title, message, type) => {
     ElNotification({
         title,
@@ -86,10 +17,114 @@ const showNotification = (title, message, type) => {
         type,
     });
 };
-const togglePaymentModal=()=>{
-    paymentModalOpen.value =! paymentModalOpen.value
+const labelPosition = ref("right");
+const phone=ref("0741433144");
+const formReadOnly = ref(true);
+const toggleReadOnly = () => {
+    formReadOnly.value = !formReadOnly.value;
+   
 };
 
+
+const centerDialogVisible = ref(false);
+
+
+
+
+
+
+const router = useRouter();
+const processOrder = async () => {
+    if (cartStore.items.length) {
+        try {
+            const headers = authStore.getHeaders();
+            const data = {
+                orderItems: cartStore.items,
+                cartTotal: cartStore.totalCost,
+            };
+
+            const res = await axios.post(
+                "api/checkout/process-order",
+                JSON.stringify(data),
+                { headers }
+            );
+
+            // Check the status from the response
+            if (
+                res.status === 200 &&
+                res.data &&
+                res.data.message === "Order processed"
+            ) {
+                centerDialogVisible.value = false;
+                showNotification(
+                    "Success",
+                    "Order processed successfully",
+                    "success"
+                );
+                ElMessageBox.confirm(
+                    "Order placed successfully. What would you like to do?",
+                    "Success",
+                    {
+                        confirmButtonText: "View Orders",
+                        cancelButtonText: "Continue Shopping",
+                        type: "success",
+                    }
+                )
+                    .then(() => {
+                        router.push({ name: "account" });
+                    })
+                    .catch(() => {
+                        router.push({ name: "shop" });
+                    });
+            } else {
+                //Handle other status or errors
+                showNotification(
+                    "Error",
+                    res.data.message ||
+                    "There was an issue processing the order",
+                    "error"
+                );
+            }
+
+            cartStore.clearCart();
+        } catch (error) {
+            console.error("Error processing order:", error);
+            showNotification(
+                "Error",
+                "There was an unexpected error processing the order",
+                "error"
+            );
+        }
+    } else {
+        showNotification(
+            "No Cart Items",
+            "You have no items in your cart",
+            "warning"
+        );
+    }
+};
+
+const loading = ref(false);
+const handlePayment = (phone) => {
+    console.log(phone)
+    customerStore. isValidKenyanPhoneNumber(phone) ?
+    loading.value = true &&
+    setTimeout(() => {
+        processOrder();
+        loading.value = false;
+    }, 4000): showNotification("Warning", "Invalid  Info: Invalid Kenyan phone number", "warning");
+};
+const handlePayBtnClick=()=>{
+    customerStore.isValidCustomerInfo(customerStore.customerInfo) ? centerDialogVisible.value=true:  centerDialogVisible.value=false
+}
+onMounted(() => {
+if(customerStore.isValidCustomerInfo(customerStore.customerInfo)){
+    showNotification("Success", "Delivery details are valid you can checkout", "success");
+}
+    
+
+});
+//const updateDeliveryDetails()
 </script>
 <template lang="">
     <main class="main-wrapper">
@@ -98,9 +133,27 @@ const togglePaymentModal=()=>{
                 <form action="#">
                     <div class="row">
                         <div class="col-lg-8">
-                            
                             <div class="axil-checkout-billing">
-                                <h4 class="title mb--40">Receiver details</h4>
+                                <div
+                                    class="addrss-header d-flex align-items-center justify-content-between"
+                                >
+                                    <h4 class="title mb-20 py-5">
+                                        Delivery Address<br>
+                                        <p>These details have been prefilled from your customer account</p>
+                                    </h4>
+                                    <el-switch
+                                        v-model="formReadOnly"
+                                        size="large"
+                                        active-text="Edit Your Details"
+                                        inactive-text="Details are fine"
+                                        class="ml-2"
+                                        inline-prompt
+                                        style="
+                                            --el-switch-on-color: #13ce66;
+                                            --el-switch-off-color: #ff4949;
+                                        "
+                                    />
+                                </div>
                                 <form>
                                     <div class="row">
                                         <div class="form-group col-lg-6">
@@ -112,8 +165,12 @@ const togglePaymentModal=()=>{
                                                 type="text"
                                                 id="first-name"
                                                 placeholder="Your First Name"
-                                                v-model="customerStore.customerInfo.first_name"
-                                                
+                                                v-model="
+                                                    customerStore.customerInfo
+                                                        .first_name
+                                                "
+                                                :readonly="formReadOnly"
+                                                ref="firstNameInput"
                                             />
                                         </div>
                                         <div class="form-group col-lg-6">
@@ -124,7 +181,11 @@ const togglePaymentModal=()=>{
                                                 type="text"
                                                 id="last-name"
                                                 placeholder="Enter Your Last Name"
-                                                v-model="customerStore.customerInfo.last_name"
+                                                v-model="
+                                                    customerStore.customerInfo
+                                                        .last_name
+                                                "
+                                                :readonly="formReadOnly"
                                             />
                                         </div>
                                         <div class="form-group col-lg-6">
@@ -133,7 +194,11 @@ const togglePaymentModal=()=>{
                                                 type="text"
                                                 id="phone"
                                                 placeholder="Phone Number"
-                                                v-model="customerStore.customerInfo.phone"
+                                                v-model="
+                                                    customerStore.customerInfo
+                                                        .phone
+                                                "
+                                                :readonly="formReadOnly"
                                             />
                                         </div>
                                         <div class="form-group col-lg-6">
@@ -142,7 +207,11 @@ const togglePaymentModal=()=>{
                                                 type="text"
                                                 id="estate"
                                                 placeholder="Where do you live?"
-                                                v-model="customerStore.customerInfo.addresses[0].estate"
+                                                :readonly="formReadOnly"
+                                                v-model="
+                                                    customerStore.customerInfo
+                                                        .addresses[0].estate
+                                                "
                                             />
                                         </div>
                                         <div class="form-group col-lg-6">
@@ -155,7 +224,12 @@ const togglePaymentModal=()=>{
                                                 id="address1"
                                                 class="mb--15"
                                                 placeholder="Street Name"
-                                                v-model="customerStore.customerInfo.addresses[0].street_address"
+                                                :readonly="formReadOnly"
+                                                v-model="
+                                                    customerStore.customerInfo
+                                                        .addresses[0]
+                                                        .street_address
+                                                "
                                             />
                                         </div>
 
@@ -168,7 +242,12 @@ const togglePaymentModal=()=>{
                                                 type="text"
                                                 id="address2"
                                                 placeholder="Apartment Name"
-                                                v-model="customerStore.customerInfo.addresses[0].apartment_name"
+                                                :readonly="formReadOnly"
+                                                v-model="
+                                                    customerStore.customerInfo
+                                                        .addresses[0]
+                                                        .apartment_name
+                                                "
                                             />
                                         </div>
                                         <div class="form-group col-lg-6">
@@ -180,23 +259,24 @@ const togglePaymentModal=()=>{
                                                 type="text"
                                                 id="address2"
                                                 placeholder="House Number"
-                                                v-model="customerStore.customerInfo.addresses[0].house_number"
+                                                :readonly="formReadOnly"
+                                                v-model="
+                                                    customerStore.customerInfo
+                                                        .addresses[0]
+                                                        .house_number
+                                                "
                                             />
                                         </div>
-
-                                        <button
-                                            type="submit"
-                                            class="axil-btn btn-bg-primary viewcart-btn"
-                                        >
-                                           Update Receiver Details
-                                        </button>
+                                        <a v-if="!formReadOnly" @click="customerStore.handleDeliveryInfo()" class="axil-btn btn-bg-primary right-icon">
+                                               Update Your Delivery Details
+                           
+                          <i class="fa fa-money" aria-hidden="true"></i></a>
                                     </div>
-                                </form>
 
-                               
+                                </form>
                             </div>
                         </div>
-                        <div class="col-md-4 order-md-2 mb-4 ">
+                        <div class="col-md-4 order-md-2 mb-4">
                             <h6
                                 class="d-flex justify-content-between align-items-center mb-3"
                             >
@@ -209,8 +289,6 @@ const togglePaymentModal=()=>{
                                     :key="index"
                                 >
                                     <div>
-                                     
-                                      
                                         <h6 class="my-0">
                                             {{
                                                 item.name
@@ -248,168 +326,87 @@ const togglePaymentModal=()=>{
                                     <span>Total (KSH )</span>
                                     <strong
                                         >KSH
-                                        {{ cartStore.totalCost.toLocaleString() }}</strong
+                                        {{
+                                            cartStore.totalCost.toLocaleString()
+                                        }}</strong
                                     >
                                 </li>
                             </ul>
                             <button
                                 type="button"
-                            class="axil-btn btn-bg-secondary checkout-btn"
-                                data-bs-toggle="modal"
-                                data-bs-target="#staticBackdrop"
-                               @click.prevent="togglePaymentModal"
+                                class="axil-btn btn-bg-secondary checkout-btn"
+                                @click="handlePayBtnClick"
                             >
                                 <i class="fa fa-rocket"></i> Pay Now
-                        </button>
+                            </button>
                         </div>
                     </div>
                 </form>
             </div>
             <div class="d-flex justify-content-center" v-else>
-                <div 
-                        class="content"
-                       
+                <div class="content">
+                    <span class="title-highlighter highlighter-secondary">
+                        <i class="fa-solid fa-circle-exclamation"></i> You have
+                        no products in your Cart to checkout</span
                     >
-                        <span class="title-highlighter highlighter-secondary">
-                            <i class="fa-solid fa-circle-exclamation"></i> You have no products in your Cart to checkout</span
-                        >
-                      
-                        <p>
-                          Continue Shopping if you find products you like add them....
-                        </p>
-                        <router-link
-                            to="/shop"
-                            class="axil-btn btn-bg-secondary right-icon"
-                        >
+
+                    <p>
+                        Continue Shopping if you find products you like add
+                        them....
+                    </p>
+                    <router-link to="/shop"
+                        ><a class="axil-btn btn-bg-secondary right-icon">
                             Back To Shopping
-                            <i class="fa fa-cart-arrow-down"></i>
-                        </router-link>
-            </div>
-            </div>
-            
-        </div>
-        <!-- Modal -->
-    </main>
-    <div 
-        class="modal fade"
-        id="staticBackdrop"
-        data-bs-backdrop="static"
-        data-bs-keyboard="false"
-        tabindex="-1"
-        aria-labelledby="staticBackdropLabel"
-        aria-hidden="true"
-       
-    >
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-body" v-loading="loading" element-loading-text="Processing Payment">
-                    <div class="text-right">
-                        <i
-                            class="fa fa-close close"
-                            data-bs-dismiss="modal"
-                        ></i>
-                    </div>
-                    <div class="tabs mt-3">
-                        <ul class="nav nav-tabs" id="myTab" role="tablist">
-                            
-                          
-                        </ul>
-                        <div class="tab-content" id="myTabContent">
-                           
-                            <div
-                                class="tab-pane fade show active"
-                                id="paypal"
-                                role="tabpanel"
-                                aria-labelledby="paypal-tab"
-                            >
-                                <div class="px-5 mt-5">
-                                    <div class="text-center">
-                                        <h5>Lipa na M-pesa</h5>
-                                        <p class="text-dark">You will receive mpesa notification prompting you to pay KSH
-                                        {{ cartStore.totalCost.toLocaleString() }}</p>
-                                    </div>
-                                    <form  >
-                                    <div class="inputbox">
-                                        <input v-model="phone_number"
-                                           type="tel"
-                                            name="mpesa number"
-                                            class="form-control"
-                                            required="required"
-                                        />
-                                        <span>Your Mobile Number</span>
-                                    </div>
-                                    <div class="pay px-5">
-                                        <a
-                                        @click.prevent="handlePayment"
-                                         type="submit"
-                                            class="axil-btn btn-outline"
-                                        >
-                                            Get Payment Notification
-                                    </a>
-                                    </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                            <i class="fa fa-arrow-left"></i
+                        ></a>
+                    </router-link>
                 </div>
             </div>
         </div>
-    </div>
+        <!-- Modal -->
+    </main>
+    <el-dialog
+        v-model="centerDialogVisible"
+        title="Lipa Na Mpesa"
+       
+        center
+        destroy-on-close>
+        <p class="text-dark fw-bold text-center">
+            You will receive mpesa notification prompting you to pay KSH
+            {{ cartStore.totalCost.toLocaleString() }}
+        </p>
+         <form action="" class="form ">
+            <div class="form-group ">
+                <label for="phone"></label>
+                <input type="text" class="form-control text-center" placeholder="Enter mpesa number"  v-model="phone" >
+            </div>
+         </form>
+      
+        <template #footer>
+            <span class="dialog-footer">
+                <el-button type="primary" plain @click="handlePayment(phone)">
+                    Get Payment Notification
+                </el-button>
+            </span>
+        </template>
+    </el-dialog>
 </template>
 
 <style scoped>
-.launch {
-    height: 50px;
+.dialog-footer button:first-child {
+    margin-right: 10px;
 }
 
-.close {
-    font-size: 21px;
-    cursor: pointer;
+.dialog-footer button:first-child {
+    margin-right: 10px;
 }
 
-.modal-body {
-    height: auto;
-}
-
-.nav-tabs {
-    border: none !important;
-}
-
-.nav-tabs .nav-link.active {
-    color: #495057;
-    background-color: #fff;
-    border-color: #ffffff #ffffff #fff;
-    border-top: 3px solid rgb(54, 4, 50) !important;
-}
-
-.nav-tabs .nav-link {
-    margin-bottom: -1px;
-    border: 1px solid transparent;
-    border-top-left-radius: 0rem;
-    border-top-right-radius: 0rem;
-    border-top: 3px solid #eee;
-    font-size: 20px;
-}
-
-.nav-tabs .nav-link:hover {
-    border-color: #e9ecef #ffffff #ffffff;
-}
-
-.nav-tabs {
-    display: table !important;
-    width: 100%;
-}
-
-.nav-item {
-    display: table-cell;
-}
 
 .form-control {
-    border-bottom: 1px solid #807777 !important;
-    border: none;
+    
     font-weight: 600;
 }
+
 
 .form-control:focus {
     color: #495057;
@@ -419,44 +416,4 @@ const togglePaymentModal=()=>{
     box-shadow: none;
 }
 
-.inputbox {
-    position: relative;
-    margin-bottom: 20px;
-    width: 100%;
-}
-
-.inputbox span {
-    position: absolute;
-    top: 7px;
-    left: 11px;
-    transition: 0.5s;
-}
-
-.inputbox i {
-    position: absolute;
-    top: 13px;
-    right: 8px;
-    transition: 0.5s;
-    color: #3f51b5;
-}
-
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-}
-
-.inputbox input:focus~span {
-    transform: translateX(-0px) translateY(-15px);
-    font-size: 12px;
-}
-
-.inputbox input:valid~span {
-    transform: translateX(-0px) translateY(-15px);
-    font-size: 12px;
-}
-
-.pay button {
-    height: 30px;
-    border-radius: 37px;
-}</style>
+</style>

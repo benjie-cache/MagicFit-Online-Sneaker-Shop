@@ -1,4 +1,3 @@
-// store/authStore.js
 import { defineStore } from 'pinia';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
@@ -24,11 +23,13 @@ export const useAuthStore = defineStore({
     async getCustomerInfo() {
       try {
         const headers = this.getHeaders();
-        const response = await axios.get('api/get-customer-info', { headers });
+        const response = await axios.get('api/customer/get-customer-info', { headers });
 
         if (response.data.customer) {
-       ///set the associated customer info after login
+       ///set the associated customer info after login.customer
+           this.customerStore.clearCustomerInfo()
           this.customerStore.setCustomerInfo(response.data.customer);
+          console.log(response.data.customer)
           console.log("Customer Info Has Been Set")
         }else{
           console.error("no such customer is available")
@@ -53,18 +54,37 @@ export const useAuthStore = defineStore({
 
         this.setUserToken(user, token);
         try {
-          this.router.push({ name: "account" });
+          const customer_data={
+            "id": null,
+            "first_name": "",
+            "last_name": "",
+            "phone": "",
+            "type": "",
+            "addresses": [
+                {
+                    "type": "billing",
+                    "estate": "",
+                    "address2": null,
+                    "street_address": "",
+                    "apartment_name": "",
+                    "house_number": ""
+                }
+            ]
+        }
+        this.customerStore.setCustomerInfo(customer_data);
+          
           try {
-            showNotification("Success", "You have succefully Registered.Finish setting up your Customer Account", "success");
-            this.getCustomerInfo()
+            this.router.push({ name: "account" });
+            showNotification("Success", "You have successfully registered please complete your account profile", "success");
+            //this.getCustomerInfo()
 
           } catch (error) {
             console.log(error)
-            throw error
+            console.error('Redirect failed', error.message)
           }
 
         } catch (error) {
-          console.error('Redirect failed', error.message)
+          
         }
         return user;
       } catch (error) {

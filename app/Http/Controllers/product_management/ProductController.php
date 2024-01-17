@@ -17,8 +17,8 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        $perPage = $request->input('per_page', 10);
-
+        $perPage = $request->input('per_page', 12);
+     
         $query = Product::with(['images', 'discount']);
 
         // Log::info('the query', $query);
