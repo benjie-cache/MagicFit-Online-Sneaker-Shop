@@ -5,7 +5,8 @@ import useCartStore from "@/store/cartStore.js";
 export const useWishlistStore = defineStore('useWishlistStore', () => {
   const useCart = useCartStore();
   const WISHLIST_KEY = 'wishlistItems';
-  const wishlistItems = ref(JSON.parse(localStorage.getItem(WISHLIST_KEY)) || []);
+  const wishlistItems = ref(JSON.parse(localStorage.getItem(WISHLIST_KEY)) ||[]);
+  const totalItems=ref( wishlistItems.value.reduce((acc, item) => acc + item.count, 0))
 
   const showNotification = (title, message, type) => {
     ElNotification({

@@ -18,7 +18,7 @@ class ProductResource extends JsonResource
             'id' => $this->id,
             'brand_id'=>$this->brand_id,
             'category_id'=>$this->products_category_id,
-            'name' => $this->name,
+            'name' =>ucwords(strtolower($this->name)),
             'slug' => $this->slug,
             'description' => $this->description,
             'price' => round($this->price),

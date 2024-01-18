@@ -1,6 +1,9 @@
 <script setup>
 import {defineAsyncComponent} from 'vue';
 import useCartStore from '@/store/cartStore.js';
+const NoItem = defineAsyncComponent(()=>
+import('@/components/NoItem.vue')
+);
 
 const cartStore=useCartStore();
 const ServiceArea=defineAsyncComponent(()=>import('@/components/ServiceArea.vue'));
@@ -9,14 +12,14 @@ const ServiceArea=defineAsyncComponent(()=>import('@/components/ServiceArea.vue'
        <main class="main-wrapper">
     <div class="axil-product-cart-area axil-section-gap">
             <div class="container">
-                <div class="axil-product-cart-wrap">
+                <div class="axil-product-cart-wrap" v-if="cartStore.items.length">
                     <div class="product-table-heading">
                         <h4 class="title">Your Cart</h4>
-                        <a @click.prevent="cartStore.clearCart" class="cart-clear" v-if="cartStore.items.length">Clear Shoping Cart</a>
+                        <a @click.prevent="cartStore.clearCart" class="cart-clear" >Clear Shoping Cart</a>
                     </div>
                     <div class="table-responsive">
                         <table class="table axil-product-table axil-cart-table mb--40">
-                            <thead v-if="cartStore.items.length">
+                            <thead>
                                 <tr>
                                     <th scope="col" class="product-remove"></th>
                                     <th scope="col" class="product-thumbnail">Product</th>
@@ -27,7 +30,7 @@ const ServiceArea=defineAsyncComponent(()=>import('@/components/ServiceArea.vue'
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr   v-if="cartStore.items.length" v-for="(item,index) in cartStore.items" :key="item.id">
+                                <tr   v-for="(item,index) in cartStore.items" :key="item.id">
                                     <td class="product-remove"><a    @click="cartStore.decreaseItem(item,'all')" class="remove-wishlist"><i class="fa fa-times"></i></a></td>
                                     <td class="product-thumbnail"><a ><img v-if="item.images && item.images.length > 1 && item.images[1]" :src="'/storage' + item.images[1].url" alt="Image"></a></td>
                                     <td class="product-title"><a >{{item.name}}</a></td>
@@ -39,11 +42,11 @@ const ServiceArea=defineAsyncComponent(()=>import('@/components/ServiceArea.vue'
                                     </td>
                                     <td class="product-subtotal" data-title="Subtotal"><span class="currency-symbol">KSH </span>{{item.subtotal}}</td>
                                 </tr>
-                                <h6 v-else>Your cart is empty you cant check out just yet</h6>
+                               
                             </tbody>
                         </table>
                     </div>
-                    <div class="cart-update-btn-area"  v-if="cartStore.items.length">
+                    <div class="cart-update-btn-area" >
                         <div class="input-group product-cupon">
                             <input placeholder="Enter Discount code" type="text">
                             <div class="product-cupon-btn">
@@ -57,6 +60,11 @@ const ServiceArea=defineAsyncComponent(()=>import('@/components/ServiceArea.vue'
                     </div>
                   
                 </div>
+                <NoItem v-else
+           title="You have no products in your Cart to checkout"
+           explanation="Continue Shopping if you find products you like add them...."
+           backText="Back To Shopping"/>
+
             </div>
         </div>
     </main>

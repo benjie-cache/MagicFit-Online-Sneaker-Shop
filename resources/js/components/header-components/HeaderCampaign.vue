@@ -9,7 +9,7 @@
                                     <p>HAPPY NEW YEAR 10% OFF!! : <a href="#">GET OFFER</a></p>
                                 </div>
                         </el-carousel-item>
-                        </el-carousel>
+                    </el-carousel>
                       
                     </div>
                 </div>
@@ -17,19 +17,6 @@
         </div>
 </template>
 <script setup>
-import {onMounted } from 'vue';
-onMounted(()=>{
-    $(document).ready(() => {
-    $('.header-campaign-activation').slick({
-                infinite: true,
-                slidesToShow: 1,
-                slidesToScroll: 1,
-                arrows: true,
-                dots: false,
-                autoplay: true,
-                prevArrow: '<button class="slide-arrow prev-arrow"><i class="fa fa-long-arrow-left"></i></button>',
-                nextArrow: '<button class="slide-arrow next-arrow"><i class="fa fa-long-arrow-right"></i></button>'
-            });
-        })
-});
+
+
 </script>

@@ -22,7 +22,8 @@ export default defineConfig({
            '~slick-carousel': path.resolve(__dirname, 'node_modules/slick-carousel'),
            '@': path.resolve(__dirname, './resources/js'),
            '~images': path.resolve(__dirname, './resources/images'), 
-        }
+        },
+    
     },
    
 });

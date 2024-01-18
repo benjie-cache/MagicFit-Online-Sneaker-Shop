@@ -1,5 +1,9 @@
 <script setup>
-import {useWishlistStore} from '@/store/wishlistStore.js'
+import {defineAsyncComponent} from 'vue';
+import {useWishlistStore} from '@/store/wishlistStore.js';
+const NoItem = defineAsyncComponent(()=>
+import('@/components/NoItem.vue')
+);
 const wishlistStore=useWishlistStore();
 
 </script>
@@ -8,10 +12,11 @@ const wishlistStore=useWishlistStore();
         <!-- Start Wishlist Area  -->
         <div class="axil-wishlist-area axil-section-gap">
             <div class="container">
-                <div class="product-table-heading" v-if="wishlistStore.wishlistItems.length">
+                <div class="axil-product-cart-wrap" v-if="wishlistStore.wishlistItems.length" >
+                <div class="product-table-heading" >
                     <h4 class="title">My Wishlist on MagicFit</h4>
                 </div>
-                <div class="table-responsive" v-if="wishlistStore.wishlistItems.length">
+                <div class="table-responsive">
                     <table class="table axil-product-table axil-wishlist-table" >
                         <thead>
                             <tr>
@@ -39,27 +44,11 @@ const wishlistStore=useWishlistStore();
                     </table>
                   
                 </div>
-                <div v-else class="d-flex justify-content-center">
-                    <div 
-                        class="content"
-                       
-                    >
-                        <span class="title-highlighter highlighter-secondary">
-                            <i class="fal fa-exclamation-circle"></i> You have no products in your wish list</span
-                        >
-                      
-                        <p>
-                          Continue Shopping if you find products you like add them....
-                        </p>
-                        <router-link
-                            to="/shop"
-                          
-                        ><a  class="axil-btn btn-bg-secondary right-icon"> Back To Shopping
-                            <i class="fa fa-cart-arrow-down"></i></a>
-                           
-                        </router-link>
-                </div>
-                </div>
+               </div>
+        <NoItem v-else
+           title="You have no products in your wishlist"
+           explanation="Continue Shopping if you find products you like add them...."
+           backText="Back To Shopping"  />
                
             </div>
         </div>

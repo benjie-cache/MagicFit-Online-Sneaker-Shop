@@ -1,14 +1,16 @@
 <script setup>
 import logo from '../../../images/logo/logo1.png';
-import prodImgUrl from '../../../images/others/luka 2 caves.webp';
 
-import favicon from '../../../images/others/Nike G.T black.png';
-import { ref, watch } from 'vue'
+
+import { defineAsyncComponent} from 'vue'
 import useCartStore from '@/store/cartStore.js';
 
 
 import useDropdownStore from '@/store/dropdownStore.js';
 import {useAuthStore} from '@/store/authStore.js';
+import {useWishlistStore} from '@/store/wishlistStore.js';
+const CartReview = defineAsyncComponent(()=>import('@/components/cart-components/CartReview.vue'));
+const HeaderSearch = defineAsyncComponent(()=>import('@/components/header-components/HeaderSearch.vue'));
 const cartStore = useCartStore();
 //initialize authstore
 const authStore=useAuthStore();
@@ -17,6 +19,7 @@ const handleLogOut=async()=>{
 
     const res= await authStore.logOut()
 };
+const wishlistStore=useWishlistStore();
 </script>
 
 <template lang="">
@@ -25,7 +28,7 @@ const handleLogOut=async()=>{
             <div class="container">
                 <div class="header-navbar">
                     <div class="header-brand">
-                        <router-link to='/'><a href="index-2.html" class="logo logo-dark">
+                        <router-link to='/'><a  class="logo logo-dark">
                             <img  :src="logo" alt="Site Logo">
                         </a></router-link>
                         <router-link to='/'><a class="logo logo-light">
@@ -47,7 +50,7 @@ const handleLogOut=async()=>{
                                 <li><router-link to="/"><a >Featured & Deals</a></router-link></li>
                                 <li><router-link to="/shop" ><a >Shop Now</a></router-link></li>
                            
-                                <li><a href="">Talk To Us</a></li>
+                                <li><router-link to="/contact-us" ><a >Talk To Us</a></router-link></li>
                             </ul>
                         </nav>
                         <!-- End Mainmanu Nav -->
@@ -69,7 +72,7 @@ const handleLogOut=async()=>{
                             <li class="shopping-cart">
                                  <router-link to="/wishlist" class="cart-dropdown-btn">
                                     
-                                   
+                                    <span class="wishlist-count" v-if="wishlistStore.wishlistItems.length">{{wishlistStore.totalItems}}</span>
                                     <i class="flaticon-heart"></i>
 
                                 </router-link>
@@ -85,13 +88,13 @@ const handleLogOut=async()=>{
                                 <a @click="dropDownStore.toggleAccountDropdown()" :class={open:dropDownStore.isAccountDropdownopen}>
                                     <i class="flaticon-person"></i>
                                 </a>
-                                <div :class="['my-account-dropdown' , dropDownStore.isAccountDropdownopen ? 'open':'' ]" >
+                                <div v-if="dropDownStore.isAccountDropdownopen" :class="['my-account-dropdown' , dropDownStore.isAccountDropdownopen ? 'open':'' ]" >
                                     <span class="title">QUICKLINKS</span>
                                     <ul>
                                         <li >
                                            <router-link to="/account"> <a >My Account</a></router-link>
                                         </li>
-                                        <li >
+                                        <li v-if="authStore.user">
                                          <a @click="handleLogOut" >Logout</a>
                                         </li>
                                     </ul>
@@ -110,140 +113,20 @@ const handleLogOut=async()=>{
             </div>
         </div>
       
-      
-   
-<div  :class="['header-search-modal' ,dropDownStore.isHeaderSearchOpen? 'open':'' ]" id="header-search-modal">
-        <button class="card-close sidebar-close"  @click="dropDownStore.toggleHeaderSearchDropdown"><i class="fas fa-times"></i></button>
-        <div class="header-search-wrap">
-            <div class="card-header">
-                <form action="#">
-                    <div class="input-group">
-                        <input type="search" class="form-control" name="prod-search" id="prod-search" placeholder="Write Something....">
-                        <button type="submit" class="axil-btn btn-bg-primary"><i class="flaticon-magnifying-glass"></i></button>
-                    </div>
-                </form>
-            </div>
-            <div class="card-body">
-                <div class="search-result-header">
-                    <h6 class="title">1 Result Found</h6>
-                    <a href="shop.html" class="view-all">View All</a>
-                </div>
-                <div class="psearch-results">
-                    <div class="axil-product-list">
-                        <div class="thumbnail">
-                            <a href="single-product.html">
-                                <img :src="prodImgUrl" alt="Luka Caves sneakers" class="search-image">
-                            </a>
-                        </div>
-                        <div class="product-content">
-                          
-                            <h6 class="product-title"><a href="single-product.html">Luka 2 caves</a></h6>
-                            <div class="product-price-variant">
-                                <span class="price current-price">KSH 4500</span>
-                                <span class="price old-price">KSH 5000</span>
-                            </div>
-                            <div class="product-cart">
-                                <a href="cart.html" class="cart-btn"><i class="fa fa-shopping-cart"></i></a>
-                                <a href="wishlist.html" class="cart-btn"><i class="fa fa-heart"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                   
-                </div>
-            </div>
-        </div>
-    </div>     
-       
-<div  id="cart-dropdown"  :class="['cart-dropdown' ,dropDownStore.isOpen? 'open':'' ]">
-       
-        <div class="cart-content-wrap">
-            <div class="cart-header">
-                <h2 class="header-title">Cart review</h2>
-                <button class="cart-close sidebar-close" @click="dropDownStore.toggleDropdown">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="cart-body">
-                <ul class="cart-item-list">
-                    <li
-                        class="cart-item"
-                        v-if="cartStore.items.length"
-                        v-for="(item, index) in cartStore.items"
-                        :key="index"
-                    >
-                        <div class="item-img">
-                            <a href=""
-                                > <img v-if="item.images && item.images.length > 1 && item.images[1]" :src="'/storage' + item.images[1].url" alt="Image"></a>
-                            <button
-                                class="close-btn"
-                             
-                                @click="cartStore.decreaseItem(item,'all')">
-                                <i class="fas fa-times"></i>
-                            </button>
-                        </div>
-                        <div class="item-content">
-                            
-                            <h3 class="item-title">
-                                <a href="">{{
-                                    item.name
-                                }}</a>
-                            </h3>
-                            <div class="item-price">
-                                <span class="currency-symbol">KSH  </span
-                                >   {{ item.price }}
-                            </div>
-                            <div class="pro-qty item-quantity"><span class="dec qtybtn"    @click="cartStore.decreaseItem(item)">-</span>
-                                <input type="number" class="quantity-input"     @input="handleQuantityInput(item)"    v-model="item.count">
-                            <span class="inc qtybtn" @click="cartStore.increaseItem(item)">+</span></div>
-                            
-                        </div>
-                    </li>
-                    <h6 v-else>You havent added any items in your cart yet</h6>
-                </ul>
-            </div>
-            <div class="cart-footer"  v-if="cartStore.items.length > 0 && !showAlert">
-                <h3 class="cart-subtotal">
-                    <span class="subtotal-title">Subtotal:</span>
-                    <span class="subtotal-amount">{{ parseFloat(cartStore.totalCost).toFixed(2)}}</span>
-                </h3>
-                <div class="group-btn" >
-                     <router-link to="/cart">
-                        <a @click="dropDownStore.toggleDropdown" class="axil-btn btn-bg-primary viewcart-btn"
-                            >View Cart</a
-                        ></router-link
-                    > 
-         <router-link to="/checkout"> <a  @click="dropDownStore.toggleDropdown"
-                       
-                       class="axil-btn btn-bg-secondary checkout-btn"
-                       >Checkout</a
-                   ></router-link>
-                   
-                </div>
-            </div>
-        </div>
-    </div>
+      <!--This is the header searcch component-->
+<Teleport to="body">
+  <div  :class="['' ,dropDownStore.isOpen || dropDownStore.isHeaderSearchOpen ? 'closeMask':'']" >
+  
+  </div>
+</Teleport>  
+<div v-if="dropDownStore.isHeaderSearchOpen" :class="['header-search-modal' ,dropDownStore.isHeaderSearchOpen? 'open':'' ]" id="header-search-modal">
+    <HeaderSearch/>
+</div>     
+   <!--This is the cart review searcch component-->    
+<div v-if="dropDownStore.isOpen"  id="cart-dropdown"  :class="['cart-dropdown' ,dropDownStore.isOpen? 'open':'' ]">
+<CartReview/>
+</div>
         
    
 
 </template>
-
-<style scoped>
-.search-image {
-    width: 50px;
-    height: 50px;
-}
-
-.cart-dropdown.open {
-    right: 0
-}
-.el-popper.is-customized {
-  /* Set padding to ensure the height is 32px */
-  padding: 6px 12px;
-  background: linear-gradient(90deg, rgb(159, 229, 151), rgb(204, 229, 129));
-}
-
-.el-popper.is-customized .el-popper__arrow::before {
-  background: linear-gradient(45deg, #b2e68d, #bce689);
-  right: 0;
-}
-</style>

@@ -8300,7 +8300,21 @@ button.axil-btn.btn-size-md i {
     top: -12px;
     right: -12px
 }
-
+.header-action .shopping-cart .cart-dropdown-btn .wishlist-count {
+    text-align: center;
+    background-color: var(--color-secondary);
+    border: 2px solid var(--color-white);
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--color-white);
+    border-radius: 50%;
+    height: 22px;
+    width: 22px;
+    line-height: 19px;
+    position: absolute;
+    top: -12px;
+    right: -12px
+}
 .header-action .my-account {
     position: relative
 }
@@ -9831,7 +9845,7 @@ button.axil-btn.btn-size-md i {
     right: 0
 }
 
-body.open .closeMask {
+body .closeMask {
     height: 100%;
     width: 100%;
     background-color: rgba(0, 0, 0, .6);

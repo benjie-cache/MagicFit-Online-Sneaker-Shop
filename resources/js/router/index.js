@@ -8,6 +8,7 @@ import { ElNotification } from 'element-plus';
 const Home=()=>import('@/pages/Home.vue');
 
 const Shop=()=>import('@/pages/Shop.vue');
+const Contact=()=>import('@/pages/Contact.vue')
 const Checkout=()=>import('@/pages/Checkout.vue')
 const Login=()=>import('@/pages/auth/Login.vue');
 const Register=()=>import('@/pages/auth/Register.vue');
@@ -42,6 +43,7 @@ const router = createRouter({
         { path: '/account', component: Account, name:'account' ,meta: { title: 'MagicFit || Customer Account' }},
         { path: '/cart', component: Cart, name:'cart' ,meta: { title: 'MagicFit || Cart' }},
         { path: '/wishlist', component: Wishlist, name:'wishlist' ,meta: { title: 'MagicFit || WishList' }},
+        { path: '/contact-us', component: Contact, name:'contact' ,meta: { title: 'MagicFit || ContactUs' }},
       ],
     },
     { path: '/login', component: Login, name: 'login',meta: { title: 'MagicFit || Customer Login' } },

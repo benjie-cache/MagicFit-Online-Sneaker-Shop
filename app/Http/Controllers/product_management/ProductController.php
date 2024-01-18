@@ -19,7 +19,7 @@ class ProductController extends Controller
     {
         $perPage = $request->input('per_page', 12);
      
-        $query = Product::with(['images', 'discount']);
+        $query = Product::with(['images', 'discount','colors','sizes']);
 
         // Log::info('the query', $query);
 

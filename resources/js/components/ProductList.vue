@@ -12,7 +12,12 @@ const headers = {
 };
 const selectedSort = ref("latest");
 
+const handlePageChange=(newPage)=>{
+          productStore.current_page=newPage;
+          console.log(productStore.current_page)
+          productStore.applyFilters(newPage)
 
+};
 const sortProducts = () => {
     switch (selectedSort.value) {
         case "latest":
@@ -36,7 +41,7 @@ const sortProducts = () => {
 
 onMounted(() => {
     productStore.fetchProducts();
-  
+   
 });
 
 </script>
@@ -71,18 +76,17 @@ onMounted(() => {
         </div>
         <!-- End .row -->
         <div class="row row--15" id="prod-list">
-            <div
-                class="col-xl-3 col-sm-6"
+            <div class="col-xl-3 col-sm-6"
                 v-for="(product,index) in productStore.sortedProducts"
-                :key="index"
-            >
+                :key="index" >
+            
                 <Product :product="product" />
             </div>
             <!-- End Single Product  -->
         </div>
         <div class="text-center pt--20">
             <el-pagination background layout="prev, pager, next" 
-      :total="productStore.total"   @current-change="productStore.applyFilters"  hide-on-single-page  />
+      :total="productStore.total"   @current-change="handlePageChange"  hide-on-single-page  />
             
         </div>
        

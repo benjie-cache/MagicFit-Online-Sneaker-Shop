@@ -12,7 +12,7 @@ const showNotification = (title,message,type) => {
 export const useCustomerStore = defineStore({
   id: 'customer',
   state: () => ({
-    customerInfo: JSON.parse(localStorage.getItem('customerInfo')) ||null,
+    customerInfo:JSON.parse(localStorage.getItem('customerInfo')) ||null,
     customerOrders:null,
     current_page: 1,
     totalPages: 1,

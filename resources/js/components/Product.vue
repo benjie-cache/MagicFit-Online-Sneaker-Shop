@@ -1,8 +1,8 @@
 <script setup>
-import { defineAsyncComponent ,onMounted} from "vue";
-import {useWishlistStore} from '@/store/wishlistStore.js';
+import { defineAsyncComponent, onMounted } from "vue";
+import { useWishlistStore } from "@/store/wishlistStore.js";
 
-const wishlistStore=useWishlistStore()
+const wishlistStore = useWishlistStore();
 const ProductQuickView = defineAsyncComponent(() =>
     import("@/components/ProductQuickView.vue")
 );
@@ -10,8 +10,9 @@ const ProductQuickView = defineAsyncComponent(() =>
 import useCartStore from "@/store/cartStore.js";
 
 import { ref } from "vue";
+
 const isQuickViewOpen = ref(false);
-const modalIdPrefix = "quick-view-modal"; // Prefix for modal IDs
+
 const openQuickViewModal = (product) => {
     isQuickViewOpen.value = true;
 };
@@ -23,19 +24,29 @@ const props = defineProps({
     product: Object,
 });
 
-// Define a function to generate a unique modal ID based on product ID
-const getModalId = (productId) => `${modalIdPrefix}-${productId}`;
-
 //handle cart management
 const cartStore = useCartStore();
 
+const handleActionClick = (event) => {
+    const target = event.target.closest("[data-action]");
+    if (!target) return;
+
+    const action = target.dataset.action;
+    console.log(action);
+
+    if (action === "wishlist") {
+        wishlistStore.addToWishlist(props.product);
+    } else if (action === "addtocart") {
+        useCartStore().addItem(props.product);
+    } else if (action === "quickview") {
+        openQuickViewModal(props.product);
+    }
+};
 </script>
 <template lang="">
     <div class="axil-product product-style-one mb--30">
         <div class="thumbnail">
             <a>
-               
-
                 <img
                     v-if="
                         product.images &&
@@ -52,23 +63,15 @@ const cartStore = useCartStore();
                 </div>
             </div>
             <div class="product-hover-action">
-                <ul class="cart-action">
-                    <li class="wishlist">
-                        <a @click.prevent="wishlistStore.addToWishlist(product)"><i class="far fa-heart"></i></a>
+                <ul class="cart-action" @click.stop="handleActionClick">
+                    <li class="wishlist" data-action="wishlist">
+                        <a><i class="far fa-heart"></i></a>
                     </li>
-                    <li class="select-option">
-                        <a @click="useCartStore().addItem(product)"
-                            ><i class="fa fa-shopping-cart"></i></a
-                        >
+                    <li class="select-option" data-action="addtocart">
+                        <a><i class="fa fa-shopping-cart"></i></a>
                     </li>
-                    <li class="quickview">
-                        <a
-                            href="#"
-                            data-bs-toggle="modal"
-                            :data-bs-target="'#'+getModalId(product.id)"
-                            @click="openQuickViewModal(product)"
-                            ><i class="far fa-eye"></i
-                        ></a>
+                    <li class="quickview" data-action="quickview">
+                        <a><i class="far fa-eye"></i></a>
                     </li>
                 </ul>
             </div>
@@ -76,16 +79,7 @@ const cartStore = useCartStore();
         <div class="product-content">
             <div class="inner">
                 <h5 class="title">
-                    {{
-                        product.name
-                            .split(" ")
-                            .map(
-                                (word) =>
-                                    word.charAt(0).toUpperCase() +
-                                    word.slice(1).toLowerCase()
-                            )
-                            .join(" ")
-                    }}
+                    {{ product.name }}
                 </h5>
 
                 <div class="product-price-variant" v-if="product.discount">
@@ -108,29 +102,16 @@ const cartStore = useCartStore();
             </div>
         </div>
     </div>
-    <div v-if="isQuickViewOpen"
-        class="modal modal-sm fade quick-view-product"
-        :id="getModalId(product.id)"
-        tabindex="-1"
-        aria-hidden="true"
-    >
-        <div class="modal-dialog modal-dialog-centered"  >
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button
-                        type="button"
-                        class="btn-close"
-                        data-bs-dismiss="modal"
-                        aria-label="Close"
-                    >
-                       <i class="fa fa-times"></i>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <ProductQuickView :selected_product="product"/>
-                </div>
-            </div>
-        </div>
-    </div>
-</template>
 
+    <el-dialog
+        v-model="isQuickViewOpen"
+        title="Product Quick View"
+        width="70%"
+        height="70%"
+        close-on-click-modal
+        append-to-body
+        lock-scroll
+    >
+        <ProductQuickView :selected_product="product" />
+    </el-dialog>
+</template>

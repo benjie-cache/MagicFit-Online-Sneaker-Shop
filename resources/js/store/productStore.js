@@ -56,14 +56,14 @@ export const useProductStore = defineStore({
           this.current_page = res.data.meta.current_page;
          this.total=res.data.meta.total;
          this.per_page=res.data.meta.per_page
-         // console.log(response.data.meta)
+  
         
       } catch (error) {
           console.error("An error occurred while fetching products:", error);
           throw error;
       }
   },
-    async applyFilters(newPage) {
+    async applyFilters(newPage=this.current_page){
       try {
       
        
