@@ -1,15 +1,14 @@
 <script setup>
-import { defineAsyncComponent, onMounted } from "vue";
+import { defineAsyncComponent, ref } from "vue";
 import { useWishlistStore } from "@/store/wishlistStore.js";
 
 const wishlistStore = useWishlistStore();
 const ProductQuickView = defineAsyncComponent(() =>
     import("@/components/ProductQuickView.vue")
 );
+const ColorVariant= defineAsyncComponent(()=>import("@/components/product-components/ColorVariant.vue"))
 
 import useCartStore from "@/store/cartStore.js";
-
-import { ref } from "vue";
 
 const isQuickViewOpen = ref(false);
 
@@ -17,9 +16,6 @@ const openQuickViewModal = (product) => {
     isQuickViewOpen.value = true;
 };
 
-const closeQuickView = () => {
-    isQuickViewOpen.value = false;
-};
 const props = defineProps({
     product: Object,
 });
@@ -42,18 +38,35 @@ const handleActionClick = (event) => {
         openQuickViewModal(props.product);
     }
 };
+const isHovered = false;
+const displayImage = ref("/storage" + props.product.images[1].url);
+const handleImageHover = () => {
+    console.log("image hovered");
+    displayImage.value = "/storage" + props.product.images[0].url;
+};
+const handleImageLeave = () => {
+    console.log("mouse left");
+    displayImage.value = "/storage" + props.product.images[1].url;
+};
+
 </script>
+
 <template lang="">
-    <div class="axil-product product-style-one mb--30">
+    <div
+        class="axil-product product-style-one mb--30"
+        @mouseover="handleImageHover"
+        @mouseleave="handleImageLeave"
+    >
         <div class="thumbnail">
             <a>
                 <img
+                    class="image-hover"
                     v-if="
                         product.images &&
                         product.images.length > 1 &&
                         product.images[1]
                     "
-                    :src="'/storage' + product.images[1].url"
+                    :src="displayImage"
                     alt="Image"
                 />
             </a>
@@ -82,23 +95,18 @@ const handleActionClick = (event) => {
                     {{ product.name }}
                 </h5>
 
-                <div class="product-price-variant" v-if="product.discount">
-                    <span class="price current-price"
-                        >ksh
-                        {{
-                            product.discount.price_after_discount.toLocaleString()
-                        }}/=</span
+                <div class="product-price-variant">
+                    <span class="price current-price" 
+                        >ksh {{ !product.discount ? product.price.toLocaleString(): product.discount.price_after_discount}}/=</span
                     >
-                    <span class="price old-price">
+                    <span class="price old-price" v-if="product.discount">
                         ksh
                         {{ product.discount.original_price.toLocaleString() }}/=
                     </span>
+
+                    <ColorVariant :productColors="product.colors"/>
                 </div>
-                <div class="product-price-variant" v-else>
-                    <span class="price current-price"
-                        >ksh {{ product.price.toLocaleString() }}/=</span
-                    >
-                </div>
+              
             </div>
         </div>
     </div>

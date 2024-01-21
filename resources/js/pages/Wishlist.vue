@@ -53,9 +53,5 @@ const wishlistStore=useWishlistStore();
             </div>
         </div>
     </main>
-        <!-- End Wishlist Area  -->
-</template>
 
-<style lang="">
-    
-</style>
+</template>

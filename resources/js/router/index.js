@@ -30,7 +30,13 @@ const router = createRouter({
       path: '/',
       component: DefaultLayout,
       children: [
-        { path: '/', component: Home, name: 'home', meta: { title: 'MagicFit || Home' } },
+        { path: '/', 
+        component: Home,
+         name: 'home', 
+         meta: { 
+          title: 'MagicFit || Home',
+          isHome:true
+         } },
         { path: '/shop', component: Shop, name: 'shop',  meta: { title: 'MagicFit || Shop' }},
 
         { path: '/checkout',
@@ -60,6 +66,9 @@ router.beforeEach((to, from, next) => {
      });
      showNotification('Login First','You have to be logged in to access that {}..','warning')
   } 
+  if(to.matched.some(record => record.meta.isHome)){
+    const loadingInstance = ElLoading.service({ fullscreen: true,text:"Welcome To Magic Fit.Happy Shopping"})
+  }
   const loadingInstance = ElLoading.service({ fullscreen: true});
   document.title = to.meta.title || 'MagicFit';
   next();

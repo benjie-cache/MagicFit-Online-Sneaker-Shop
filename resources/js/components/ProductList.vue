@@ -78,7 +78,7 @@ onMounted(() => {
         <div class="row row--15" id="prod-list">
             <div class="col-xl-3 col-sm-6"
                 v-for="(product,index) in productStore.sortedProducts"
-                :key="index" >
+                :key="product.id" >
             
                 <Product :product="product" />
             </div>

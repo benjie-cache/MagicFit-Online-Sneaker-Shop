@@ -48,7 +48,8 @@ export default function useOrderProcessing() {
                                   confirmButtonText: "View Orders",
                                   cancelButtonText: "Continue Shopping",
                                   type: "success",
-                                  center: true,
+                                  lockScroll: false,
+                              
                               }
                           )
                               .then(() => {
