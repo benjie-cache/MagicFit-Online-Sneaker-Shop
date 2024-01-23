@@ -13,9 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('products', function (Blueprint $table) {
+        Schema::create('products',function (Blueprint $table) {
           
-           //DEAL WITH FOREIGN KEYS AND RELATIONSHIPS
+      
            $table->id();
           //  foreign keys
            $table->unsignedBigInteger('products_category_id')->index()->nullable();
@@ -27,8 +27,8 @@ return new class extends Migration
             $table->string('name',2000);
             $table->string('slug',2000);
             $table->text('description')->nullable();
-            $table->decimal('price',10,2);
-            $table->boolean('is_hot_deal_of_the_day')->default(false); //New column
+            $table->string('sku')->unique(); 
+       
             $table->timestamps();
            
             

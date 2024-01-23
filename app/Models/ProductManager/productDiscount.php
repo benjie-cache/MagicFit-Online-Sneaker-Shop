@@ -1,16 +1,15 @@
 <?php
 
-namespace App\Models;
-use App\Models\ProductVariant;
+namespace App\Models\ProductManager;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Size extends Model
+class productDiscount extends Model
 {
     use HasFactory;
-    public function product_variants():HasMany
-    {
-        return $this->hasMany(ProductVariant::class);
+    public function products():HasMany{
+        return $this->hasMany(Product::class);
     }
 }

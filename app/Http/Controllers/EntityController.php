@@ -7,7 +7,7 @@ use App\Http\Resources\ProductCategoryResource;
 use App\Http\Resources\ColorResource;
 use App\Http\Resources\SizeResource;
 use App\Models\Brand;
-use App\Models\product_management\ProductCategory;
+use App\Models\ProductManager\ProductCategory;
 use App\Models\Color;
 use App\Models\Size;
 

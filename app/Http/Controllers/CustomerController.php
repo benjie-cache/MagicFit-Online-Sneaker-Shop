@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\CustomerResource;
 use App\Http\Resources\OrderResource;
-use App\Models\customer_management\Customer;
-use App\Models\customer_management\CustomerAddress;
+use App\Models\CustomerManager\Customer;
+use App\Models\CustomerManager\CustomerAddress;
 
-use App\Models\shopping_process\Order;
+use App\Models\ShoppingProcessManager\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;

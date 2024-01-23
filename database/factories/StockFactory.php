@@ -1,7 +1,7 @@
 <?php
 
 namespace Database\Factories;
-use App\Models\product_management\Product;
+use App\Models\ProductManager\Product;
 use App\Models\Color;
 use App\Models\Size;
 use App\Models\Stock;

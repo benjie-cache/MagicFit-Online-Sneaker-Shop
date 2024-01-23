@@ -26,13 +26,10 @@ class ProductResource extends JsonResource
             'created_at' => $this->created_at->toDateTimeString(),
             'updated_at' => $this->updated_at->toDateTimeString(),
              //Include colors and sizes
-             'colors' => $this->whenLoaded('colors', function () {
-                return ColorResource::collection($this->colors);
-            }),
+             'colors' =>ColorResource::collection($this->whenLoaded('colors')),
+              
 
-            'sizes' => $this->whenLoaded('sizes', function () {
-                return SizeResource::collection($this->sizes);
-            }),
+            'sizes' => SizeResource::collection($this->whenLoaded('sizes'))
         ];
  
 

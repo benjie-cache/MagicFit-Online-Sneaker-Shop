@@ -70,7 +70,7 @@ export const useProductStore = defineStore({
       // Send filters to the backend as query parameters
           
           const response = await axios.get(this.FETCH_PRODUCTS_URL,{
-            params:  { filters: JSON.stringify(this.filters),   page:newPage },
+            params:  { filters: this.filters,   page:newPage },
             headers: { "Content-Type": "application/json" },
           });
         console.log(response.meta)

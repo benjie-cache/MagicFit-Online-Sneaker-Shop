@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use App\Models\User;
+
 return new class extends Migration
 {
     /**
@@ -17,13 +17,13 @@ return new class extends Migration
             $table->id();
             $table->string('first_name',20);
             $table->string('last_name',20);
-            $table->integer('phone')->nullable(); 
+            $table->string('phone',30)->nullable()->change();
             $table->enum('type',['guest','authenticated'])->default('authenticated');
             
             $table->timestamps();
             
               //foreign keys
-              $table->foreignId('user_id')->nullable()->index()->constrained()->onDelete('cascade');
+              $table->foreignId('user_id')->index()->constrained()->onDelete('cascade')->change();
               
         });
     }

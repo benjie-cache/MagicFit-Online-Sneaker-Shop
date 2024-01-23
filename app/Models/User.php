@@ -5,7 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
 
-use App\Models\shopping_process\Order;
+use App\Models\ShoppingProcessManager\Order;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -13,16 +13,11 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-use App\Models\shopping_process\ShoppingSession;
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
-                
-   //shopping session user relation
-   public function shopping_session():HasOne{
-    return $this->hasOne(ShoppingSession::class);
-   }
+
    public function orders():HasMany{
     return $this->hasMany(Order::class);
    }

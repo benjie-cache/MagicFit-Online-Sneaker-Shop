@@ -4,12 +4,12 @@ use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\CustomerController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\product_management\ProductController;
+use App\Http\Controllers\ProductManager\ProductController;
 
 use App\Http\Controllers\UserAuthenticationController;
 use App\Http\Controllers\EntityController;
 use App\Http\Controllers\OrderController;
-use App\Models\customer_management\Customer;
+use App\Models\CustomerManager\Customer;
 
 /*
 |--------------------------------------------------------------------------

@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Models;
-use App\Models\ProductManager\Product;
+namespace App\Models\ProductManager;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+
 use Illuminate\Database\Eloquent\Relations\HasMany;
-class Brand extends Model
+class ProductCategory extends Model
 {
     use HasFactory;
-    public function products():HasMany
-    {
+    public function products(): HasMany{
         return $this->hasMany(Product::class);
     }
 }

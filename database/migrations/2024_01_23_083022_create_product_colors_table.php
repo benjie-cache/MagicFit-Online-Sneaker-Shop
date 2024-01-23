@@ -13,15 +13,18 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('product_discounts',function (Blueprint $table){
+        Schema::create('product_colors', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('product_id');
+            $table->unsignedBigInteger('product_id')->index();
             $table->foreign('product_id')->references('id')->on('products')->cascadeOnDelete();
-            $table->decimal('discount_percentage', 5,2);
-            $table->decimal('discount_amount', 10, 2)->nullable();
-            $table->date('start_date')->nullable();
-            $table->date('end_date')->nullable();
+            $table->unsignedBigInteger('color_id')->index();
+            $table->foreign('color_id')->references('id')->on('colors')->cascadeOnDelete();
+            $table->decimal('price', 10, 2);
+            $table->string('sku')->unique(); 
             $table->timestamps();
+    
+      
+            $table->unique(['product_id', 'color_id']);
         });
     }
 
@@ -32,6 +35,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('product_discounts');
+        Schema::dropIfExists('product_colors');
     }
 };

@@ -4,15 +4,15 @@ namespace App\Http\Controllers;
 
 
 use Illuminate\Http\Request;
-use App\Models\shopping_process\Order;
-use App\Models\shopping_process\OrderItem;
-use App\Models\customer_management\Customer;
-use App\Models\customer_management\CustomerAddress;
+use App\Models\ShoppingProcessManager\Order;
+use App\Models\ShoppingProcessManager\OrderItem;
+use App\Models\CustomerManager\Customer;
+use App\Models\CustomerManager\CustomerAddress;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\CustomerResource;
-use App\Models\shopping_process\OrderDetail;
-use App\Models\shopping_process\Payment;
+use App\Models\ShoppingProcessManager\OrderDetail;
+use App\Models\ShoppingProcessManager\Payment;
 use Illuminate\Support\Facades\DB;
 class CheckoutController extends Controller
 {
