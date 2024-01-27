@@ -6,13 +6,16 @@ const wishlistStore = useWishlistStore();
 const ProductQuickView = defineAsyncComponent(() =>
     import("@/components/ProductQuickView.vue")
 );
-const ColorVariant= defineAsyncComponent(()=>import("@/components/product-components/ColorVariant.vue"))
+const ColorVariant = defineAsyncComponent(() =>
+    import("@/components/product-components/ColorVariant.vue")
+);
 
 import useCartStore from "@/store/cartStore.js";
+const cartStore = useCartStore();
 
 const isQuickViewOpen = ref(false);
 
-const openQuickViewModal = (product) => {
+const openQuickViewModal = () => {
     isQuickViewOpen.value = true;
 };
 
@@ -20,15 +23,14 @@ const props = defineProps({
     product: Object,
 });
 
-//handle cart management
-const cartStore = useCartStore();
-
+////manage the state of active productColor
+const activeProductColor = ref(props.product.productColors[0]);
 const handleActionClick = (event) => {
     const target = event.target.closest("[data-action]");
     if (!target) return;
 
     const action = target.dataset.action;
-    console.log(action);
+    //console.log(action);
 
     if (action === "wishlist") {
         wishlistStore.addToWishlist(props.product);
@@ -38,38 +40,24 @@ const handleActionClick = (event) => {
         openQuickViewModal(props.product);
     }
 };
-const isHovered = false;
-const displayImage = ref("/storage" + props.product.images[1].url);
-const handleImageHover = () => {
-    console.log("image hovered");
-    displayImage.value = "/storage" + props.product.images[0].url;
-};
-const handleImageLeave = () => {
-    console.log("mouse left");
-    displayImage.value = "/storage" + props.product.images[1].url;
-};
 
+const handleColorChange = (colorCode, colorId) => {
+    activeProductColor.value = props.product.productColors.find(
+        (item) => item.id === colorId && item.color_code === colorCode
+    );
+};
 </script>
 
 <template lang="">
-    <div
-        class="axil-product product-style-one mb--30"
-        @mouseover="handleImageHover"
-        @mouseleave="handleImageLeave"
-    >
+    <div class="axil-product product-style-one mb--30">
         <div class="thumbnail">
-            <a>
-                <img
-                    class="image-hover"
-                    v-if="
-                        product.images &&
-                        product.images.length > 1 &&
-                        product.images[1]
-                    "
-                    :src="displayImage"
-                    alt="Image"
-                />
-            </a>
+            <img
+                class="image-hover"
+                :src="'/storage' + activeProductColor.productImages[1].url"
+                alt="Image"
+                style="height:100"
+            />
+
             <div class="label-block label-right" v-if="product.discount">
                 <div class="product-badget">
                     {{ product.discount.discount_percentage }}% OFF
@@ -91,22 +79,22 @@ const handleImageLeave = () => {
         </div>
         <div class="product-content">
             <div class="inner">
-                <h5 class="title">
-                    {{ product.name }}
+                <h5 class="title text-capitalize">
+                    {{ activeProductColor.color_name }} {{ product.name }}
                 </h5>
 
                 <div class="product-price-variant">
-                    <span class="price current-price" 
-                        >ksh {{ !product.discount ? product.price.toLocaleString(): product.discount.price_after_discount}}/=</span
+                    <span class="price current-price"
+                        >KSH {{ activeProductColor.price }}/=</span
                     >
-                    <span class="price old-price" v-if="product.discount">
-                        ksh
-                        {{ product.discount.original_price.toLocaleString() }}/=
-                    </span>
 
-                    <ColorVariant :productColors="product.colors"/>
+                    <div class="color-variant-wrapper">
+                        <ColorVariant
+                            :productColors="product.productColors"
+                            @colorChanged="handleColorChange"
+                        />
+                    </div>
                 </div>
-              
             </div>
         </div>
     </div>

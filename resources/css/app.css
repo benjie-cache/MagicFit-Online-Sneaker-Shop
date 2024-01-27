@@ -9982,7 +9982,7 @@ body .closeMask {
 .axil-product .product-content .title {
     color: var(--color-body);
     font-size: 16px;
-    font-weight: 500;
+    font-weight: 600;
     margin-bottom: 10px;
     transition: var(--transition)
 }
@@ -10026,7 +10026,12 @@ body .closeMask {
     visibility: hidden;
     transition: .5s
 }
-
+.axil-product:hover .product-hover-action {
+    bottom: 30px;
+    opacity: 1;
+    visibility: visible;
+    transition-delay: .2s
+}
 .axil-product .cart-action {
     display: flex;
     align-items: center;
@@ -10137,12 +10142,7 @@ body .closeMask {
     opacity: 1
 }
 
-.axil-product:hover .product-hover-action {
-    bottom: 30px;
-    opacity: 1;
-    visibility: visible;
-    transition-delay: .2s
-}
+
 
 .axil-product.product-style-two {
     text-align: center
@@ -10442,7 +10442,8 @@ body .closeMask {
 }
 
 .axil-product.product-style-eight .color-variant-wrapper {
-    margin-bottom: 12px
+    
+   margin-bottom: 12px;
 }
 
 .axil-product.product-style-eight .color-variant {

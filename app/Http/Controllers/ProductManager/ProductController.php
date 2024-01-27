@@ -17,8 +17,8 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Product::with(['images',  'colors', 'sizes']);
-        
+        $query = Product::with(['productColors','productColors.productImages']);
+   
         $filters = $request->input('filters');
         if ($filters) {
             $query->when(isset($filters['brands']), fn($q) => $q->whereIn('brand_id', $filters['brands']))

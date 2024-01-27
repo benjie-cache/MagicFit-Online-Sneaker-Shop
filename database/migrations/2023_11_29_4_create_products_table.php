@@ -27,7 +27,7 @@ return new class extends Migration
             $table->string('name',2000);
             $table->string('slug',2000);
             $table->text('description')->nullable();
-            $table->string('sku')->unique(); 
+            $table->string('sku')->unique()->default('sku1'); 
        
             $table->timestamps();
            

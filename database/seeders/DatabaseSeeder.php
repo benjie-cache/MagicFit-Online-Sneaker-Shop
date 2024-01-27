@@ -10,7 +10,7 @@ use App\Models\ProductManager\ProductCategory;
 use App\models\Brand;
 use App\Models\Color;
 use App\Models\Size;
-use App\Models\Stock;
+use App\Models\ProductVariant;
 class DatabaseSeeder extends Seeder
 {
     /**
@@ -21,12 +21,12 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
      
-   //  Size::factory(7)->create();
-    //  Color::factory(3)->create();
-    //  Brand::factory(5)->create();
-    //  ProductCategory::factory(3)->create();
-   ////////// Product::factory(7)->create();
-  Stock::factory(5)->create();
+   Size::factory(7)->create();
+    // Color::factory(3)->create();
+      Brand::factory(5)->create();
+ ProductCategory::factory(3)->create();
+ Product::factory(1)->create();
+//  ProductVariant::factory(5)->create();
   // User::factory(3)->create();
      
     }

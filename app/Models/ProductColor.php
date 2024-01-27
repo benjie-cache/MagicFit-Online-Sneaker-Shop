@@ -26,12 +26,12 @@ class ProductColor extends Model
 
     public function product():BelongsTo
     {
-        return $this->belongsTo(Product::class, 'product_id');
+        return $this->belongsTo(Product::class);
     }
 
     public function color():BelongsTo
     {
-        return $this->belongsTo(Color::class, 'color_id');
+        return $this->belongsTo(Color::class);
     }
 
 
@@ -50,12 +50,12 @@ class ProductColor extends Model
  
 
 
-    public function product_images():HasMany
+    public function productImages():HasMany
     {
         return $this->hasMany(ProductImage::class);
     }
 
-    public function product_variants():HasMany
+    public function productVariants():HasMany
     {
         return $this->hasMany(ProductVariant::class);
     }

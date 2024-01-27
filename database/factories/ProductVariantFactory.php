@@ -4,12 +4,12 @@ namespace Database\Factories;
 use App\Models\ProductManager\Product;
 use App\Models\Color;
 use App\Models\Size;
-use App\Models\Stock;
+use App\Models\ProductVariant;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Stock>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\ProductVariant>
  */
 class StockFactory extends Factory
 {
@@ -29,7 +29,7 @@ class StockFactory extends Factory
 
     public function configure()
 {
-    return $this->afterCreating(function (Stock $stock) {
+    return $this->afterCreating(function (ProductVariant $productvariant) {
         // Generate all possible combinations of product, color, and size
         $products = Product::pluck('id');
         $colors = Color::pluck('id');
@@ -38,9 +38,9 @@ class StockFactory extends Factory
         foreach ($products as $productId) {
             foreach ($colors as $colorId) {
                 foreach ($sizes as $sizeId) {
-                    // Skip if a stock entry for this combination already exists
+                    // Skip if a productvariant entry for this combination already exists
                     if (
-                        Stock::where('product_id', $productId)
+                        ProductVariant::where('product_id', $productId)
                             ->where('color_id', $colorId)
                             ->where('size_id', $sizeId)
                             ->exists()
@@ -48,8 +48,8 @@ class StockFactory extends Factory
                         continue;
                     }
 
-                    // Create a stock entry for each combination
-                    Stock::factory()->create([
+                    // Create a productvariant entry for each combination
+                    ProductVariant::factory()->create([
                         'product_id' => $productId,
                         'color_id' => $colorId,
                         'size_id' => $sizeId,

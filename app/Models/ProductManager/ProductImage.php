@@ -8,7 +8,7 @@ use App\Models\ProductColor;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-
+use Illuminate\Database\Eloquent\Relations\HasMany;
 class ProductImage extends Model
 {
     use HasFactory;
@@ -16,14 +16,17 @@ class ProductImage extends Model
     {
         return $this->belongsTo(ProductColor::class);
     }
+    
     public function product():BelongsTo
     {
-        return $this->belongsTo(Product::class, 'product_id');
+        return $this->belongsTo(Product::class, 'product_colors');
     }
     public function color():BelongsTo
     {
-        return $this->belongsTo(Product::class, 'color_id');
+        return $this->belongsTo(Product::class, 'product_colors');
     }
+  
+
  
 
 }
