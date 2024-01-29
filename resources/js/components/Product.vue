@@ -4,7 +4,7 @@ import { useWishlistStore } from "@/store/wishlistStore.js";
 
 const wishlistStore = useWishlistStore();
 const ProductQuickView = defineAsyncComponent(() =>
-    import("@/components/ProductQuickView.vue")
+    import("@/components/product-components/ProductQuickView.vue")
 );
 const ColorVariant = defineAsyncComponent(() =>
     import("@/components/product-components/ColorVariant.vue")
@@ -29,6 +29,7 @@ const handleActionClick = (event) => {
     const target = event.target.closest("[data-action]");
     if (!target) return;
 
+
     const action = target.dataset.action;
     //console.log(action);
 
@@ -52,6 +53,7 @@ const handleColorChange = (colorCode, colorId) => {
     <div class="axil-product product-style-one mb--30">
         <div class="thumbnail">
             <img
+                loading="lazy"
                 class="image-hover"
                 :src="'/storage' + activeProductColor.productImages[1].url"
                 alt="Image"
@@ -107,6 +109,7 @@ const handleColorChange = (colorCode, colorId) => {
         close-on-click-modal
         append-to-body
         lock-scroll
+        destroy-on-close
     >
         <ProductQuickView :selected_product="product" />
     </el-dialog>

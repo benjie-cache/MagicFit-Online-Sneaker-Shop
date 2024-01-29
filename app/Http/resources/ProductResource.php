@@ -20,15 +20,16 @@ class ProductResource extends JsonResource
             'category_id' => $this->products_category_id,
             'name' => $this->name,
             'productColors' => ProductColorResource::collection($this->whenLoaded('productColors')),
+            'description' => $this->description,
         ];
 
-        // Check if it's a request for a single product
-        if ($request->routeIs('products.show')) {
-           
-            $data = array_merge($data, [
-                'description' => $this->description,
-            ]);
-        }
+        // // Check if it's a request for a single product
+        // if ($request->routeIs('products.show')) {
+
+        //     $data = array_merge($data, [
+        //         'description' => $this->description,
+        //     ]);
+        // }
 
         return $data;
     }

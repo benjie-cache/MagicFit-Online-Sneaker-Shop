@@ -35,10 +35,10 @@ Route::prefix('auth')->middleware('auth:sanctum')->group(function (){
 //Routes for product crud ...
 Route::prefix('products')->group(function (){
     Route::get('/', [ProductController::class, 'index']);     //get a list of all products
-    Route::get('/{product}', [ProductController::class, 'show']);///show a single product
+    Route::get('/{id}', [ProductController::class, 'show']);///show a single product
     Route::post('/', [ProductController::class, 'store']);//store a newly created product
-    Route::put('/{product}', [ProductController::class, 'update']);//edit or update product details
-    Route::delete('/{product}', [ProductController::class, 'destroy']);//delete a single product 
+    Route::put('/{id}', [ProductController::class, 'update']);//edit or update product details
+    Route::delete('/{id}', [ProductController::class, 'destroy']);//delete a single product 
 });
 
 Route::get('/entities', [EntityController::class, 'getEntities']);

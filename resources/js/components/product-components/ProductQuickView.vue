@@ -1,10 +1,13 @@
 <script setup>
 import { useWishlistStore } from '@/store/wishlistStore.js';
-
+import axios from "axios";
 import useCartStore from '@/store/cartStore.js';
-import { computed } from 'vue'
+import {defineAsyncComponent, onMounted, ref } from 'vue'
 const cartStore = useCartStore();
-import rateIcon from '../../images/icons/rate.png';
+const ColorVariant = defineAsyncComponent(() =>
+    import("@/components/product-components/ColorVariant.vue")
+);
+//import rateIcon from '../../images/icons/rate.png';
 
 const wishlistStore = useWishlistStore()
 const props = defineProps({
@@ -12,18 +15,24 @@ const props = defineProps({
 });
 
 
-const formatProductName = computed(() => {
-    return props.selected_product.name
-        .split(" ")
-        .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-        .join(" ");
+const productDetails=ref(null)
+const activeProductColor = ref(props.selected_product.productColors[0]);
+
+const handleColorChange = (colorCode, colorId) => {
+    activeProductColor.value = props.selected_product.productColors.find(
+        (item) => item.id === colorId && item.color_code === colorCode
+    );
+};
+onMounted(async () => {
+  try {
+    const headers={   "Content-Type": "application/json"}
+    const response = await axios.get(`/api/products/${props.selected_product.id}`,headers);
+    productDetails.value=response.data
+
+  } catch (error) {
+    console.error("Error fetching product details:", error);
+  }
 });
-
-const formattedPrice = computed(() => {
-    return props.selected_product.price.toLocaleString();
-});
-
-
 </script>
 
 <template  >
@@ -34,11 +43,15 @@ const formattedPrice = computed(() => {
                     <div class="col-lg-12 order-lg-2">
                         <div
                             class="single-product-thumbnail product-large-thumbnail-{{ props.selected_product.id }} axil-product thumbnail-badge zoom-gallery">
-                            <el-carousel :interval="4000" type="card" height="300px" @change="handleLargeImageChange">
-                                <el-carousel-item v-for="(image, index) in selected_product.images" :key="index">
-                                    <img :src="'/storage' + image.url" alt="Product Image">
+                            <el-carousel  type="card" height="300px" @change="handleLargeImageChange">
+                                <el-carousel-item v-for="(image, index) in activeProductColor.productImages" :key="index">
+                                    <img loading="lazy" :src="'/storage' + image.url" alt="Product Image">
                                 </el-carousel-item>
                             </el-carousel>
+                            <div class="color-variant-wrapper">
+                                <ColorVariant  :productColors="selected_product.productColors"
+                                @colorChanged="handleColorChange"/>
+                                </div>
 
                         </div>
                     </div>
@@ -56,15 +69,15 @@ const formattedPrice = computed(() => {
                                 <a href="">(<span>1</span> customer reviews)</a>
                             </div>
                         </div>
-                        <h3 class="product-title">{{ formatProductName }}</h3>
-                        <span class="price-amount">ksh {{ formattedPrice }}</span>
+                        <h3 class="product-title text-capitalize">{{ selected_product.name }}</h3>
+                        <span class="price-amount h4 text-muted">{{activeProductColor.color_name}}</span>
+                        <span class="price-amount">KSH {{activeProductColor.price}}</span>
                         <ul class="product-meta">
                             <li><i class="fa fa-check"></i>In stock</li>
                             <li><i class="fa fa-check"></i>Delivery available</li>
 
                         </ul>
                         <p class="description">{{ selected_product.description }}</p>
-
 
                         <!-- Start Product Action Wrapper  -->
                         <div class="product-action-wrapper d-flex-center">
@@ -81,6 +94,7 @@ const formattedPrice = computed(() => {
                         </div>
                         <!-- End Product Action Wrapper  -->
                     </div>
+
                 </div>
             </div>
         </div>

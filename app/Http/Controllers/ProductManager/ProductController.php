@@ -49,11 +49,11 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($product)
+    public function show($id)
     {
         //
-        $product = Product::findOrFail($product);
-        return ProductResource::collection($product);
+        $product =Product::with(['productColors','productColors.productImages'])->findOrFail($id);
+        return new  ProductResource($product);
     }
 
     /**

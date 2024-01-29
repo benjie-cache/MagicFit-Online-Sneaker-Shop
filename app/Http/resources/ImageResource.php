@@ -18,7 +18,7 @@ class ImageResource extends JsonResource
 
         if ($context === 'multiple_products') {
             
-            if (!in_array($this->view, [ 'side'])) {
+            if (!in_array($this->view, [ 'side','top','rear'])) {
                 return null;
             }
         }
