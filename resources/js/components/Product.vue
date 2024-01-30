@@ -36,7 +36,18 @@ const handleActionClick = (event) => {
     if (action === "wishlist") {
         wishlistStore.addToWishlist(props.product);
     } else if (action === "addtocart") {
-        useCartStore().addItem(props.product);
+        const item={
+            id:activeProductColor.value.id,
+            name:props.product.name,
+            color_id:activeProductColor.value.color_id,
+            color_name:activeProductColor.value.color_name,
+            color_code:activeProductColor.value.color_code,
+            price:activeProductColor.value.price,
+            image:activeProductColor.value.productImages[1].url
+        }
+
+        useCartStore().addItem(item);
+
     } else if (action === "quickview") {
         openQuickViewModal(props.product);
     }
@@ -82,13 +93,13 @@ const handleColorChange = (colorCode, colorId) => {
         <div class="product-content">
             <div class="inner">
                 <h5 class="title text-capitalize">
-                    {{ activeProductColor.color_name }} {{ product.name }}
+
+                   {{ product.name }}
                 </h5>
 
                 <div class="product-price-variant">
                     <span class="price current-price"
-                        >KSH {{ activeProductColor.price }}/=</span
-                    >
+                        >KSH {{ activeProductColor.price }}/=   ( {{ activeProductColor.color_name }} )</span>
 
                     <div class="color-variant-wrapper">
                         <ColorVariant

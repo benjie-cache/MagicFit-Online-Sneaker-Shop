@@ -23,29 +23,31 @@ const dropDownStore = useDropdownStore();
                     >
                         <div class="item-img">
                             <a href=""
-                                > <img v-if="item.images && item.images.length > 1 && item.images[1]" :src="'/storage' + item.images[1].url" alt="Image"></a>
+                                > <img v-if="item.image" :src="'/storage' + item.image" alt="Image"></a>
                             <button
                                 class="close-btn"
-                             
+
                                 @click="cartStore.decreaseItem(item,'all')">
                                 <i class="fas fa-times"></i>
                             </button>
                         </div>
                         <div class="item-content">
-                            
+                            <span><span class="color" :style="{ backgroundColor: item.color_code}"></span></span>
                             <h3 class="item-title">
-                                <a href="">{{
+
+
+                                    {{
                                     item.name
-                                }}</a>
+                                }}
                             </h3>
                             <div class="item-price">
                                 <span class="currency-symbol">KSH  </span
-                                >   {{ item.price }}
+                                >   {{ item.price }}   ({{ item.color_name}})
                             </div>
                             <div class="pro-qty item-quantity"><span class="dec qtybtn"    @click="cartStore.decreaseItem(item)">-</span>
                                 <input type="number" class="quantity-input"      v-model="item.count">
                             <span class="inc qtybtn" @click="cartStore.increaseItem(item)">+</span></div>
-                            
+
                         </div>
                     </li>
                     <h6 v-else>You havent added any items in your cart yet</h6>
@@ -61,13 +63,13 @@ const dropDownStore = useDropdownStore();
                         <a @click="dropDownStore.toggleDropdown" class="axil-btn btn-bg-primary viewcart-btn"
                             >View Cart</a
                         ></router-link
-                    > 
+                    >
          <router-link to="/checkout"> <a  @click="dropDownStore.toggleDropdown"
-                       
+
                        class="axil-btn btn-bg-secondary checkout-btn"
                        >Checkout</a
                    ></router-link>
-                   
+
                 </div>
             </div>
         </div>

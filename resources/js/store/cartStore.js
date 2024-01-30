@@ -4,6 +4,7 @@ import { ElNotification } from "element-plus";
 export default defineStore('useCartStore', () => {
     const CART_KEY = 'cartItems';
     const items = ref(JSON.parse(localStorage.getItem(CART_KEY)) || []);
+
     const totalItems = ref(items.value.reduce((acc, item) => acc + item.count, 0));
     const totalCost = ref(parseFloat(items.value.reduce((acc, item) => acc + item.price * item.count, 0)).toFixed(2));
 
@@ -22,7 +23,7 @@ export default defineStore('useCartStore', () => {
     const calculateSubtotal = (item) => parseFloat((parseFloat(item.price) * item.count).toFixed(2));
     const addItem = (item) => {
         let targetItem = items.value.find(currItem => currItem.id === item.id);
-    
+
         if (targetItem) {
             showNotification("Success", "Item added to the cart", "success");
             //targetItem.count += 1;
@@ -38,7 +39,7 @@ export default defineStore('useCartStore', () => {
         const targetItem = items.value.find(currItem => currItem.id === item.id);
         if (targetItem) {
             targetItem.subtotal = calculateSubtotal(targetItem);
-           
+
         }
     };
     const increaseItem = (item, number = 1) => {
@@ -76,8 +77,8 @@ export default defineStore('useCartStore', () => {
             }
         }
     };
-   
-    
+
+
 
     const clearCart = () => {
         items.value = [];
