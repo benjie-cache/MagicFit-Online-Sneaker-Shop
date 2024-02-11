@@ -1,11 +1,11 @@
 import {computed} from "vue";
 import {defineStore} from "pinia";
 import { ElNotification } from "element-plus";
-interface ProductImage {
+export interface ProductImage {
     url: string;
     view: string;
 }
-interface ProductColor {
+export interface ProductColor {
     id: number;
     color_name: string;
     color_code: string;
@@ -51,8 +51,7 @@ export const useCartStore =defineStore('useCartStore', {
              //watch for changes in cart items
 
             items:JSON.parse(localStorage.getItem(CART_KEY)) || [],
-            //totalItems:0,
-            //totalCost:0,
+
 
 
 

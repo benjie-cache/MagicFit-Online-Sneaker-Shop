@@ -1,9 +1,14 @@
 <script setup lang="ts">
 import { ref  } from 'vue';
 const emit = defineEmits(['colorChanged'])
-const props = defineProps(['productColors']);
+const props = defineProps(
+    {
+        productColors: Object,
+        activeColorIndex: Number
+    }
+);
 
-const activeColor = ref(props.productColors[0].color_code);
+const activeColor = ref(props.productColors[props.activeColorIndex].color_code);
 
 const handleColorClick = (colorCode,colorId) => {
 

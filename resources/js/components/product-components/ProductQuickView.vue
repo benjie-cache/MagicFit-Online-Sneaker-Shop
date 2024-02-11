@@ -1,38 +1,32 @@
-<script setup>
-import { useWishlistStore } from '@/store/wishlistStore.js';
+<script setup lang="ts">
 import axios from "axios";
-import useCartStore from '@/store/cartStore.js';
 import {defineAsyncComponent, onMounted, ref } from 'vue'
-const cartStore = useCartStore();
 const ColorVariant = defineAsyncComponent(() =>
-    import("@/components/product-components/ColorVariant.vue")
+import("../product-components/ColorVariant.vue")
 );
 //import rateIcon from '../../images/icons/rate.png';
-
-const wishlistStore = useWishlistStore()
 const props = defineProps({
     selected_product: Object,
+    activeProductColor: Object
 });
-
-
-const productDetails=ref(null)
-const activeProductColor = ref(props.selected_product.productColors[0]);
-
-const handleColorChange = (colorCode, colorId) => {
-    activeProductColor.value = props.selected_product.productColors.find(
-        (item) => item.id === colorId && item.color_code === colorCode
-    );
+const emit = defineEmits(['actionClicked','colorChanged']);
+//handle action click
+const handleActionClick = (event: Event) => {
+       emit('actionClicked',event);
 };
-onMounted(async () => {
-  try {
-    const headers={   "Content-Type": "application/json"}
-    const response = await axios.get(`/api/products/${props.selected_product.id}`,headers);
-    productDetails.value=response.data
+const productDetails=ref(null)
 
-  } catch (error) {
-    console.error("Error fetching product details:", error);
-  }
-});
+onMounted(async()=>{
+    try{
+         const headers:object={   "Content-Type": "application/json"}
+
+         const response = await axios.get(`/api/products/${props.selected_product.id}`,headers);
+         productDetails.value=response.data
+    }catch(error:any){
+        console.log(error)
+    }
+})
+
 </script>
 
 <template  >
@@ -43,15 +37,18 @@ onMounted(async () => {
                     <div class="col-lg-12 order-lg-2">
                         <div
                             class="single-product-thumbnail product-large-thumbnail-{{ props.selected_product.id }} axil-product thumbnail-badge zoom-gallery">
-                            <el-carousel  type="card" height="300px" @change="handleLargeImageChange">
+                            <el-carousel  type="card" height="300px" >
                                 <el-carousel-item v-for="(image, index) in activeProductColor.productImages" :key="index">
                                     <img loading="lazy" :src="'/storage' + image.url" alt="Product Image">
                                 </el-carousel-item>
                             </el-carousel>
-                            <div class="color-variant-wrapper">
-                                <ColorVariant  :productColors="selected_product.productColors"
-                                @colorChanged="handleColorChange"/>
+                            <div class="d-flex m-2  justify-content-center">
+                                <div class="color-variant-wrapper">
+                                    <ColorVariant  :productColors="selected_product.productColors"
+                                    @colorChanged="emit('colorChanged')"/>
                                 </div>
+                            </div>
+
 
                         </div>
                     </div>
@@ -63,7 +60,7 @@ onMounted(async () => {
                     <div class="inner">
                         <div class="product-rating">
                             <div class="star-rating">
-                                <img :src="rateIcon" alt="Rate Images">
+                                <img src="" alt="Rate Images">
                             </div>
                             <div class="review-link">
                                 <a href="">(<span>1</span> customer reviews)</a>
@@ -83,11 +80,11 @@ onMounted(async () => {
                         <div class="product-action-wrapper d-flex-center">
 
                             <!-- Start Product Action  -->
-                            <ul class="product-action d-flex-center mb--0">
-                                <li class="add-to-cart"><a @click="cartStore.addItem(selected_product)"
-                                        class="axil-btn btn-bg-primary">Add to Cart</a></li>
-                                <li class="wishlist"><a @click.prevent="wishlistStore.addToWishlist(product)"
-                                        class="axil-btn wishlist-btn"><i class="far fa-heart"></i></a></li>
+                            <ul class="product-action d-flex-center mb--0" @click.stop="handleActionClick">
+                                <li class="add-to-cart"><a
+                                        class="axil-btn btn-bg-primary" data-action="addtocart">Add to Cart</a></li>
+                                <li class="wishlist"><a
+                                        class="axil-btn wishlist-btn" data-action="wishlist"><i class="far fa-heart" ></i></a></li>
                             </ul>
                             <!-- End Product Action -->
 
