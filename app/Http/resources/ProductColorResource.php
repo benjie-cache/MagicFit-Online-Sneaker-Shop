@@ -19,7 +19,7 @@ class ProductColorResource extends JsonResource
 
             'color_name' => $this->color->name,
             'color_code' => $this->color->color_code,
-            'price' => $this->price,
+            'price' => (int)$this->price,
 
 
             'productImages' => ImageResource::collection($this->whenLoaded('productImages')),

@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { ref  } from 'vue';
 const emit = defineEmits(['colorChanged'])
 const props = defineProps(['productColors']);
@@ -6,10 +6,10 @@ const props = defineProps(['productColors']);
 const activeColor = ref(props.productColors[0].color_code);
 
 const handleColorClick = (colorCode,colorId) => {
-  
+
 
   activeColor.value = colorCode;
-   
+
   emit('colorChanged',colorCode,colorId);
 };
 
@@ -19,20 +19,20 @@ const isActiveColor = (colorCode) =>{
 
 </script>
 <template>
-   
+
         <ul class="color-variant">
             <li   v-for="color in productColors"
                  :key="color.id"
-            
+
                  :class="[color.name, isActiveColor(color.color_code) ? 'active' : '']"
                  @click="() => handleColorClick(color.color_code,color.id)"
-               
+
             >
             <span><span class="color" :style="{ backgroundColor: color.color_code }"></span></span>
             </li>
-          
+
         </ul>
- 
+
 </template>
 <style scoped>
 .color-variant li span .color {
@@ -40,7 +40,7 @@ const isActiveColor = (colorCode) =>{
 }
 
 .color-variant li.active span {
-  border-color: grey; 
+  border-color: grey;
 }
 </style>
 

@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "composite": true,
+    "skipLibCheck": true,
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "allowSyntheticDefaultImports": true
+  },
+  "include": [
+    "resources/js/**/*.ts",
+   "resource/js/**/*.d.ts",
+   "resources/js/**/*.tsx",
+   "resources/js/**/*.vue",
+   "vite.config.ts",]
+}

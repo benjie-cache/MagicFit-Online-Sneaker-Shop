@@ -3,7 +3,7 @@ import logo from '../../../images/logo/logo1.png';
 
 
 import { defineAsyncComponent} from 'vue'
-import useCartStore from '@/store/cartStore.js';
+import {useCartStore} from '@/store/cartStore.ts';
 
 
 import useDropdownStore from '@/store/dropdownStore.js';
@@ -45,11 +45,11 @@ const wishlistStore=useWishlistStore();
                                 </a>
                             </div>
                             <ul class="mainmenu">
-                                
-                             
+
+
                                 <li><router-link to="/"><a >Featured & Deals</a></router-link></li>
                                 <li><router-link to="/shop" ><a >Shop Now</a></router-link></li>
-                           
+
                                 <li><router-link to="/contact-us" ><a >Talk To Us</a></router-link></li>
                             </ul>
                         </nav>
@@ -68,16 +68,16 @@ const wishlistStore=useWishlistStore();
                                     <i class="flaticon-magnifying-glass"></i>
                                 </a>
                             </li>
-                           
+
                             <li class="shopping-cart">
                                  <router-link to="/wishlist" class="cart-dropdown-btn">
-                                    
+
                                     <span class="wishlist-count" v-if="wishlistStore.wishlistItems.length">{{wishlistStore.totalItems}}</span>
                                     <i class="flaticon-heart"></i>
 
                                 </router-link>
                             </li>
-                          
+
                             <li class="shopping-cart">
                                 <a  class="cart-dropdown-btn"  @click="dropDownStore.toggleDropdown"  >
                                     <span class="cart-count">{{cartStore.totalItems}}</span>
@@ -112,21 +112,21 @@ const wishlistStore=useWishlistStore();
                 </div>
             </div>
         </div>
-      
+
       <!--This is the header searcch component-->
 <Teleport to="body">
   <div  :class="['' ,dropDownStore.isOpen || dropDownStore.isHeaderSearchOpen ? 'closeMask':'']" >
-  
+
   </div>
-</Teleport>  
+</Teleport>
 <div v-if="dropDownStore.isHeaderSearchOpen" :class="['header-search-modal' ,dropDownStore.isHeaderSearchOpen? 'open':'' ]" id="header-search-modal">
     <HeaderSearch/>
-</div>     
-   <!--This is the cart review searcch component-->    
+</div>
+   <!--This is the cart review searcch component-->
 <div v-if="dropDownStore.isOpen"  id="cart-dropdown"  :class="['cart-dropdown' ,dropDownStore.isOpen? 'open':'' ]">
 <CartReview/>
 </div>
-        
-   
+
+
 
 </template>

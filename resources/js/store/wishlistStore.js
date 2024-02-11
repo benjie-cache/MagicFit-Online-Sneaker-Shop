@@ -1,7 +1,8 @@
 import { ref, watch } from 'vue';
 import { defineStore } from 'pinia';
 import { ElNotification } from 'element-plus';
-import useCartStore from "@/store/cartStore.js";
+import {useCartStore} from "@/store/cartStore";
+
 export const useWishlistStore = defineStore('useWishlistStore', () => {
   const useCart = useCartStore();
   const WISHLIST_KEY = 'wishlistItems';
@@ -43,7 +44,7 @@ export const useWishlistStore = defineStore('useWishlistStore', () => {
 
     // Add item to cart
     useCart.addItem(item);
- 
+
   };
 
   return {

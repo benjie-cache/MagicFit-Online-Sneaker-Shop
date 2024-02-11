@@ -6,7 +6,7 @@ import {defineEmits  } from 'vue';
 const emit = defineEmits(['payBtnClicked'])
 const customerStore = useCustomerStore();
 const handlePayBtnClick = () => {
-   
+
     emit('payBtnClicked');
   };
 
@@ -19,29 +19,19 @@ const handlePayBtnClick = () => {
                 </h6>
                 <ul class="list-group mb-3">
                     <li class="list-group-item d-flex justify-content-between  lh-condensed"
-                        v-for="(item, index) in cartStore.items" :key="index">
+                        v-for="(item, index) in cartStore.items" :key="item.id">
                         <div>
-                            <h6 class="my-0">
+                            <h6 class="my-0 text-capitalize">
                                 {{
                                     item.name
-                                        .split(" ")
-                                        .map(
-                                            (word) =>
-                                                word
-                                                    .charAt(0)
-                                                    .toUpperCase() +
-                                                word
-                                                    .slice(1)
-                                                    .toLowerCase()
-                                        )
-                                        .join(" ")
+
                                 }}
                             </h6>
                             <small class="text-muted">
                                 {{ item.count }} x
                                 {{
                                     item.price.toLocaleString()
-                                }}</small>
+                                }}    ({{item.color_name}})</small>
                         </div>
                         <span class="text-dark fw-bolder">KSH
                             {{

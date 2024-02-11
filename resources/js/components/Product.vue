@@ -1,16 +1,16 @@
-<script setup>
+<script setup lang="ts" >
 import { defineAsyncComponent, ref } from "vue";
-import { useWishlistStore } from "@/store/wishlistStore.js";
+//import { useWishlistStore } from "@/store/wishlistStore.js";
 
-const wishlistStore = useWishlistStore();
-const ProductQuickView = defineAsyncComponent(() =>
-    import("@/components/product-components/ProductQuickView.vue")
-);
+//const wishlistStore = useWishlistStore();
+//const ProductQuickView = defineAsyncComponent(() =>
+ //   import("@/components/product-components/ProductQuickView.vue")
+//);
 const ColorVariant = defineAsyncComponent(() =>
-    import("@/components/product-components/ColorVariant.vue")
+    import("../components/product-components/ColorVariant.vue")
 );
 
-import useCartStore from "@/store/cartStore.js";
+import {Item ,useCartStore} from "../store/cartStore";
 const cartStore = useCartStore();
 
 const isQuickViewOpen = ref(false);
@@ -34,22 +34,34 @@ const handleActionClick = (event) => {
     //console.log(action);
 
     if (action === "wishlist") {
-        wishlistStore.addToWishlist(props.product);
+        return;
+      //  wishlistStore.addToWishlist(props.product);
     } else if (action === "addtocart") {
-        const item={
+
+        console.log(activeProductColor.value)
+        const item:Item={
             id:activeProductColor.value.id,
+            brand_id:props.product.brand_id,
+            category_id:props.product.category_id,
             name:props.product.name,
-            color_id:activeProductColor.value.color_id,
-            color_name:activeProductColor.value.color_name,
-            color_code:activeProductColor.value.color_code,
-            price:activeProductColor.value.price,
-            image:activeProductColor.value.productImages[1].url
+            productColor:{
+                id:activeProductColor.value.id,
+                color_name:activeProductColor.value.color_name,
+                color_code:activeProductColor.value.color_code,
+                price: activeProductColor.value.price,
+                productImages:activeProductColor.value.productImages
+
+            },
+            description:props.product.description,
+           // count:1,
+            //itemSubtotal:
         }
 
-        useCartStore().addItem(item);
-
+      cartStore.addItem(item);
+      console.log(cartStore.items)
     } else if (action === "quickview") {
-        openQuickViewModal(props.product);
+        return
+       // openQuickViewModal(props.product);
     }
 };
 
